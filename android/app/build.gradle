@@ -46,6 +46,7 @@ android {
         applicationId "com.deteccion.dengue.utec.deteccion_zonas_dengue"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
