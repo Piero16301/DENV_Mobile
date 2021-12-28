@@ -38,7 +38,7 @@ dependencies:
   # Librerías de este proyecto
   geolocator: ^8.0.1
   intl: ^0.17.0
-  geocode: ^1.0.1
+  google_geocoding: ^0.2.0
   http: ^0.13.4
 
 dev_dependencies:

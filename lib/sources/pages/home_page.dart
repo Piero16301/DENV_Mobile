@@ -18,12 +18,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     getCurrentLocation().then((currentPosition) {
-      getDirection(latitude: currentPosition.latitude, longitude: currentPosition.longitude).then((currentAddress) {
-        if (currentAddress.city != null) {
-          currentcity = currentAddress.city!;
-        } else {
-          currentcity = '-';
-        }
+      getCity(latitude: currentPosition.latitude, longitude: currentPosition.longitude).then((currentCity) {
+        currentcity = currentCity;
+
         setState(() {});
       });
       setState(() {});

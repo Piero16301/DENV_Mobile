@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:geocode/geocode.dart';
+import 'package:google_geocoding/google_geocoding.dart';
 
 Future<Position> getCurrentLocation() async {
   bool serviceEnabled;
@@ -27,7 +27,34 @@ Future<Position> getCurrentLocation() async {
   return await Geolocator.getCurrentPosition();
 }
 
-Future<Address> getDirection({required double latitude, required double longitude}) async {
-  GeoCode geoCode = GeoCode();
-  return await geoCode.reverseGeocoding(latitude: latitude, longitude: longitude);
+Future<String> getCity({required double latitude, required double longitude}) async {
+  GoogleGeocoding googleGeocoding = GoogleGeocoding('AIzaSyDXwhfcs7ssjeFlSVe7OWboZVG-G1z69Tc');
+  LatLon latLon = LatLon(latitude, longitude);
+  GeocodingResponse? response = await googleGeocoding.geocoding.getReverse(latLon);
+  if (response != null) {
+    if (response.results != null) {
+      if (response.results!.isNotEmpty) {
+        if (response.results![0].addressComponents != null) {
+          if (response.results![0].addressComponents!.isNotEmpty) {
+            for (var element in response.results![0].addressComponents!) {
+              if (element.types![0] == 'administrative_area_level_2') {
+                return element.longName!;
+              }
+            }
+            return '-';
+          } else {
+            return '-';
+          }
+        } else {
+          return '-';
+        }
+      } else {
+        return '-';
+      }
+    } else {
+      return '-';
+    }
+  } else {
+    return '-';
+  }
 }
