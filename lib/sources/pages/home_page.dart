@@ -51,28 +51,37 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // GIF de mostrar mapa
-            Center(
-              child: Image.asset(
-                'assets/main-loading.gif',
-                height: 170,
-                width: 170,
-              ),
-            ),
+            // Zona de Ver Mapa
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, 'view_map'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // GIF de carga de mapa
+                  Center(
+                    child: Image.asset(
+                      'assets/main-loading.gif',
+                      height: 170,
+                      width: 170,
+                    ),
+                  ),
 
-            SizedBox(
-              height: _size.height * 0.025,
-            ),
+                  SizedBox(
+                    height: _size.height * 0.025,
+                  ),
 
-            // Texto de mostrar mapa
-            const Center(
-              child: Text(
-                'VER MAPA',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.white
-                ),
+                  // Texto de mostrar mapa
+                  const Center(
+                    child: Text(
+                      'VER MAPA',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -118,6 +127,8 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   '$currentcity, $_currentDate',
                   style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
                     color: Colors.white
                   ),
                 ),
@@ -135,13 +146,19 @@ class _HomePageState extends State<HomePage> {
       width: _size.width * 0.31,
       child: Column(
         children: [
-          Container(
-            height: _size.height * 0.05,
-            width: _size.width * 0.31,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: const Color(0xff2c5364),
+          ElevatedButton(
+            child: Container(),
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              elevation: MaterialStateProperty.all<double>(3.0),
+              backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff2c5364)),
+              minimumSize: MaterialStateProperty.all<Size>(Size(_size.width * 0.31, _size.height * 0.05)),
             ),
+            onPressed: () {},
           ),
 
           const Spacer(),

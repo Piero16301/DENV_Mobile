@@ -28,7 +28,7 @@ Future<Position> getCurrentLocation() async {
 }
 
 Future<String> getCity({required double latitude, required double longitude}) async {
-  GoogleGeocoding googleGeocoding = GoogleGeocoding('AIzaSyDXwhfcs7ssjeFlSVe7OWboZVG-G1z69Tc');
+  GoogleGeocoding googleGeocoding = GoogleGeocoding('AIzaSyBy-ZP5BSbdESqotdxt9G5gMxZILYRJ0Ng');
   LatLon latLon = LatLon(latitude, longitude);
   GeocodingResponse? response = await googleGeocoding.geocoding.getReverse(latLon);
   if (response != null) {

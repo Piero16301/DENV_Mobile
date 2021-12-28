@@ -9,6 +9,10 @@
         android:label="deteccion_zonas_dengue"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBy-ZP5BSbdESqotdxt9G5gMxZILYRJ0Ng"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
