@@ -37,17 +37,34 @@ class _HomePageState extends State<HomePage> {
     final String _currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
     return Scaffold(
-      body: SafeArea(
+      body: Container(
+        width: _size.width,
+        height: _size.height,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xff0f2027),
+              Color(0xff203a43),
+              Color(0xff2c5364),
+            ],
+            begin: FractionalOffset(0.0, 0.0),
+            end: FractionalOffset(0.0, 1.0),
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // GIF de mostrar mapa
-            const Center(
-              child: Icon(
-                Icons.account_circle,
-                color: Colors.white,
-                size: 170,
+            Center(
+              child: Image.asset(
+                'assets/main-loading.gif',
+                height: 170,
+                width: 170,
               ),
+            ),
+
+            SizedBox(
+              height: _size.height * 0.025,
             ),
 
             // Texto de mostrar mapa
@@ -56,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                 'VER MAPA',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 16,
                   color: Colors.white
                 ),
               ),
@@ -93,7 +110,8 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(
-                  Icons.location_on_outlined
+                  Icons.location_on_outlined,
+                  color: Colors.white,
                 ),
 
                 SizedBox(
@@ -102,6 +120,9 @@ class _HomePageState extends State<HomePage> {
 
                 Text(
                   '$currentcity, $_currentDate',
+                  style: const TextStyle(
+                    color: Colors.white
+                  ),
                 ),
               ],
             )
@@ -122,7 +143,7 @@ class _HomePageState extends State<HomePage> {
             width: _size.width * 0.31,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.green,
+              color: const Color(0xff2c5364),
             ),
           ),
 
@@ -134,7 +155,8 @@ class _HomePageState extends State<HomePage> {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold,
+              color: Colors.white
             ),
           )
         ],

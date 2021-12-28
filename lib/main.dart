@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geocode/geocode.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'package:deteccion_zonas_dengue/sources/pages/home_page.dart';
 
@@ -20,7 +18,6 @@ class MyApp extends StatelessWidget {
       routes: {
         'home' : (BuildContext context) => const HomePage(),
       },
-      theme: ThemeData.dark(),
     );
   }
 }
