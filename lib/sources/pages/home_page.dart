@@ -96,12 +96,14 @@ class _HomePageState extends State<HomePage> {
               children: [
                 homePageButton(
                   _size,
-                  'REPORTAR ÁREA CON MOSQUITOS'
+                  'REPORTAR ÁREA CON MOSQUITOS',
+                  'report_area',
                 ),
 
                 homePageButton(
                   _size,
-                  'SUBIR FOTO DE MOSQUITO'
+                  'SUBIR FOTO DE MOSQUITO',
+                  'report_area',
                 ),
               ],
             ),
@@ -140,7 +142,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  SizedBox homePageButton(Size _size, String text) {
+  SizedBox homePageButton(Size _size, String text, String page) {
     return SizedBox(
       height: _size.height * 0.105,
       width: _size.width * 0.31,
@@ -158,7 +160,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff2c5364)),
               minimumSize: MaterialStateProperty.all<Size>(Size(_size.width * 0.31, _size.height * 0.05)),
             ),
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, page),
           ),
 
           const Spacer(),

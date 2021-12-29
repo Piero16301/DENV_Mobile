@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
 import 'package:deteccion_zonas_dengue/sources/providers/mosquito_point_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ViewMapPage extends StatefulWidget {
   const ViewMapPage({Key? key}) : super(key: key);
@@ -30,6 +30,7 @@ class _ViewMapPageState extends State<ViewMapPage> {
     setMarker();
   }
 
+  // Llamar marcadores desde base de datos
   void getAllPoints() async {
     // Obtener todos los puntos de la base de datos
     MosquitoPointProvider mosquitoPointProvider = MosquitoPointProvider();
@@ -46,10 +47,9 @@ class _ViewMapPageState extends State<ViewMapPage> {
   Widget build(BuildContext context) {
     const CameraPosition initialPoint = CameraPosition(
         target: LatLng(-12.135163895120733, -77.02331503157205),
-        zoom: 17.5
+        zoom: 17,
     );
 
-    // Llamar marcadores desde base de datos
     Set<Marker> markers = <Marker>{};
 
     for (var element in points) {
@@ -66,15 +66,17 @@ class _ViewMapPageState extends State<ViewMapPage> {
     }
 
     return Scaffold(
-      body: GoogleMap(
-        myLocationButtonEnabled: false,
-        zoomControlsEnabled: false,
-        mapType: mapType,
-        markers: markers,
-        initialCameraPosition: initialPoint,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+      body: SafeArea(
+        child: GoogleMap(
+          myLocationButtonEnabled: false,
+          zoomControlsEnabled: false,
+          mapType: mapType,
+          markers: markers,
+          initialCameraPosition: initialPoint,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
       ),
     );
   }
