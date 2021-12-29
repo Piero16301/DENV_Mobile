@@ -1,3 +1,4 @@
+import 'package:deteccion_zonas_dengue/sources/pages/report_area_comment_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:deteccion_zonas_dengue/sources/pages/home_page.dart';
@@ -18,9 +19,10 @@ class MyApp extends StatelessWidget {
       title: 'Detección de Zonas con Dengue',
       initialRoute: 'home',
       routes: {
-        'home'        : (BuildContext context) => const HomePage(),
-        'view_map'    : (BuildContext context) => const ViewMapPage(),
-        'report_area' : (BuildContext context) => const ReportAreaPage(),
+        'home'                : (BuildContext context) => const HomePage(),
+        'view_map'            : (BuildContext context) => const ViewMapPage(),
+        'report_area'         : (BuildContext context) => const ReportAreaPage(),
+        'report_area_comment' : (BuildContext context) => const ReportAreaComment(),
       },
     );
   }

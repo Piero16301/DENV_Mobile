@@ -17,6 +17,7 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   MapType mapType = MapType.normal;
   int _markerIdCounter = 0;
+  LatLng currentPosition = const LatLng(-12.135163895120733, -77.02331503157205);
 
   static const CameraPosition initialPoint = CameraPosition(
     target: LatLng(-12.135163895120733, -77.02331503157205),
@@ -31,7 +32,7 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
   }
 
   void setMarker() async {
-    markerIcon = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), 'assets/add_map_marker.png');
+    markerIcon = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), 'assets/map_marker.png');
     setState(() {});
   }
 
@@ -43,12 +44,6 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
           myLocationButtonEnabled: false,
           zoomControlsEnabled: false,
 
-          // Gestos a bloquear para la siguiente vista
-          // rotateGesturesEnabled: false,
-          // scrollGesturesEnabled: false,
-          // tiltGesturesEnabled: false,
-          // zoomGesturesEnabled: false,
-
           mapType: mapType,
           markers: Set<Marker>.of(_markers.values),
           onMapCreated: _onMapCreated,
@@ -57,6 +52,7 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
             if (_markers.isNotEmpty) {
               MarkerId markerId = MarkerId(_markerIdVal());
               Marker marker = _markers[markerId]!;
+              currentPosition = position.target;
               Marker updatedMarker = marker.copyWith(
                 positionParam: position.target,
                 iconParam: markerIcon,
@@ -75,7 +71,7 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
         ),
         icon: const Icon(Icons.add_location_alt_rounded),
         backgroundColor: const Color(0xff2c5364),
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, 'report_area_comment', arguments: currentPosition),
       ),
     );
   }

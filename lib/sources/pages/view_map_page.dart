@@ -36,6 +36,8 @@ class _ViewMapPageState extends State<ViewMapPage> {
     MosquitoPointProvider mosquitoPointProvider = MosquitoPointProvider();
     List<MosquitoPointModel> response = await mosquitoPointProvider.getAllMosquitoPoints();
     points = List.from(response);
+
+    setState(() {});
   }
 
   void setMarker() async {
