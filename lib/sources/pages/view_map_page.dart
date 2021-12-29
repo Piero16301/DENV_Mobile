@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
+import 'package:deteccion_zonas_dengue/sources/providers/mosquito_point_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,10 +18,23 @@ class _ViewMapPageState extends State<ViewMapPage> {
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   MapType mapType = MapType.normal;
 
+  // Lista de todos los puntos de la base de datos
+  List<MosquitoPointModel> points = [];
+
   @override
   void initState() {
     super.initState();
+
+    getAllPoints();
+
     setMarker();
+  }
+
+  void getAllPoints() async {
+    // Obtener todos los puntos de la base de datos
+    MosquitoPointProvider mosquitoPointProvider = MosquitoPointProvider();
+    List<MosquitoPointModel> response = await mosquitoPointProvider.getAllMosquitoPoints();
+    points = List.from(response);
   }
 
   void setMarker() async {
@@ -37,16 +52,18 @@ class _ViewMapPageState extends State<ViewMapPage> {
     // Llamar marcadores desde base de datos
     Set<Marker> markers = <Marker>{};
 
-    markers.add(Marker(
-      markerId: const MarkerId('-MYMR9IcLh9d5A2m4zbn'),
-      icon: markerIcon,
-      anchor: const Offset(0.5, 0.5),
-      position: const LatLng(-12.135163895120733, -77.02331503157205),
-      infoWindow: const InfoWindow(
-        title: 'Mosquitos',
-        snippet: 'Se han reportado mosquitos bastantes',
-      ),
-    ));
+    for (var element in points) {
+      markers.add(Marker(
+        markerId: MarkerId(element.id),
+        icon: markerIcon,
+        anchor: const Offset(0.5, 0.5),
+        position: LatLng(element.latitud, element.longitud),
+        infoWindow: InfoWindow(
+          title: 'Mosquitos',
+          snippet: element.comentario,
+        ),
+      ));
+    }
 
     return Scaffold(
       body: GoogleMap(
