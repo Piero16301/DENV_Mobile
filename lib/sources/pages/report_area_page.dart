@@ -56,6 +56,7 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
               Marker updatedMarker = marker.copyWith(
                 positionParam: position.target,
                 iconParam: markerIcon,
+                anchorParam: const Offset(0.5, 0.5),
               );
 
               setState(() {
@@ -86,6 +87,7 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
       position: position,
       draggable: false,
       icon: markerIcon,
+      anchor: const Offset(0.5, 0.5),
     );
 
     setState(() {

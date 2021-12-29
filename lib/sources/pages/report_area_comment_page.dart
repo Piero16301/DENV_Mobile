@@ -77,6 +77,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                     markerId: const MarkerId('main_point'),
                     position: point,
                     icon: markerIcon,
+                    anchor: const Offset(0.5, 0.5),
                   )},
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
@@ -178,10 +179,62 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
     bool response = await mosquitoPointProvider.createMosquitoPoint(mosquitoPoint);
 
     if (response) {
-      print('Punto creado con éxito');
+      showDialogCreatePoint(true);
     } else {
-      print('Error al crear el punto');
+      showDialogCreatePoint(false);
     }
+  }
+
+  Future<dynamic> showDialogCreatePoint(bool success) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            elevation: 3,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+            title: Center(
+              child: Text(
+                success ? 'Éxito' : 'Error',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: Color(0xff2c5364),
+                ),
+              ),
+            ),
+            content: Text(success
+              ? 'La zona ha sido guardada correctamente en la base de datos'
+              : 'Verifica tu conexión a internet e intenta crear el punto nuevamente',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 15
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Color(0xff2c5364),
+                  ),
+                ),
+                onPressed: () => success
+                  ? Navigator.pushNamedAndRemoveUntil(context, 'home', (_) => false)
+                  : Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      }
+    );
   }
 }
 

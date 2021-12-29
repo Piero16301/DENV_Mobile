@@ -11,8 +11,11 @@ class MosquitoPointProvider {
   Future<bool> createMosquitoPoint(MosquitoPointModel mosquitoPoint) async {
     final url = '$_url/puntos-mosquitos.json';
     final response = await http.post(Uri.parse(url), body: mosquitoPointToJson(mosquitoPoint));
-    final decodedData = json.decode(response.body);
-    return true;
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<List<MosquitoPointModel>> getAllMosquitoPoints() async {
