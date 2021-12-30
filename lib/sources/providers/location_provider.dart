@@ -30,7 +30,7 @@ Future<Position> getCurrentLocation() async {
 Future<String> getCity({required double latitude, required double longitude}) async {
   GoogleGeocoding googleGeocoding = GoogleGeocoding('AIzaSyBy-ZP5BSbdESqotdxt9G5gMxZILYRJ0Ng');
   LatLon latLon = LatLon(latitude, longitude);
-  GeocodingResponse? response = await googleGeocoding.geocoding.getReverse(latLon);
+  GeocodingResponse? response = await googleGeocoding.geocoding.getReverse(latLon, language: 'es');
   if (response != null) {
     if (response.results != null) {
       if (response.results!.isNotEmpty) {
@@ -41,20 +41,26 @@ Future<String> getCity({required double latitude, required double longitude}) as
                 return element.longName!;
               }
             }
-            return '-';
-          } else {
-            return '-';
           }
-        } else {
-          return '-';
         }
-      } else {
-        return '-';
       }
-    } else {
-      return '-';
     }
-  } else {
-    return '-';
   }
+  return '-';
+}
+
+Future<String> getAddress({required double latitude, required double longitude}) async {
+  GoogleGeocoding googleGeocoding = GoogleGeocoding('AIzaSyBy-ZP5BSbdESqotdxt9G5gMxZILYRJ0Ng');
+  LatLon latLon = LatLon(latitude, longitude);
+  GeocodingResponse? response = await googleGeocoding.geocoding.getReverse(latLon, language: 'es');
+  if (response != null) {
+    if (response.results != null) {
+      if (response.results!.isNotEmpty) {
+        if (response.results![0].formattedAddress != null) {
+          return response.results![0].formattedAddress!;
+        }
+      }
+    }
+  }
+  return '-';
 }

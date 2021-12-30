@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
-
     final String _currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
     return Scaffold(
@@ -103,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                 homePageButton(
                   _size,
                   'SUBIR FOTO DE MOSQUITO',
-                  'report_area',
+                  'get_image',
                 ),
               ],
             ),
