@@ -11,7 +11,7 @@ class MosquitoPhotoProvider {
 
   Future<bool> createMosquitoPhoto(MosquitoPhotoModel mosquitoPhoto) async {
     final url = '$_url/fotos-mosquitos.json';
-    final response = await http.post(Uri.parse(url), body: mosquitoPointToJson(mosquitoPhoto));
+    final response = await http.post(Uri.parse(url), body: mosquitoPhotoToJson(mosquitoPhoto));
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -24,19 +24,19 @@ class MosquitoPhotoProvider {
     final response = await http.get(Uri.parse(url));
 
     final Map<String, dynamic>? decodedData = json.decode(response.body);
-    final List<MosquitoPhotoModel> points = [];
+    final List<MosquitoPhotoModel> photos = [];
 
     if (decodedData == null) return [];
 
     if (decodedData['error'] != null) return [];
 
-    decodedData.forEach((id, point) {
-      final pointTemp = MosquitoPhotoModel.fromJson(point);
-      pointTemp.id = id;
-      points.add(pointTemp);
+    decodedData.forEach((id, photo) {
+      final photoTemp = MosquitoPhotoModel.fromJson(photo);
+      photoTemp.id = id;
+      photos.add(photoTemp);
     });
 
-    return points;
+    return photos;
   }
 
   Future<String> uploadPhoto(File image) async {

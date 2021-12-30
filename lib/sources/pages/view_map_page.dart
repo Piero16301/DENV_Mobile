@@ -61,8 +61,8 @@ class _ViewMapPageState extends State<ViewMapPage> {
         anchor: const Offset(0.5, 0.5),
         position: LatLng(element.latitud, element.longitud),
         infoWindow: InfoWindow(
-          title: 'Mosquitos',
-          snippet: element.comentario,
+          title: 'Área con mosquitos',
+          onTap: () => Navigator.pushNamed(context, 'mosquito_point_view', arguments: element),
         ),
       ));
     }

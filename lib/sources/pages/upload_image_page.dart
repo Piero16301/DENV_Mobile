@@ -47,7 +47,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
         elevation: 3.0,
         title: const Center(
           child: Text(
-            'Agregar Foto',
+            'Agregar foto',
             style: TextStyle(
               fontWeight: FontWeight.bold
             ),

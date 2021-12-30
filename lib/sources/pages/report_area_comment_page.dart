@@ -42,7 +42,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
         elevation: 3.0,
         title: const Center(
           child: Text(
-            'Agregar Zona',
+            'Agregar zona',
             style: TextStyle(
               fontWeight: FontWeight.bold
             ),
@@ -56,6 +56,21 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
           children: [
             SizedBox(
               height:_size.width * 0.05,
+            ),
+
+            const Center(
+              child: Text(
+                'Ubicación',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color(0xff2c5364),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: _size.height * 0.02,
             ),
 
             Center(
@@ -91,7 +106,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
             ),
 
             SizedBox(
-              height:_size.width * 0.1,
+              height:_size.width * 0.08,
             ),
 
             Center(
@@ -122,9 +137,11 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                       decoration: const InputDecoration(
                         hintText: 'Insertar comentario',
                         enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(color: Color(0xff2c5364), width: 2)
                         ),
                         focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                             borderSide: BorderSide(color: Color(0xff2c5364), width: 2)
                         ),
                       ),
@@ -161,7 +178,11 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                   ],
                 ),
               ),
-            )
+            ),
+
+            SizedBox(
+              height: _size.width * 0.05,
+            ),
           ],
         ),
       ),

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-MosquitoPhotoModel mosquitoPointFromJson(String str) => MosquitoPhotoModel.fromJson(json.decode(str));
+MosquitoPhotoModel mosquitoPhotoFromJson(String str) => MosquitoPhotoModel.fromJson(json.decode(str));
 
-String mosquitoPointToJson(MosquitoPhotoModel data) => json.encode(data.toJson());
+String mosquitoPhotoToJson(MosquitoPhotoModel data) => json.encode(data.toJson());
 
 class MosquitoPhotoModel {
   String id;
