@@ -26,7 +26,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
   }
 
   void setMarker() async {
-    markerIcon = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), 'assets/map_marker.png');
+    markerIcon = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), 'assets/map_marker_point.png');
     setState(() {});
   }
 
