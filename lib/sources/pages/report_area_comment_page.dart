@@ -95,6 +95,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                     anchor: const Offset(0.5, 0.5),
                   )},
                   onMapCreated: (GoogleMapController controller) {
+                    controller.setMapStyle('[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
                     _controller.complete(controller);
                   },
                   initialCameraPosition: CameraPosition(

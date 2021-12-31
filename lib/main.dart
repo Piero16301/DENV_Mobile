@@ -8,6 +8,7 @@ import 'package:deteccion_zonas_dengue/sources/pages/report_area_page.dart';
 import 'package:deteccion_zonas_dengue/sources/pages/view_map_page.dart';
 import 'package:deteccion_zonas_dengue/sources/pages/upload_image_page.dart';
 import 'package:deteccion_zonas_dengue/sources/pages/mosquito_point_view_page.dart';
+import 'package:deteccion_zonas_dengue/sources/pages/mosquito_photo_view.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         'get_image'           : (BuildContext context) => const GetImagePage(),
         'upload_image'        : (BuildContext context) => const UploadImagePage(),
         'mosquito_point_view' : (BuildContext context) => const MosquitoPointViewPage(),
+        'mosquito_photo_view' : (BuildContext context) => const MosquitoPhotoView(),
       },
     );
   }

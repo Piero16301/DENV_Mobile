@@ -44,6 +44,9 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
           myLocationButtonEnabled: false,
           zoomControlsEnabled: false,
 
+          // Para ocultar los botones de direcciones
+          mapToolbarEnabled: false,
+
           mapType: mapType,
           markers: Set<Marker>.of(_markers.values),
           onMapCreated: _onMapCreated,
@@ -78,6 +81,7 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
   }
 
   void _onMapCreated(GoogleMapController controller) async {
+    controller.setMapStyle('[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
     _controller.complete(controller);
 
     MarkerId markerId = MarkerId(_markerIdVal());

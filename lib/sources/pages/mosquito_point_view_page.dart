@@ -1,9 +1,8 @@
 import 'dart:async';
-
-import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
 
 class MosquitoPointViewPage extends StatefulWidget {
   const MosquitoPointViewPage({Key? key}) : super(key: key);
@@ -47,7 +46,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
                   fontWeight: FontWeight.bold
               ),
             ),
-          )
+          ),
       ),
 
       body: SingleChildScrollView(
@@ -87,6 +86,9 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
                   tiltGesturesEnabled: false,
                   zoomGesturesEnabled: false,
 
+                  // Para ocultar los botones de direcciones
+                  mapToolbarEnabled: false,
+
                   mapType: mapType,
                   markers: <Marker>{Marker(
                     markerId: MarkerId(mosquitoPointModel.id),
@@ -95,6 +97,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
                     anchor: const Offset(0.5, 0.5),
                   )},
                   onMapCreated: (GoogleMapController controller) {
+                    controller.setMapStyle('[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
                     _controller.complete(controller);
                   },
                   initialCameraPosition: CameraPosition(
