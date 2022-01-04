@@ -55,133 +55,169 @@ class _UploadImagePageState extends State<UploadImagePage> {
         ),
       ),
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: _size.width * 0.05,
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: _size.width * 0.05,
+            ),
 
-          Center(
-            child: Container(
-              height: _size.height * 0.45,
-              width: _size.width * 0.9,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color(0xff2c5364),
-                  width: 3,
+            const Center(
+              child: Text(
+                'Fotografía',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color(0xff2c5364),
                 ),
               ),
-              child: Image.file(
-                image,
-                fit: BoxFit.contain,
+            ),
+
+            SizedBox(
+              height:_size.width * 0.05,
+            ),
+
+            Center(
+              child: Container(
+                height: _size.height * 0.45,
+                width: _size.width * 0.9,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: const Color(0xff2c5364),
+                    width: 3,
+                  ),
+                ),
+                child: Image.file(
+                  image,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-          ),
 
-          SizedBox(
-            height: _size.width * 0.1,
-          ),
+            SizedBox(
+              height: _size.width * 0.05,
+            ),
 
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              rowDetails(
-                _size,
-                Icons.location_on_outlined,
-                currentAddress,
-              ),
-
-              SizedBox(
-                height: _size.width * 0.075,
-              ),
-
-              rowDetails(
-                _size,
-                Icons.calendar_today_outlined,
-                _currentDate,
-              ),
-
-              SizedBox(
-                height: _size.width * 0.075,
-              ),
-
-              rowDetails(
-                _size,
-                Icons.access_time_outlined,
-                _currentHour,
-              ),
-            ],
-          ),
-
-          SizedBox(
-            height: _size.width * 0.1,
-          ),
-          
-          ElevatedButton(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Icon(Icons.send, size: 60),
-                Text(
-                  'Enviar',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    'Detalles',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Color(0xff2c5364),
+                    ),
                   ),
+                ),
+
+                SizedBox(
+                  height:_size.width * 0.05,
+                ),
+
+                rowDetails(
+                  _size,
+                  Icons.location_on_outlined,
+                  currentAddress,
+                ),
+
+                SizedBox(
+                  height:_size.width * 0.05,
+                ),
+
+                rowDetails(
+                  _size,
+                  Icons.calendar_today_outlined,
+                  _currentDate,
+                ),
+
+                SizedBox(
+                  height:_size.width * 0.05,
+                ),
+
+                rowDetails(
+                  _size,
+                  Icons.access_time_outlined,
+                  _currentHour,
                 ),
               ],
             ),
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              elevation: MaterialStateProperty.all<double>(3.0),
-              backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff2c5364)),
-              maximumSize: MaterialStateProperty.all<Size>(Size(_size.width * 0.25, _size.width * 0.25)),
-              minimumSize: MaterialStateProperty.all<Size>(Size(_size.width * 0.25, _size.width * 0.25)),
+
+            SizedBox(
+              height: _size.width * 0.1,
             ),
-            onPressed: () async {
-              MosquitoPhotoProvider mosquitoPhotoProvider = MosquitoPhotoProvider();
-              String photoUrl = await mosquitoPhotoProvider.uploadPhoto(image);
-              if (photoUrl == '-') {
-                showDialogCreatePoint(
-                  false,
-                  'Foto no subida',
-                  'Verifica tu conexión a internet e intenta crear el punto nuevamente',
-                );
-              }
 
-              MosquitoPhotoModel mosquitoPhotoModel = MosquitoPhotoModel(
-                direccion: currentAddress,
-                fecha: _currentDate,
-                fotoUrl: photoUrl,
-                hora: _currentHour,
-                latitud: currentLatitude,
-                longitud: currentLongitude,
-              );
+            ElevatedButton(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Icon(Icons.send, size: 60),
+                  Text(
+                    'Enviar',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                elevation: MaterialStateProperty.all<double>(3.0),
+                backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff2c5364)),
+                maximumSize: MaterialStateProperty.all<Size>(Size(_size.width * 0.25, _size.width * 0.25)),
+                minimumSize: MaterialStateProperty.all<Size>(Size(_size.width * 0.25, _size.width * 0.25)),
+              ),
+              onPressed: () async {
+                MosquitoPhotoProvider mosquitoPhotoProvider = MosquitoPhotoProvider();
+                String photoUrl = await mosquitoPhotoProvider.uploadPhoto(image);
+                if (photoUrl == '-') {
+                  showDialogCreatePoint(
+                    false,
+                    'Foto no subida',
+                    'Verifica tu conexión a internet e intenta crear el punto nuevamente',
+                  );
+                }
 
-              bool response = await mosquitoPhotoProvider.createMosquitoPhoto(mosquitoPhotoModel);
-              if (response) {
-                showDialogCreatePoint(
-                  true,
-                  'Éxito',
-                  'La foto ha sido guardada correctamente en la base de datos',
+                MosquitoPhotoModel mosquitoPhotoModel = MosquitoPhotoModel(
+                  direccion: currentAddress,
+                  fecha: _currentDate,
+                  fotoUrl: photoUrl,
+                  hora: _currentHour,
+                  latitud: currentLatitude,
+                  longitud: currentLongitude,
                 );
-              } else {
-                showDialogCreatePoint(
-                  false,
-                  'Error',
-                  'Verifica tu conexión a internet e intenta crear el punto nuevamente',
-                );
-              }
-            },
-          ),
-        ],
+
+                bool response = await mosquitoPhotoProvider.createMosquitoPhoto(mosquitoPhotoModel);
+                if (response) {
+                  showDialogCreatePoint(
+                    true,
+                    'Éxito',
+                    'La foto ha sido guardada correctamente en la base de datos',
+                  );
+                } else {
+                  showDialogCreatePoint(
+                    false,
+                    'Error',
+                    'Verifica tu conexión a internet e intenta crear el punto nuevamente',
+                  );
+                }
+              },
+            ),
+
+            SizedBox(
+              height: _size.width * 0.05,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -242,7 +278,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          width: _size.width * 0.15,
+          width: _size.width * 0.05,
         ),
 
         Icon(

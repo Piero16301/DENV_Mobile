@@ -8,7 +8,7 @@ import 'package:deteccion_zonas_dengue/sources/pages/report_area_page.dart';
 import 'package:deteccion_zonas_dengue/sources/pages/view_map_page.dart';
 import 'package:deteccion_zonas_dengue/sources/pages/upload_image_page.dart';
 import 'package:deteccion_zonas_dengue/sources/pages/mosquito_point_view_page.dart';
-import 'package:deteccion_zonas_dengue/sources/pages/mosquito_photo_view.dart';
+import 'package:deteccion_zonas_dengue/sources/pages/mosquito_photo_view_page.dart';
 
 void main() async {
   runApp(const MyApp());

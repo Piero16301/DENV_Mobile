@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
+import 'package:deteccion_zonas_dengue/sources/providers/location_provider.dart';
 import 'package:deteccion_zonas_dengue/sources/providers/mosquito_point_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 class ReportAreaComment extends StatefulWidget {
   const ReportAreaComment({Key? key}) : super(key: key);
@@ -17,6 +19,10 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
 
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   MapType mapType = MapType.normal;
+
+  String currentAddress = '-';
+  double currentLatitude = 0.0;
+  double currentLongitude = 0.0;
 
   @override
   void initState() {
@@ -34,6 +40,14 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
     final LatLng point = ModalRoute.of(context)!.settings.arguments as LatLng;
+    final String _currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    final String _currentHour = DateFormat('Hms').format(DateTime.now());
+
+    getAddress(latitude: point.latitude, longitude: point.longitude).then((address) {
+      currentAddress = address;
+
+      setState(() {});
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +84,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
             ),
 
             SizedBox(
-              height: _size.height * 0.02,
+              height: _size.width * 0.025,
             ),
 
             Center(
@@ -107,7 +121,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
             ),
 
             SizedBox(
-              height:_size.width * 0.08,
+              height:_size.width * 0.05,
             ),
 
             Center(
@@ -127,7 +141,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                     ),
 
                     SizedBox(
-                      height: _size.height * 0.02,
+                      height: _size.width * 0.025,
                     ),
 
                     TextField(
@@ -149,7 +163,52 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                     ),
 
                     SizedBox(
-                      height: _size.height * 0.02,
+                      height:_size.width * 0.05,
+                    ),
+
+                    const Center(
+                      child: Text(
+                        'Detalles',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Color(0xff2c5364),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height:_size.width * 0.05,
+                    ),
+
+                    rowDetails(
+                      _size,
+                      Icons.location_on_outlined,
+                      currentAddress,
+                    ),
+
+                    SizedBox(
+                      height:_size.width * 0.05,
+                    ),
+
+                    rowDetails(
+                        _size,
+                        Icons.calendar_today_outlined,
+                        _currentDate
+                    ),
+
+                    SizedBox(
+                      height:_size.width * 0.05,
+                    ),
+
+                    rowDetails(
+                        _size,
+                        Icons.access_time_outlined,
+                        _currentHour
+                    ),
+
+                    SizedBox(
+                      height:_size.width * 0.05,
                     ),
 
                     ElevatedButton(
@@ -173,7 +232,13 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                         minimumSize: MaterialStateProperty.all<Size>(Size(_size.width * 0.5, _size.height * 0.05)),
                       ),
                       onPressed: () {
-                        _sendNewPoint(point, _textController.text);
+                        _sendNewPoint(
+                          point,
+                          currentAddress,
+                          _currentHour,
+                          _currentDate,
+                          _textController.text,
+                        );
                       }
                     ),
                   ],
@@ -190,11 +255,43 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
     );
   }
 
-  void _sendNewPoint(LatLng latLng, String comment) async {
+  Row rowDetails(Size _size, IconData iconData, String text) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(
+          iconData,
+          color: Colors.black,
+          size: 30,
+        ),
+
+        SizedBox(
+          width: _size.width * 0.05,
+        ),
+
+        SizedBox(
+          width: _size.width * 0.65,
+          child: Text(
+            text,
+            overflow: TextOverflow.clip,
+            style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _sendNewPoint(LatLng latLng, String address, String hour, String date, String comment) async {
     MosquitoPointModel mosquitoPoint = MosquitoPointModel(
+      direccion: address,
+      hora: hour,
+      fecha: date,
       latitud: latLng.latitude,
       longitud: latLng.longitude,
-      comentario: comment
+      comentario: comment,
     );
 
     MosquitoPointProvider mosquitoPointProvider = MosquitoPointProvider();

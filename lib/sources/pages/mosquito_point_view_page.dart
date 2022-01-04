@@ -69,7 +69,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
             ),
 
             SizedBox(
-              height: _size.height * 0.02,
+              height: _size.height * 0.025,
             ),
 
             Center(
@@ -109,7 +109,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
             ),
 
             SizedBox(
-              height: _size.width * 0.08,
+              height: _size.width * 0.05,
             ),
 
             Center(
@@ -131,7 +131,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
                     ),
 
                     SizedBox(
-                      height: _size.height * 0.02,
+                      height: _size.width * 0.025,
                     ),
 
                     Container(
@@ -155,11 +155,89 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
             ),
 
             SizedBox(
+              height:_size.width * 0.05,
+            ),
+
+            const Center(
+              child: Text(
+                'Detalles',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color(0xff2c5364),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height:_size.width * 0.05,
+            ),
+
+            rowDetails(
+              _size,
+              Icons.location_on_outlined,
+              mosquitoPointModel.direccion,
+            ),
+
+            SizedBox(
+              height:_size.width * 0.05,
+            ),
+
+            rowDetails(
+              _size,
+              Icons.calendar_today_outlined,
+              mosquitoPointModel.fecha,
+            ),
+
+            SizedBox(
+              height:_size.width * 0.05,
+            ),
+
+            rowDetails(
+              _size,
+              Icons.access_time_outlined,
+              mosquitoPointModel.hora,
+            ),
+
+            SizedBox(
               height: _size.width * 0.05,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Row rowDetails(Size _size, IconData iconData, String text) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: _size.width * 0.05,
+        ),
+
+        Icon(
+          iconData,
+          color: Colors.black,
+          size: 30,
+        ),
+
+        SizedBox(
+          width: _size.width * 0.05,
+        ),
+
+        SizedBox(
+          width: _size.width * 0.65,
+          child: Text(
+            text,
+            overflow: TextOverflow.clip,
+            style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

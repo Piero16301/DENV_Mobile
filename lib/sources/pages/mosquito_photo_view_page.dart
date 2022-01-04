@@ -68,7 +68,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
             ),
 
             SizedBox(
-              height: _size.height * 0.02,
+              height: _size.width * 0.025,
             ),
 
             Center(
@@ -113,7 +113,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
 
             const Center(
               child: Text(
-                'Foto',
+                'Fotografía',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -123,7 +123,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
             ),
 
             SizedBox(
-              height: _size.height * 0.02,
+              height: _size.width * 0.025,
             ),
 
             Center(
@@ -161,7 +161,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
             ),
 
             SizedBox(
-              height: _size.height * 0.02,
+              height: _size.width * 0.025,
             ),
 
             Column(
@@ -174,7 +174,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
                 ),
 
                 SizedBox(
-                  height: _size.height * 0.015,
+                  height: _size.width * 0.05,
                 ),
 
                 rowDetails(
@@ -184,7 +184,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
                 ),
 
                 SizedBox(
-                  height: _size.height * 0.015,
+                  height: _size.width * 0.05,
                 ),
 
                 rowDetails(
