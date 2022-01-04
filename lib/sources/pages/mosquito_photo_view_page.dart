@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'package:deteccion_zonas_dengue/sources/models/mosquito_photo_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:deteccion_zonas_dengue/sources/models/mosquito_photo_model.dart';
 
 class MosquitoPhotoView extends StatefulWidget {
   const MosquitoPhotoView({Key? key}) : super(key: key);

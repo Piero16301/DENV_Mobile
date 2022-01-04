@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
-import 'package:deteccion_zonas_dengue/sources/providers/mosquito_point_provider.dart';
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_photo_model.dart';
-import 'package:deteccion_zonas_dengue/sources/providers/mosquito_photo_provider.dart';
+import 'package:deteccion_zonas_dengue/sources/models/screen_arguments_model.dart';
 
 class ViewMapPage extends StatefulWidget {
   const ViewMapPage({Key? key}) : super(key: key);
@@ -22,27 +21,14 @@ class _ViewMapPageState extends State<ViewMapPage> {
 
   MapType mapType = MapType.normal;
 
-  // Posición inicial de la cámara
-  LatLng initialPosition = const LatLng(-12.135525263353959, -77.02378141325494);
-
   // Conjunto de todos los marcadores
   Set<Marker> markers = <Marker>{};
-
-  // Lista de todos los puntos de la base de datos
-  List<MosquitoPointModel> points = [];
-
-  // Lista de todas las fotos de la base de datos
-  List<MosquitoPhotoModel> photos = [];
 
   @override
   void initState() {
     super.initState();
 
     setMarkers();
-
-    // Obtener información de la base de datos
-    getAllPoints();
-    getAllPhotos();
   }
 
   void setMarkers() async {
@@ -51,31 +37,17 @@ class _ViewMapPageState extends State<ViewMapPage> {
     setState(() {});
   }
 
-  // Llamar marcadores de puntos desde base de datos
-  void getAllPoints() async {
-    // Obtener todos los puntos de la base de datos
-    MosquitoPointProvider mosquitoPointProvider = MosquitoPointProvider();
-    List<MosquitoPointModel> response = await mosquitoPointProvider.getAllMosquitoPoints();
-    points = List.from(response);
-
-    setState(() {});
-  }
-
-  // Llamar marcadores de fotos desde base de datos
-  void getAllPhotos() async {
-    // Obtener todos las fotos de la base de datos
-    MosquitoPhotoProvider mosquitoPhotoProvider = MosquitoPhotoProvider();
-    List<MosquitoPhotoModel> response = await mosquitoPhotoProvider.getAllMosquitoPhotos();
-    photos = List.from(response);
-
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Agregar información al conjunto de marcadores
-    addAllPoints();
-    addAllPhotos();
+    // Recibir el objeto del HomePage
+    final ScreenArguments screenArguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
+    // Posición inicial de la cámara
+    LatLng initialPosition = LatLng(screenArguments.centerLatitude, screenArguments.centerLongitude);
+
+    // Recibir data y agregar marcadores
+    addAllPoints(screenArguments.listMosquitoPoints);
+    addAllPhotos(screenArguments.listMosquitoPhotos);
 
     return Scaffold(
       body: SafeArea(
@@ -92,7 +64,7 @@ class _ViewMapPageState extends State<ViewMapPage> {
           markers: markers,
           initialCameraPosition: CameraPosition(
             target: initialPosition,
-            zoom: 15,
+            zoom: 12,
           ),
           onMapCreated: (GoogleMapController controller) {
             controller.setMapStyle('[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
@@ -103,7 +75,7 @@ class _ViewMapPageState extends State<ViewMapPage> {
     );
   }
 
-  void addAllPoints() {
+  void addAllPoints(List<MosquitoPointModel> points) {
     // Se agregan los puntos a los marcadores
     for (var point in points) {
       markers.add(Marker(
@@ -119,7 +91,7 @@ class _ViewMapPageState extends State<ViewMapPage> {
     }
   }
 
-  void addAllPhotos() {
+  void addAllPhotos(List<MosquitoPhotoModel> photos) {
     // Se agregan las fotos a los marcadores
     for (var photo in photos) {
       markers.add(Marker(

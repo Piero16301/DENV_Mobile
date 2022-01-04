@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:deteccion_zonas_dengue/sources/providers/location_provider.dart';
+import 'package:deteccion_zonas_dengue/sources/models/mosquito_photo_model.dart';
+import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
+import 'package:deteccion_zonas_dengue/sources/models/screen_arguments_model.dart';
+import 'package:deteccion_zonas_dengue/sources/providers/mosquito_photo_provider.dart';
+import 'package:deteccion_zonas_dengue/sources/providers/mosquito_point_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -52,7 +57,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             // Zona de Ver Mapa
             InkWell(
-              onTap: () => Navigator.pushNamed(context, 'view_map'),
+              onTap: () => getAllCloudData(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -139,6 +144,49 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  // Obtener todos los puntos de la base de datos
+  Future<List<MosquitoPointModel>> getAllPoints() async {
+    MosquitoPointProvider mosquitoPointProvider = MosquitoPointProvider();
+    List<MosquitoPointModel> pointsResponse = await mosquitoPointProvider.getAllMosquitoPoints();
+    return pointsResponse;
+  }
+
+  // Obtener todos las fotos de la base de datos
+  Future<List<MosquitoPhotoModel>> getAllPhotos() async {
+    MosquitoPhotoProvider mosquitoPhotoProvider = MosquitoPhotoProvider();
+    List<MosquitoPhotoModel> photosResponse = await mosquitoPhotoProvider.getAllMosquitoPhotos();
+    return photosResponse;
+  }
+
+  void getAllCloudData() async {
+    // Obtener datos de la base de datos
+    List<MosquitoPointModel> listPoints = await getAllPoints();
+    List<MosquitoPhotoModel> listPhotos = await getAllPhotos();
+
+    // Calcular el centro del mapa en base a los marcadores
+    double avgLatPoints = listPoints.isEmpty ? 0.0 : listPoints.map((e) => e.latitud).reduce((value, element) => value + element) / listPoints.length;
+    double avgLonPoints = listPoints.isEmpty ? 0.0 : listPoints.map((e) => e.longitud).reduce((value, element) => value + element) / listPoints.length;
+
+    double avgLatPhotos = listPhotos.isEmpty ? 0.0 : listPhotos.map((e) => e.latitud).reduce((value, element) => value + element) / listPhotos.length;
+    double avgLonPhotos = listPhotos.isEmpty ? 0.0 : listPhotos.map((e) => e.longitud).reduce((value, element) => value + element) / listPhotos.length;
+
+    int totalRegisters = listPoints.length + listPhotos.length;
+    double avgLatGlobal = (avgLatPoints * (listPoints.length / totalRegisters))
+        + (avgLatPhotos * (listPhotos.length / totalRegisters));
+    double avgLonGlobal = (avgLonPoints * (listPoints.length / totalRegisters))
+        + (avgLonPhotos * (listPhotos.length / totalRegisters));
+
+    // Objeto de argumentos
+    ScreenArguments screenArguments = ScreenArguments(
+      listPoints,
+      listPhotos,
+      avgLatGlobal,
+      avgLonGlobal,
+    );
+
+    Navigator.pushNamed(context, 'view_map', arguments: screenArguments);
   }
 
   SizedBox homePageButton(Size _size, String text, String page) {
