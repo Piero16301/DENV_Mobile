@@ -2,14 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import 'package:deteccion_zonas_dengue/sources/pages/report_area_comment_page.dart';
-import 'package:deteccion_zonas_dengue/sources/pages/get_image_page.dart';
-import 'package:deteccion_zonas_dengue/sources/pages/home_page.dart';
-import 'package:deteccion_zonas_dengue/sources/pages/report_area_page.dart';
-import 'package:deteccion_zonas_dengue/sources/pages/view_map_page.dart';
-import 'package:deteccion_zonas_dengue/sources/pages/upload_image_page.dart';
-import 'package:deteccion_zonas_dengue/sources/pages/mosquito_point_view_page.dart';
-import 'package:deteccion_zonas_dengue/sources/pages/mosquito_photo_view_page.dart';
+import 'package:deteccion_zonas_dengue/sources/pages/pages.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -26,7 +19,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'DEVN',
+      title: 'DENV',
       initialRoute: 'home',
       routes: {
         'home'                : (BuildContext context) => const HomePage(),
