@@ -36,14 +36,14 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   # Librerías de este proyecto
-  geolocator: ^8.0.1
-  intl: ^0.17.0
-  google_geocoding: ^0.2.0
-  http: ^0.13.4
-  google_maps_flutter: ^2.1.1
-  image_picker: ^0.8.4+4
-  mime_type: ^1.0.0
-  flutter_easyloading: ^3.0.3
+  geolocator: ^8.0.1           # Android | iOS | MacOS | Web
+  intl: ^0.17.0                # Android | iOS | Linux | MacOS | Web | Windows
+  google_geocoding: ^0.2.0     # Android | iOS | Linux | MacOS | Web | Windows
+  http: ^0.13.4                # Android | iOS | Linux | MacOS | Web | Windows
+  google_maps_flutter: ^2.1.1  # Android | iOS
+  image_picker: ^0.8.4+4       # Android | iOS | Web | Windows
+  mime_type: ^1.0.0            # Android | iOS | Linux | MacOS | Web | Windows
+  flutter_easyloading: ^3.0.3  # Android | iOS | Linux | MacOS | Web | Windows
 
 dev_dependencies:
   flutter_test:
