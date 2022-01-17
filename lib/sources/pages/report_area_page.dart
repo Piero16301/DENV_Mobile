@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ReportAreaPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _ReportAreaPageState extends State<ReportAreaPage> {
 
   static const CameraPosition initialPoint = CameraPosition(
     target: LatLng(-12.135163895120733, -77.02331503157205),
-    zoom: 17,
+    zoom: 12,
   );
 
   @override

@@ -1,10 +1,13 @@
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
 import 'package:deteccion_zonas_dengue/sources/providers/location_provider.dart';
 import 'package:deteccion_zonas_dengue/sources/providers/mosquito_point_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 
 class ReportAreaComment extends StatefulWidget {
   const ReportAreaComment({Key? key}) : super(key: key);
@@ -23,12 +26,22 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
   String currentAddress = '-';
   double currentLatitude = 0.0;
   double currentLongitude = 0.0;
+  bool firstCall = true;
 
   @override
   void initState() {
     super.initState();
 
     setMarker();
+
+    // Inicializar el loader
+    EasyLoading.instance
+      ..indicatorType = EasyLoadingIndicatorType.ring
+      ..loadingStyle = EasyLoadingStyle.dark
+      ..indicatorSize = 50.0
+      ..animationStyle = EasyLoadingAnimationStyle.scale
+      ..dismissOnTap = false
+      ..maskType = EasyLoadingMaskType.black;
   }
 
   void setMarker() async {
@@ -43,11 +56,15 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
     final String _currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
     final String _currentHour = DateFormat('Hms').format(DateTime.now());
 
-    getAddress(latitude: point.latitude, longitude: point.longitude).then((address) {
-      currentAddress = address;
+    if (firstCall) {
+      getAddress(latitude: point.latitude, longitude: point.longitude).then((
+          address) {
+        currentAddress = address;
 
-      setState(() {});
-    });
+        setState(() {});
+      });
+      firstCall = false;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -285,6 +302,10 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
   }
 
   void _sendNewPoint(LatLng latLng, String address, String hour, String date, String comment) async {
+    await EasyLoading.show(
+      status: 'Enviando\ninformación...',
+    );
+
     MosquitoPointModel mosquitoPoint = MosquitoPointModel(
       direccion: address,
       hora: hour,
@@ -296,6 +317,9 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
 
     MosquitoPointProvider mosquitoPointProvider = MosquitoPointProvider();
     bool response = await mosquitoPointProvider.createMosquitoPoint(mosquitoPoint);
+
+    // Ocultar ícono de carga
+    await EasyLoading.dismiss();
 
     if (response) {
       showDialogCreatePoint(true);

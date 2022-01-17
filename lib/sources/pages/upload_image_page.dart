@@ -1,9 +1,12 @@
 import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
+
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_photo_model.dart';
 import 'package:deteccion_zonas_dengue/sources/providers/location_provider.dart';
 import 'package:deteccion_zonas_dengue/sources/providers/mosquito_photo_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class UploadImagePage extends StatefulWidget {
   const UploadImagePage({Key? key}) : super(key: key);
@@ -31,6 +34,15 @@ class _UploadImagePageState extends State<UploadImagePage> {
       });
       setState(() {});
     });
+
+    // Inicializar el loader
+    EasyLoading.instance
+      ..indicatorType = EasyLoadingIndicatorType.ring
+      ..loadingStyle = EasyLoadingStyle.dark
+      ..indicatorSize = 50.0
+      ..animationStyle = EasyLoadingAnimationStyle.scale
+      ..dismissOnTap = false
+      ..maskType = EasyLoadingMaskType.black;
   }
 
   @override
@@ -80,7 +92,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
 
             Center(
               child: Container(
-                height: _size.height * 0.45,
+                height: _size.width * 0.9,
                 width: _size.width * 0.9,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -177,6 +189,10 @@ class _UploadImagePageState extends State<UploadImagePage> {
                 minimumSize: MaterialStateProperty.all<Size>(Size(_size.width * 0.25, _size.width * 0.25)),
               ),
               onPressed: () async {
+                await EasyLoading.show(
+                  status: 'Enviando\ninformación...',
+                );
+
                 MosquitoPhotoProvider mosquitoPhotoProvider = MosquitoPhotoProvider();
                 String photoUrl = await mosquitoPhotoProvider.uploadPhoto(image);
                 if (photoUrl == '-') {
@@ -197,6 +213,10 @@ class _UploadImagePageState extends State<UploadImagePage> {
                 );
 
                 bool response = await mosquitoPhotoProvider.createMosquitoPhoto(mosquitoPhotoModel);
+
+                // Ocultar ícono de carga
+                await EasyLoading.dismiss();
+
                 if (response) {
                   showDialogCreatePoint(
                     true,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:deteccion_zonas_dengue/sources/providers/location_provider.dart';
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_photo_model.dart';
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    // Obtener ciudad actual
     getCurrentLocation().then((currentPosition) {
       getCity(latitude: currentPosition.latitude, longitude: currentPosition.longitude).then((currentCity) {
         currentcity = currentCity;
@@ -30,6 +32,15 @@ class _HomePageState extends State<HomePage> {
       });
       setState(() {});
     });
+
+    // Inicializar el loader
+    EasyLoading.instance
+      ..indicatorType = EasyLoadingIndicatorType.ring
+      ..loadingStyle = EasyLoadingStyle.dark
+      ..indicatorSize = 50.0
+      ..animationStyle = EasyLoadingAnimationStyle.scale
+      ..dismissOnTap = false
+      ..maskType = EasyLoadingMaskType.black;
   }
 
   @override
@@ -161,6 +172,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getAllCloudData() async {
+    // Mostrar ícono de carga
+    await EasyLoading.show(
+      status: 'Obteniendo\ninformación...',
+    );
+
     // Obtener datos de la base de datos
     List<MosquitoPointModel> listPoints = await getAllPoints();
     List<MosquitoPhotoModel> listPhotos = await getAllPhotos();
@@ -185,6 +201,9 @@ class _HomePageState extends State<HomePage> {
       avgLatGlobal,
       avgLonGlobal,
     );
+
+    // Ocultar ícono de carga
+    await EasyLoading.dismiss();
 
     Navigator.pushNamed(context, 'view_map', arguments: screenArguments);
   }
