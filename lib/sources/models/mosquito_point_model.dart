@@ -9,6 +9,7 @@ class MosquitoPointModel {
   String comentario;
   String direccion;
   String fecha;
+  String fotoUrl;
   String hora;
   double latitud;
   double longitud;
@@ -18,6 +19,7 @@ class MosquitoPointModel {
     this.comentario = '',
     this.direccion  = '',
     this.fecha      = '',
+    this.fotoUrl    = '',
     this.hora       = '',
     this.latitud    = 0.0,
     this.longitud   = 0.0,
@@ -27,6 +29,7 @@ class MosquitoPointModel {
     comentario: json['comentario'],
     direccion:  json['direccion'],
     fecha:      json['fecha'],
+    fotoUrl:    json['fotoUrl'],
     hora:       json['hora'],
     latitud:    json['latitud'].toDouble(),
     longitud:   json['longitud'].toDouble(),
@@ -36,6 +39,7 @@ class MosquitoPointModel {
     'comentario': comentario,
     'direccion' : direccion,
     'fecha'     : fecha,
+    'fotoUrl'   : 'Sin enlace',
     'hora'      : hora,
     'latitud'   : latitud,
     'longitud'  : longitud,

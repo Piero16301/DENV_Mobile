@@ -6,6 +6,7 @@ String mosquitoPhotoToJson(MosquitoPhotoModel data) => json.encode(data.toJson()
 
 class MosquitoPhotoModel {
   String id;
+  String comentario;
   String direccion;
   String fecha;
   String fotoUrl;
@@ -15,6 +16,7 @@ class MosquitoPhotoModel {
 
   MosquitoPhotoModel({
     this.id         = '',
+    this.comentario = '',
     this.direccion  = '',
     this.fecha      = '',
     this.fotoUrl    = '',
@@ -24,6 +26,7 @@ class MosquitoPhotoModel {
   });
 
   factory MosquitoPhotoModel.fromJson(Map<String, dynamic> json) => MosquitoPhotoModel(
+    comentario: json['comentario'],
     direccion : json['direccion'],
     fecha     : json['fecha'],
     fotoUrl   : json['fotoUrl'],
@@ -33,6 +36,7 @@ class MosquitoPhotoModel {
   );
 
   Map<String, dynamic> toJson() => {
+    'comentario': 'Sin comentario',
     'direccion' : direccion,
     'fecha'     : fecha,
     'fotoUrl'   : fotoUrl,
