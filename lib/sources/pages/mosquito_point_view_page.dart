@@ -92,7 +92,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
                   mapType: mapType,
                   markers: <Marker>{Marker(
                     markerId: MarkerId(mosquitoPointModel.id),
-                    position: LatLng(mosquitoPointModel.latitud, mosquitoPointModel.longitud),
+                    position: LatLng(mosquitoPointModel.latitude, mosquitoPointModel.longitude),
                     icon: markerIcon,
                     anchor: const Offset(0.5, 0.5),
                   )},
@@ -101,7 +101,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
                     _controller.complete(controller);
                   },
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(mosquitoPointModel.latitud, mosquitoPointModel.longitud),
+                    target: LatLng(mosquitoPointModel.latitude, mosquitoPointModel.longitude),
                     zoom: 17,
                   ),
                 ),
@@ -145,7 +145,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        mosquitoPointModel.comentario,
+                        mosquitoPointModel.comment,
                         textAlign: TextAlign.justify,
                       ),
                     ),
@@ -176,7 +176,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
             rowDetails(
               _size,
               Icons.location_on_outlined,
-              mosquitoPointModel.direccion,
+              mosquitoPointModel.address,
             ),
 
             SizedBox(
@@ -186,7 +186,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
             rowDetails(
               _size,
               Icons.calendar_today_outlined,
-              mosquitoPointModel.fecha,
+              mosquitoPointModel.datetime.toIso8601String(),
             ),
 
             SizedBox(
@@ -196,7 +196,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
             rowDetails(
               _size,
               Icons.access_time_outlined,
-              mosquitoPointModel.hora,
+              mosquitoPointModel.datetime.toIso8601String(),
             ),
 
             SizedBox(

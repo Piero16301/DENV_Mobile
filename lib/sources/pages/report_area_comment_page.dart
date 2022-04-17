@@ -53,7 +53,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
     final LatLng point = ModalRoute.of(context)!.settings.arguments as LatLng;
-    final String _currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    final String _currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     final String _currentHour = DateFormat('Hms').format(DateTime.now());
 
     if (firstCall) {
@@ -306,13 +306,15 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
       status: 'Enviando\ninformación...',
     );
 
+    String dateFormat = "${date}T$hour.000+00:00";
+
     MosquitoPointModel mosquitoPoint = MosquitoPointModel(
-      direccion: address,
-      hora: hour,
-      fecha: date,
-      latitud: latLng.latitude,
-      longitud: latLng.longitude,
-      comentario: comment,
+      address: address,
+      comment: comment,
+      datetime: DateTime.parse(dateFormat),
+      latitude: latLng.latitude,
+      longitude: latLng.longitude,
+      photourl: "Sin enlace",
     );
 
     MosquitoPointProvider mosquitoPointProvider = MosquitoPointProvider();

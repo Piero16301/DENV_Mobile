@@ -82,7 +82,7 @@ class _ViewMapPageState extends State<ViewMapPage> {
         markerId: MarkerId(point.id),
         icon: markerIconPoint,
         anchor: const Offset(0.5, 0.5),
-        position: LatLng(point.latitud, point.longitud),
+        position: LatLng(point.latitude, point.longitude),
         infoWindow: InfoWindow(
           title: 'Área con mosquitos',
           onTap: () => Navigator.pushNamed(context, 'mosquito_point_view', arguments: point),

@@ -182,8 +182,8 @@ class _HomePageState extends State<HomePage> {
     List<MosquitoPhotoModel> listPhotos = await getAllPhotos();
 
     // Calcular el centro del mapa en base a los marcadores
-    double avgLatPoints = listPoints.isEmpty ? 0.0 : listPoints.map((e) => e.latitud).reduce((value, element) => value + element) / listPoints.length;
-    double avgLonPoints = listPoints.isEmpty ? 0.0 : listPoints.map((e) => e.longitud).reduce((value, element) => value + element) / listPoints.length;
+    double avgLatPoints = listPoints.isEmpty ? 0.0 : listPoints.map((e) => e.latitude).reduce((value, element) => value + element) / listPoints.length;
+    double avgLonPoints = listPoints.isEmpty ? 0.0 : listPoints.map((e) => e.longitude).reduce((value, element) => value + element) / listPoints.length;
 
     double avgLatPhotos = listPhotos.isEmpty ? 0.0 : listPhotos.map((e) => e.latitud).reduce((value, element) => value + element) / listPhotos.length;
     double avgLonPhotos = listPhotos.isEmpty ? 0.0 : listPhotos.map((e) => e.longitud).reduce((value, element) => value + element) / listPhotos.length;
