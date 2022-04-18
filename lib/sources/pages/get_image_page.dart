@@ -10,7 +10,7 @@ class GetImagePage extends StatefulWidget {
 }
 
 class _GetImagePageState extends State<GetImagePage> {
-  late File image;
+  File? image;
 
   @override
   Widget build(BuildContext context) {

@@ -7,12 +7,17 @@ import 'package:mime_type/mime_type.dart';
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_photo_model.dart';
 
 class MosquitoPhotoProvider {
-  final String _url = 'https://deteccion-zonas-dengue-default-rtdb.firebaseio.com';
+  // URL Backend
+  final String _url = 'http://40.124.84.39';
 
   Future<bool> createMosquitoPhoto(MosquitoPhotoModel mosquitoPhoto) async {
-    final url = '$_url/fotos-mosquitos.json';
+    final url = '$_url/photo';
     final response = await http.post(Uri.parse(url), body: mosquitoPhotoToJson(mosquitoPhoto));
-    if (response.statusCode == 200) {
+    final Map<String, dynamic>? decodedData = json.decode(response.body);
+
+    if (decodedData == null) return false;
+
+    if (decodedData["message"] == "success") {
       return true;
     } else {
       return false;
@@ -20,27 +25,22 @@ class MosquitoPhotoProvider {
   }
 
   Future<List<MosquitoPhotoModel>> getAllMosquitoPhotos() async {
-    final url = '$_url/fotos-mosquitos.json';
+    final url = '$_url/photos';
     final response = await http.get(Uri.parse(url));
 
     final Map<String, dynamic>? decodedData = json.decode(response.body);
-    final List<MosquitoPhotoModel> photos = [];
 
     if (decodedData == null) return [];
 
-    if (decodedData['error'] != null) return [];
+    if (decodedData['message'] != 'success') return [];
 
-    decodedData.forEach((id, photo) {
-      final photoTemp = MosquitoPhotoModel.fromJson(photo);
-      photoTemp.id = id;
-      photos.add(photoTemp);
-    });
+    final mosquitoPhotoResponse = MosquitoPhotoResponse.fromJson(decodedData);
 
-    return photos;
+    return mosquitoPhotoResponse.data.data;
   }
 
   Future<String> uploadPhoto(File image) async {
-    final url = Uri.parse('https://api.cloudinary.com/v1_1/dq5dl67s2/image/upload?upload_preset=faz5r1mr');
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/dq5dl67s2/image/upload?upload_preset=sgtxqlcv');
     final mimeType = mime(image.path)!.split('/');
 
     final imageUploadRequest = http.MultipartRequest(

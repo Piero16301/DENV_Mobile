@@ -49,8 +49,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
     final File image = ModalRoute.of(context)!.settings.arguments as File;
-    final String _currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
-    final String _currentHour = DateFormat('Hms').format(DateTime.now());
+    final DateTime _currentTime = DateTime.now();
 
     return Scaffold(
       appBar: AppBar(
@@ -143,7 +142,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                 rowDetails(
                   _size,
                   Icons.calendar_today_outlined,
-                  _currentDate,
+                  DateFormat('dd-MM-yyyy').format(_currentTime),
                 ),
 
                 SizedBox(
@@ -153,7 +152,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                 rowDetails(
                   _size,
                   Icons.access_time_outlined,
-                  _currentHour,
+                  DateFormat('Hms').format(_currentTime),
                 ),
               ],
             ),
@@ -203,13 +202,15 @@ class _UploadImagePageState extends State<UploadImagePage> {
                   );
                 }
 
+                String dateFormat = "${DateFormat('yyyy-MM-dd').format(_currentTime)}T${DateFormat('Hms').format(_currentTime)}.000+00:00";
+
                 MosquitoPhotoModel mosquitoPhotoModel = MosquitoPhotoModel(
-                  direccion: currentAddress,
-                  fecha: _currentDate,
-                  fotoUrl: photoUrl,
-                  hora: _currentHour,
-                  latitud: currentLatitude,
-                  longitud: currentLongitude,
+                  address: currentAddress,
+                  comment: 'Sin comentario',
+                  datetime: DateTime.parse(dateFormat),
+                  latitude: currentLatitude,
+                  longitude: currentLongitude,
+                  photourl: photoUrl,
                 );
 
                 bool response = await mosquitoPhotoProvider.createMosquitoPhoto(mosquitoPhotoModel);

@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
-    final String _currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    final String _currentDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
     return Scaffold(
       body: Container(
@@ -185,8 +185,8 @@ class _HomePageState extends State<HomePage> {
     double avgLatPoints = listPoints.isEmpty ? 0.0 : listPoints.map((e) => e.latitude).reduce((value, element) => value + element) / listPoints.length;
     double avgLonPoints = listPoints.isEmpty ? 0.0 : listPoints.map((e) => e.longitude).reduce((value, element) => value + element) / listPoints.length;
 
-    double avgLatPhotos = listPhotos.isEmpty ? 0.0 : listPhotos.map((e) => e.latitud).reduce((value, element) => value + element) / listPhotos.length;
-    double avgLonPhotos = listPhotos.isEmpty ? 0.0 : listPhotos.map((e) => e.longitud).reduce((value, element) => value + element) / listPhotos.length;
+    double avgLatPhotos = listPhotos.isEmpty ? 0.0 : listPhotos.map((e) => e.latitude).reduce((value, element) => value + element) / listPhotos.length;
+    double avgLonPhotos = listPhotos.isEmpty ? 0.0 : listPhotos.map((e) => e.longitude).reduce((value, element) => value + element) / listPhotos.length;
 
     int totalRegisters = listPoints.length + listPhotos.length;
     double avgLatGlobal = (avgLatPoints * (listPoints.length / totalRegisters))

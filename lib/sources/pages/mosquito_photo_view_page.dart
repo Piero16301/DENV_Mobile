@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_photo_model.dart';
+import 'package:intl/intl.dart';
 
 class MosquitoPhotoView extends StatefulWidget {
   const MosquitoPhotoView({Key? key}) : super(key: key);
@@ -92,7 +93,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
                   mapType: mapType,
                   markers: <Marker>{Marker(
                     markerId: MarkerId(mosquitoPhotoModel.id),
-                    position: LatLng(mosquitoPhotoModel.latitud, mosquitoPhotoModel.longitud),
+                    position: LatLng(mosquitoPhotoModel.latitude, mosquitoPhotoModel.longitude),
                     icon: markerIcon,
                     anchor: const Offset(0.5, 0.5),
                   )},
@@ -101,7 +102,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
                     _controller.complete(controller);
                   },
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(mosquitoPhotoModel.latitud, mosquitoPhotoModel.longitud),
+                    target: LatLng(mosquitoPhotoModel.latitude, mosquitoPhotoModel.longitude),
                     zoom: 17,
                   ),
                 ),
@@ -139,7 +140,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
                   ),
                 ),
                 child: FadeInImage(
-                  image: NetworkImage(mosquitoPhotoModel.fotoUrl),
+                  image: NetworkImage(mosquitoPhotoModel.photourl),
                   placeholder: const AssetImage('assets/image_loading.gif'),
                   fit: BoxFit.contain,
                 ),
@@ -171,7 +172,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
                 rowDetails(
                   _size,
                   Icons.location_on_outlined,
-                  mosquitoPhotoModel.direccion,
+                  mosquitoPhotoModel.address,
                 ),
 
                 SizedBox(
@@ -181,7 +182,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
                 rowDetails(
                   _size,
                   Icons.calendar_today_outlined,
-                  mosquitoPhotoModel.fecha,
+                  DateFormat('dd-MM-yyyy').format(mosquitoPhotoModel.datetime),
                 ),
 
                 SizedBox(
@@ -191,7 +192,7 @@ class _MosquitoPhotoViewState extends State<MosquitoPhotoView> {
                 rowDetails(
                   _size,
                   Icons.access_time_outlined,
-                  mosquitoPhotoModel.hora,
+                  DateFormat('Hms').format(mosquitoPhotoModel.datetime),
                 ),
               ],
             ),

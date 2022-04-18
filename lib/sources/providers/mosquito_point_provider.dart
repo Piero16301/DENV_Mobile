@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
 
 class MosquitoPointProvider {
+  // URL Backend
   final String _url = 'http://40.124.84.39';
 
   Future<bool> createMosquitoPoint(MosquitoPointModel mosquitoPoint) async {

@@ -53,8 +53,7 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
     final LatLng point = ModalRoute.of(context)!.settings.arguments as LatLng;
-    final String _currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final String _currentHour = DateFormat('Hms').format(DateTime.now());
+    final DateTime _currentTime = DateTime.now();
 
     if (firstCall) {
       getAddress(latitude: point.latitude, longitude: point.longitude).then((
@@ -209,9 +208,9 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                     ),
 
                     rowDetails(
-                        _size,
-                        Icons.calendar_today_outlined,
-                        _currentDate
+                      _size,
+                      Icons.calendar_today_outlined,
+                      DateFormat('dd-MM-yyyy').format(_currentTime),
                     ),
 
                     SizedBox(
@@ -219,9 +218,9 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                     ),
 
                     rowDetails(
-                        _size,
-                        Icons.access_time_outlined,
-                        _currentHour
+                      _size,
+                      Icons.access_time_outlined,
+                      DateFormat('Hms').format(_currentTime),
                     ),
 
                     SizedBox(
@@ -252,8 +251,8 @@ class _ReportAreaCommentState extends State<ReportAreaComment> {
                         _sendNewPoint(
                           point,
                           currentAddress,
-                          _currentHour,
-                          _currentDate,
+                          DateFormat('Hms').format(_currentTime),
+                          DateFormat('yyyy-MM-dd').format(_currentTime),
                           _textController.text,
                         );
                       }

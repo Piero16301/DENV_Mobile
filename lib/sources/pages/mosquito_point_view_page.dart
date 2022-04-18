@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:deteccion_zonas_dengue/sources/models/mosquito_point_model.dart';
+import 'package:intl/intl.dart';
 
 class MosquitoPointViewPage extends StatefulWidget {
   const MosquitoPointViewPage({Key? key}) : super(key: key);
@@ -186,7 +187,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
             rowDetails(
               _size,
               Icons.calendar_today_outlined,
-              mosquitoPointModel.datetime.toIso8601String(),
+              DateFormat('dd-MM-yyyy').format(mosquitoPointModel.datetime),
             ),
 
             SizedBox(
@@ -196,7 +197,7 @@ class _MosquitoPointViewPageState extends State<MosquitoPointViewPage> {
             rowDetails(
               _size,
               Icons.access_time_outlined,
-              mosquitoPointModel.datetime.toIso8601String(),
+              DateFormat('Hms').format(mosquitoPointModel.datetime),
             ),
 
             SizedBox(
