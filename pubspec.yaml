@@ -39,6 +39,7 @@ dependencies:
   geolocator: ^8.2.0          # ANDROID | IOS |       | MACOS | WEB | WINDOWS
   google_geocoding: ^0.2.0    # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
   provider: ^6.0.2            # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
+  shared_preferences: ^2.0.13 # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
 
 dev_dependencies:
   flutter_test:
