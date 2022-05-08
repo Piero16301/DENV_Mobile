@@ -1,10 +1,10 @@
-import 'package:deteccion_zonas_dengue_mobile/shared_preferences/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:deteccion_zonas_dengue_mobile/providers/providers.dart';
 import 'package:deteccion_zonas_dengue_mobile/theme/app_theme.dart';
 import 'package:deteccion_zonas_dengue_mobile/pages/pages.dart';
+import 'package:deteccion_zonas_dengue_mobile/shared_preferences/preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
