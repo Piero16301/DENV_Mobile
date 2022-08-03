@@ -19,7 +19,7 @@ class LocationProvider extends ChangeNotifier {
     if (!locationServiceEnabled) {
       locationEnabled = false;
       notifyListeners();
-      return Future.error('Servicios de localización deshabilitados');
+      return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -27,13 +27,13 @@ class LocationProvider extends ChangeNotifier {
       if (permission == LocationPermission.denied) {
         locationEnabled = false;
         notifyListeners();
-        return Future.error('Permisos de localización denegados');
+        return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
       locationEnabled = false;
       notifyListeners();
-      return Future.error('Permisos de localización denegados permanentemente');
+      return false;
     }
     currentPosition = await Geolocator.getCurrentPosition();
 
@@ -44,11 +44,19 @@ class LocationProvider extends ChangeNotifier {
     isGettingAddress = true;
     notifyListeners();
 
-    await getLocation();
+    bool result = await getLocation();
+    if (!result) {
+      isGettingAddress = false;
+      notifyListeners();
+      return false;
+    }
 
-    GoogleGeocoding googleGeocoding = GoogleGeocoding('AIzaSyBy-ZP5BSbdESqotdxt9G5gMxZILYRJ0Ng');
-    LatLon latLon = LatLon(currentPosition!.latitude, currentPosition!.longitude);
-    GeocodingResponse? geocodingResponse = await googleGeocoding.geocoding.getReverse(latLon, language: 'es');
+    GoogleGeocoding googleGeocoding =
+        GoogleGeocoding('AIzaSyBy-ZP5BSbdESqotdxt9G5gMxZILYRJ0Ng');
+    LatLon latLon =
+        LatLon(currentPosition!.latitude, currentPosition!.longitude);
+    GeocodingResponse? geocodingResponse =
+        await googleGeocoding.geocoding.getReverse(latLon, language: 'es');
     currentAddress = geocodingResponse?.results?.first;
 
     isGettingAddress = false;
