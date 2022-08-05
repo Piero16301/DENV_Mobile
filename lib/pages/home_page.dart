@@ -27,13 +27,16 @@ class HomePage extends StatelessWidget {
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: const [
                     MapButton(),
+                    NewCaseReportButton(),
+                    NewPropagationZoneButton(),
                   ],
                 ),
               ),
               const Text(
-                'Ubicación actual',
+                'Tú ubicación',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -54,30 +57,111 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class MapButton extends StatefulWidget {
+class MapButton extends StatelessWidget {
   const MapButton({Key? key}) : super(key: key);
 
   @override
-  State<MapButton> createState() => _MapButtonState();
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 50),
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: const [
+                IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.map_rounded,
+                    // color: Colors.white,
+                  ),
+                  iconSize: 150,
+                ),
+                // const SizedBox(
+                //   height: 200,
+                //   width: 200,
+                //   child: CircularProgressIndicator(
+                //     strokeWidth: 7,
+                //     value: 0.7,
+                //   ),
+                // ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: Text(
+                'Mostar mapa',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {},
+    );
+  }
 }
 
-class _MapButtonState extends State<MapButton> {
-  bool isLoading = false;
+class NewCaseReportButton extends StatelessWidget {
+  const NewCaseReportButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
-        if (isLoading) return;
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ButtonStyle(
+          fixedSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        child: const Text(
+          'Nuevo reporte de caso',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
 
-        setState(() => isLoading = true);
-        await Future.delayed(const Duration(seconds: 3));
-        setState(() => isLoading = false);
-      },
-      child: isLoading
-          ? const CircularProgressIndicator(
-              color: Colors.white,
-            )
-          : const Text('Mostrar mapa'),
+class NewPropagationZoneButton extends StatelessWidget {
+  const NewPropagationZoneButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ButtonStyle(
+          fixedSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        child: const Text(
+          'Nueva zona de propagación',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 }
