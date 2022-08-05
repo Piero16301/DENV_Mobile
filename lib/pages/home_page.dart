@@ -25,23 +25,27 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    MapButton(),
-                    NewCaseReportButton(),
-                    NewPropagationZoneButton(),
-                  ],
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      MapButton(),
+                      NewCaseReportButton(),
+                      NewPropagationZoneButton(),
+                    ],
+                  ),
                 ),
               ),
               const Text(
                 'Tú ubicación',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox(height: 5),
               Text(
                 '${locationProvider.currentAddress!.formattedAddress}',
                 style: const TextStyle(
@@ -116,7 +120,7 @@ class NewCaseReportButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {},
         style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+          fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           shape: MaterialStateProperty.all<OutlinedBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -124,9 +128,9 @@ class NewCaseReportButton extends StatelessWidget {
           ),
         ),
         child: const Text(
-          'Nuevo reporte de caso',
+          'Reportar nuevo caso de dengue',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
@@ -146,7 +150,7 @@ class NewPropagationZoneButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {},
         style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+          fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           shape: MaterialStateProperty.all<OutlinedBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -154,9 +158,9 @@ class NewPropagationZoneButton extends StatelessWidget {
           ),
         ),
         child: const Text(
-          'Nueva zona de propagación',
+          'Reportar nueva zona de propagación',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
