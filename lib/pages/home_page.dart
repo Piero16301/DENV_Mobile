@@ -61,12 +61,31 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class MapButton extends StatelessWidget {
+class MapButton extends StatefulWidget {
   const MapButton({Key? key}) : super(key: key);
+
+  @override
+  State<MapButton> createState() => _MapButtonState();
+}
+
+class _MapButtonState extends State<MapButton> {
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: _loading
+          ? null
+          : () {
+              setState(() {
+                _loading = true;
+              });
+              Future.delayed(const Duration(seconds: 3), () {
+                setState(() {
+                  _loading = false;
+                });
+              });
+            },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 50),
         child: Column(
@@ -85,30 +104,34 @@ class MapButton extends StatelessWidget {
                   ),
                   iconSize: 150,
                 ),
-                const SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 7,
-                    // value: 0.7,
+                AnimatedOpacity(
+                  opacity: _loading ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 500),
+                  child: const SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 7,
+                      // value: 0.7,
+                    ),
                   ),
                 ),
               ],
             ),
-            // const Padding(
-            //   padding: EdgeInsets.only(top: 12),
-            //   child: Text(
-            //     'Mostar mapa',
-            //     style: TextStyle(
-            //       fontSize: 20,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            // ),
+            AnimatedOpacity(
+              opacity: _loading ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 500),
+              child: const Text(
+                'Mostar mapa',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ],
         ),
       ),
-      onTap: () {},
     );
   }
 }
