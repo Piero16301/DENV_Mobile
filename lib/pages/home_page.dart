@@ -73,35 +73,38 @@ class MapButton extends StatelessWidget {
           children: [
             Stack(
               alignment: Alignment.center,
-              children: const [
+              children: [
                 IconButton(
                   onPressed: null,
                   icon: Icon(
                     Icons.map_rounded,
-                    // color: Colors.white,
+                    color: MediaQuery.of(context).platformBrightness ==
+                            Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
                   ),
                   iconSize: 150,
                 ),
-                // const SizedBox(
-                //   height: 200,
-                //   width: 200,
-                //   child: CircularProgressIndicator(
-                //     strokeWidth: 7,
-                //     value: 0.7,
-                //   ),
-                // ),
+                const SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 7,
+                    // value: 0.7,
+                  ),
+                ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.only(top: 12),
-              child: Text(
-                'Mostar mapa',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            // const Padding(
+            //   padding: EdgeInsets.only(top: 12),
+            //   child: Text(
+            //     'Mostar mapa',
+            //     style: TextStyle(
+            //       fontSize: 20,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

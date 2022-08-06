@@ -3,11 +3,17 @@ import 'dart:ui';
 import 'package:denv_mobile/providers/providers.dart';
 import 'package:denv_mobile/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/pages.dart';
 
-void main() async {
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  ThemeModeApp.init(
+    isDarkMode:
+        SchedulerBinding.instance.window.platformBrightness == Brightness.dark,
+  );
   runApp(const MyApp());
 }
 
@@ -47,6 +53,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return ValueListenableBuilder<Brightness>(
       valueListenable: _themeNotifier.appBrightness,
       builder: (context, value, child) {
+        ThemeModeApp.changeTheme(value == Brightness.dark);
+
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => LocationProvider()),
@@ -58,33 +66,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             routes: {
               '/home': (context) => const HomePage(),
             },
-            theme: (value.name == 'dark')
-                ? ThemeData.dark().copyWith(
-                    primaryColor: Colors.black,
-                    scaffoldBackgroundColor: Colors.black,
-                    appBarTheme: const AppBarTheme(
-                      backgroundColor: Colors.black,
-                    ),
-                    elevatedButtonTheme: ElevatedButtonThemeData(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.lightBlueAccent,
-                        onPrimary: Colors.black,
-                      ),
-                    ),
-                  )
-                : ThemeData.light().copyWith(
-                    primaryColor: Colors.white,
-                    scaffoldBackgroundColor: Colors.white,
-                    appBarTheme: const AppBarTheme(
-                      backgroundColor: Colors.white,
-                    ),
-                    elevatedButtonTheme: ElevatedButtonThemeData(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.lightBlueAccent,
-                        onPrimary: Colors.white,
-                      ),
-                    ),
-                  ),
+            theme: ThemeModeApp.getTheme(),
           ),
         );
       },
