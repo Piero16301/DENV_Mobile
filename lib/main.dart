@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:denv_mobile/providers/providers.dart';
 import 'package:denv_mobile/themes/themes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/pages.dart';
@@ -14,6 +16,9 @@ void main() {
     isDarkMode:
         SchedulerBinding.instance.window.platformBrightness == Brightness.dark,
   );
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
+  }
   runApp(const MyApp());
 }
 
@@ -65,6 +70,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             initialRoute: '/home',
             routes: {
               '/home': (context) => const HomePage(),
+              '/map': (context) => const MapPage(),
             },
             theme: ThemeModeApp.getTheme(),
           ),

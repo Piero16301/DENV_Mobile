@@ -61,31 +61,25 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class MapButton extends StatefulWidget {
+class MapButton extends StatelessWidget {
   const MapButton({Key? key}) : super(key: key);
-
-  @override
-  State<MapButton> createState() => _MapButtonState();
-}
-
-class _MapButtonState extends State<MapButton> {
-  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: _loading
-          ? null
-          : () {
-              setState(() {
-                _loading = true;
-              });
-              Future.delayed(const Duration(seconds: 3), () {
-                setState(() {
-                  _loading = false;
-                });
-              });
-            },
+      // onTap: _loading
+      //     ? null
+      //     : () {
+      //         setState(() {
+      //           _loading = true;
+      //         });
+      //         Future.delayed(const Duration(seconds: 3), () {
+      //           setState(() {
+      //             _loading = false;
+      //           });
+      //         });
+      //       },
+      onTap: () => Navigator.pushNamed(context, '/map'),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 50),
         child: Column(
@@ -104,24 +98,25 @@ class _MapButtonState extends State<MapButton> {
                   ),
                   iconSize: 150,
                 ),
-                AnimatedOpacity(
-                  opacity: _loading ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 500),
-                  child: const SizedBox(
+                const AnimatedOpacity(
+                  // opacity: _loading ? 1.0 : 0.0,
+                  opacity: 0.0,
+                  duration: Duration(milliseconds: 500),
+                  child: SizedBox(
                     height: 200,
                     width: 200,
                     child: CircularProgressIndicator(
                       strokeWidth: 7,
-                      // value: 0.7,
                     ),
                   ),
                 ),
               ],
             ),
-            AnimatedOpacity(
-              opacity: _loading ? 0.0 : 1.0,
-              duration: const Duration(milliseconds: 500),
-              child: const Text(
+            const AnimatedOpacity(
+              // opacity: _loading ? 0.0 : 1.0,
+              opacity: 1.0,
+              duration: Duration(milliseconds: 500),
+              child: Text(
                 'Mostar mapa',
                 style: TextStyle(
                   fontSize: 20,
