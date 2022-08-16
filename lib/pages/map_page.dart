@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
@@ -10,11 +11,18 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {
+class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   final Completer<GoogleMapController> _controller = Completer();
 
-  BitmapDescriptor _markerIconCaseReport = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor _markerIconPropagationZone = BitmapDescriptor.defaultMarker;
+  String _darkMapStyle = '';
+  String _lightMapStyle = '';
+
+  BitmapDescriptor _markerIconCaseReportLight = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _markerIconPropagationZoneLight =
+      BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _markerIconCaseReportDark = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _markerIconPropagationZoneDark =
+      BitmapDescriptor.defaultMarker;
 
   // final MapType _currentMapType = MapType.normal;
 
@@ -22,28 +30,78 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
-    _setCustomMapPin();
     super.initState();
+    _setCustomMapPin();
+
+    WidgetsBinding.instance.addObserver(this);
+    _loadMapStyles();
+  }
+
+  Future _loadMapStyles() async {
+    _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
+    _lightMapStyle =
+        await rootBundle.loadString('assets/map_styles/light.json');
+  }
+
+  Future _setMapStyle() async {
+    final controller = await _controller.future;
+    final theme = WidgetsBinding.instance.window.platformBrightness;
+    if (theme == Brightness.dark) {
+      controller.setMapStyle(_darkMapStyle);
+    } else {
+      controller.setMapStyle(_lightMapStyle);
+    }
   }
 
   void _setCustomMapPin() async {
-    _markerIconCaseReport = await BitmapDescriptor.fromAssetImage(
+    _markerIconCaseReportLight = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(
         size: Size(10, 10),
         locale: Locale('es', 'ES'),
         devicePixelRatio: 1.5,
       ),
-      'assets/markers/marker_case_report.png',
+      'assets/markers/marker_case_report_light.png',
     );
-    _markerIconPropagationZone = await BitmapDescriptor.fromAssetImage(
+    _markerIconPropagationZoneLight = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(
         size: Size(10, 10),
         locale: Locale('es', 'ES'),
         devicePixelRatio: 1.5,
       ),
-      'assets/markers/marker_propagation_zone.png',
+      'assets/markers/marker_propagation_zone_light.png',
+    );
+
+    _markerIconCaseReportDark = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(
+        size: Size(10, 10),
+        locale: Locale('es', 'ES'),
+        devicePixelRatio: 1.5,
+      ),
+      'assets/markers/marker_case_report_dark.png',
+    );
+    _markerIconPropagationZoneDark = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(
+        size: Size(10, 10),
+        locale: Locale('es', 'ES'),
+        devicePixelRatio: 1.5,
+      ),
+      'assets/markers/marker_propagation_zone_dark.png',
     );
     setState(() {});
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+    setState(() {
+      _setMapStyle();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -59,10 +117,8 @@ class _MapPageState extends State<MapPage> {
             zoom: 15,
           ),
           onMapCreated: (GoogleMapController controller) {
-            controller.setMapStyle(
-              '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]',
-            );
             _controller.complete(controller);
+            _setMapStyle();
           },
           markers: _markers,
         ),
@@ -71,14 +127,14 @@ class _MapPageState extends State<MapPage> {
   }
 
   void addMarkers() {
-    if (_markerIconCaseReport != BitmapDescriptor.defaultMarker &&
-        _markerIconPropagationZone != BitmapDescriptor.defaultMarker) {
+    if (_markerIconCaseReportLight != BitmapDescriptor.defaultMarker &&
+        _markerIconPropagationZoneLight != BitmapDescriptor.defaultMarker) {
       _markers.add(
         Marker(
           markerId: const MarkerId('1'),
           position: const LatLng(-12.135211981936047, -77.03213588952726),
           anchor: const Offset(0.5, 0.5),
-          icon: _markerIconCaseReport,
+          icon: _markerIconCaseReportLight,
         ),
       );
       _markers.add(
@@ -86,7 +142,7 @@ class _MapPageState extends State<MapPage> {
           markerId: const MarkerId('2'),
           position: const LatLng(-12.135211981936047, -77.02213588952726),
           anchor: const Offset(0.5, 0.5),
-          icon: _markerIconPropagationZone,
+          icon: _markerIconPropagationZoneLight,
         ),
       );
     }
