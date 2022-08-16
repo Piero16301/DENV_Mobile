@@ -16,23 +16,31 @@ class _MapPageState extends State<MapPage> {
   BitmapDescriptor _markerIconCaseReport = BitmapDescriptor.defaultMarker;
   BitmapDescriptor _markerIconPropagationZone = BitmapDescriptor.defaultMarker;
 
-  final MapType _currentMapType = MapType.normal;
+  // final MapType _currentMapType = MapType.normal;
 
   final Set<Marker> _markers = <Marker>{};
 
   @override
   void initState() {
-    super.initState();
     _setCustomMapPin();
+    super.initState();
   }
 
   void _setCustomMapPin() async {
     _markerIconCaseReport = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(devicePixelRatio: 2.5),
+      const ImageConfiguration(
+        size: Size(10, 10),
+        locale: Locale('es', 'ES'),
+        devicePixelRatio: 1.5,
+      ),
       'assets/markers/marker_case_report.png',
     );
     _markerIconPropagationZone = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(devicePixelRatio: 2.5),
+      const ImageConfiguration(
+        size: Size(10, 10),
+        locale: Locale('es', 'ES'),
+        devicePixelRatio: 1.5,
+      ),
       'assets/markers/marker_propagation_zone.png',
     );
     setState(() {});
@@ -69,6 +77,7 @@ class _MapPageState extends State<MapPage> {
         Marker(
           markerId: const MarkerId('1'),
           position: const LatLng(-12.135211981936047, -77.03213588952726),
+          anchor: const Offset(0.5, 0.5),
           icon: _markerIconCaseReport,
         ),
       );
@@ -76,6 +85,7 @@ class _MapPageState extends State<MapPage> {
         Marker(
           markerId: const MarkerId('2'),
           position: const LatLng(-12.135211981936047, -77.02213588952726),
+          anchor: const Offset(0.5, 0.5),
           icon: _markerIconPropagationZone,
         ),
       );
