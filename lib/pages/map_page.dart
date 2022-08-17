@@ -17,22 +17,20 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   String _darkMapStyle = '';
   String _lightMapStyle = '';
 
-  BitmapDescriptor _markerIconCaseReportLight = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor _markerIconPropagationZoneLight =
-      BitmapDescriptor.defaultMarker;
-  BitmapDescriptor _markerIconCaseReportDark = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor _markerIconPropagationZoneDark =
-      BitmapDescriptor.defaultMarker;
+  BitmapDescriptor? _markerIconCaseReportLight;
+  BitmapDescriptor? _markerIconPropagationZoneLight;
+  BitmapDescriptor? _markerIconCaseReportDark;
+  BitmapDescriptor? _markerIconPropagationZoneDark;
 
   // final MapType _currentMapType = MapType.normal;
 
   final Set<Marker> _markers = <Marker>{};
+  final Set<Marker> _markersLight = <Marker>{};
+  final Set<Marker> _markersDark = <Marker>{};
 
   @override
   void initState() {
     super.initState();
-    _setCustomMapPin();
-
     WidgetsBinding.instance.addObserver(this);
     _loadMapStyles();
   }
@@ -48,30 +46,13 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
     final theme = WidgetsBinding.instance.window.platformBrightness;
     if (theme == Brightness.dark) {
       controller.setMapStyle(_darkMapStyle);
+      _markers.clear();
+      _markers.addAll(_markersDark);
     } else {
       controller.setMapStyle(_lightMapStyle);
+      _markers.clear();
+      _markers.addAll(_markersLight);
     }
-  }
-
-  void _setCustomMapPin() async {
-    _markerIconCaseReportLight = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(),
-      'assets/markers_small/marker_case_report_light.png',
-    );
-    _markerIconPropagationZoneLight = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(),
-      'assets/markers_small/marker_propagation_zone_light.png',
-    );
-
-    _markerIconCaseReportDark = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(),
-      'assets/markers_small/marker_case_report_dark.png',
-    );
-    _markerIconPropagationZoneDark = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(),
-      'assets/markers_small/marker_propagation_zone_dark.png',
-    );
-    setState(() {});
   }
 
   @override
@@ -90,7 +71,9 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    addMarkers();
+    _createCustomMarker(context);
+
+    _addMarkers();
 
     return Scaffold(
       body: SafeArea(
@@ -100,9 +83,23 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
             target: LatLng(-12.135211981936047, -77.02213588952726),
             zoom: 15,
           ),
+          buildingsEnabled: false,
+          compassEnabled: true,
+          mapToolbarEnabled: false,
+          indoorViewEnabled: true,
+          myLocationEnabled: false,
+          myLocationButtonEnabled: false,
+          tiltGesturesEnabled: false,
+          zoomControlsEnabled: false,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
             _setMapStyle();
+            if (WidgetsBinding.instance.window.platformBrightness ==
+                Brightness.dark) {
+              _markers.addAll(_markersDark);
+            } else {
+              _markers.addAll(_markersLight);
+            }
           },
           markers: _markers,
         ),
@@ -110,23 +107,101 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
     );
   }
 
-  void addMarkers() {
-    if (_markerIconCaseReportLight != BitmapDescriptor.defaultMarker &&
-        _markerIconPropagationZoneLight != BitmapDescriptor.defaultMarker) {
-      _markers.add(
+  Future<void> _createCustomMarker(BuildContext context) async {
+    final ImageConfiguration imageConfiguration = createLocalImageConfiguration(
+      context,
+      size: const Size.square(200),
+    );
+
+    if (_markerIconCaseReportLight == null) {
+      BitmapDescriptor.fromAssetImage(
+        imageConfiguration,
+        'assets/markers_small/marker_case_report_light.png',
+      ).then(_updateBitmapCaseReportLight);
+    }
+
+    if (_markerIconPropagationZoneLight == null) {
+      BitmapDescriptor.fromAssetImage(
+        imageConfiguration,
+        'assets/markers_small/marker_propagation_zone_light.png',
+      ).then(_updateBitmapPropagationZoneLight);
+    }
+
+    if (_markerIconCaseReportDark == null) {
+      BitmapDescriptor.fromAssetImage(
+        imageConfiguration,
+        'assets/markers_small/marker_case_report_dark.png',
+      ).then(_updateBitmapCaseReportDark);
+    }
+
+    if (_markerIconPropagationZoneDark == null) {
+      BitmapDescriptor.fromAssetImage(
+        imageConfiguration,
+        'assets/markers_small/marker_propagation_zone_dark.png',
+      ).then(_updateBitmapPropagationZoneDark);
+    }
+  }
+
+  void _updateBitmapCaseReportLight(BitmapDescriptor bitmap) {
+    setState(() {
+      _markerIconCaseReportLight = bitmap;
+    });
+  }
+
+  void _updateBitmapPropagationZoneLight(BitmapDescriptor bitmap) {
+    setState(() {
+      _markerIconPropagationZoneLight = bitmap;
+    });
+  }
+
+  void _updateBitmapCaseReportDark(BitmapDescriptor bitmap) {
+    setState(() {
+      _markerIconCaseReportDark = bitmap;
+    });
+  }
+
+  void _updateBitmapPropagationZoneDark(BitmapDescriptor bitmap) {
+    setState(() {
+      _markerIconPropagationZoneDark = bitmap;
+    });
+  }
+
+  void _addMarkers() {
+    if (_markerIconCaseReportLight != null &&
+        _markerIconPropagationZoneLight != null &&
+        _markerIconCaseReportDark != null &&
+        _markerIconPropagationZoneDark != null) {
+      _markersLight.add(
         Marker(
           markerId: const MarkerId('1'),
           position: const LatLng(-12.135211981936047, -77.03213588952726),
           anchor: const Offset(0.5, 0.5),
-          icon: _markerIconCaseReportLight,
+          icon: _markerIconCaseReportLight!,
         ),
       );
-      _markers.add(
+      _markersLight.add(
         Marker(
           markerId: const MarkerId('2'),
           position: const LatLng(-12.135211981936047, -77.02213588952726),
           anchor: const Offset(0.5, 0.5),
-          icon: _markerIconPropagationZoneLight,
+          icon: _markerIconPropagationZoneLight!,
+        ),
+      );
+
+      _markersDark.add(
+        Marker(
+          markerId: const MarkerId('1'),
+          position: const LatLng(-12.135211981936047, -77.03213588952726),
+          anchor: const Offset(0.5, 0.5),
+          icon: _markerIconCaseReportDark!,
+        ),
+      );
+      _markersDark.add(
+        Marker(
+          markerId: const MarkerId('2'),
+          position: const LatLng(-12.135211981936047, -77.02213588952726),
+          anchor: const Offset(0.5, 0.5),
+          icon: _markerIconPropagationZoneDark!,
         ),
       );
     }
