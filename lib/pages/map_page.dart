@@ -55,37 +55,21 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
   void _setCustomMapPin() async {
     _markerIconCaseReportLight = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(
-        size: Size(10, 10),
-        locale: Locale('es', 'ES'),
-        devicePixelRatio: 1.5,
-      ),
-      'assets/markers/marker_case_report_light.png',
+      const ImageConfiguration(),
+      'assets/markers_small/marker_case_report_light.png',
     );
     _markerIconPropagationZoneLight = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(
-        size: Size(10, 10),
-        locale: Locale('es', 'ES'),
-        devicePixelRatio: 1.5,
-      ),
-      'assets/markers/marker_propagation_zone_light.png',
+      const ImageConfiguration(),
+      'assets/markers_small/marker_propagation_zone_light.png',
     );
 
     _markerIconCaseReportDark = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(
-        size: Size(10, 10),
-        locale: Locale('es', 'ES'),
-        devicePixelRatio: 1.5,
-      ),
-      'assets/markers/marker_case_report_dark.png',
+      const ImageConfiguration(),
+      'assets/markers_small/marker_case_report_dark.png',
     );
     _markerIconPropagationZoneDark = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(
-        size: Size(10, 10),
-        locale: Locale('es', 'ES'),
-        devicePixelRatio: 1.5,
-      ),
-      'assets/markers/marker_propagation_zone_dark.png',
+      const ImageConfiguration(),
+      'assets/markers_small/marker_propagation_zone_dark.png',
     );
     setState(() {});
   }
