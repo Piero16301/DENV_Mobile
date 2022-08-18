@@ -139,7 +139,7 @@ class NewCaseReportButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, '/create_case_report'),
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -169,7 +169,8 @@ class NewPropagationZoneButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () =>
+            Navigator.pushNamed(context, '/create_propagation_zone'),
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           shape: MaterialStateProperty.all<OutlinedBorder>(

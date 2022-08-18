@@ -71,6 +71,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             routes: {
               '/home': (context) => const HomePage(),
               '/map': (context) => const MapPage(),
+              '/create_case_report': (context) => const CreateCaseReport(),
+              '/create_propagation_zone': (context) =>
+                  const CreatePropagationZone(),
             },
             theme: ThemeModeApp.getTheme(),
           ),
