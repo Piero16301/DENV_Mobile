@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ThemeModeApp {
-  static late bool _isDarkMode;
+  static late bool isDarkMode;
 
-  static void init({required bool isDarkMode}) {
-    _isDarkMode = isDarkMode;
+  static void init({required bool darkMode}) {
+    isDarkMode = darkMode;
   }
 
   static final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -12,11 +12,25 @@ class ThemeModeApp {
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
+      titleTextStyle: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.black,
+      ),
+      elevation: 0,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        primary: Colors.lightBlue,
-        onPrimary: Colors.white,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.blue),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        foregroundColor: MaterialStateProperty.all(Colors.white),
       ),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
@@ -29,11 +43,25 @@ class ThemeModeApp {
     scaffoldBackgroundColor: Colors.black,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.black,
+      titleTextStyle: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+      elevation: 0,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        primary: Colors.lightBlueAccent,
-        onPrimary: Colors.black,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        foregroundColor: MaterialStateProperty.all(Colors.black),
       ),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
@@ -42,10 +70,10 @@ class ThemeModeApp {
   );
 
   static ThemeData getTheme() {
-    return _isDarkMode ? darkTheme : lightTheme;
+    return isDarkMode ? darkTheme : lightTheme;
   }
 
-  static void changeTheme(isDarkMode) {
-    _isDarkMode = isDarkMode;
+  static void changeTheme(darkMode) {
+    isDarkMode = darkMode;
   }
 }

@@ -13,7 +13,7 @@ import 'pages/pages.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   ThemeModeApp.init(
-    isDarkMode:
+    darkMode:
         SchedulerBinding.instance.window.platformBrightness == Brightness.dark,
   );
   if (defaultTargetPlatform == TargetPlatform.android) {

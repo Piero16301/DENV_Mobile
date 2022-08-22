@@ -39,6 +39,9 @@ dependencies:
   google_geocoding: ^0.2.0      # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
   permission_handler: ^10.0.0   # ANDROID | IOS |       |       |     | WINDOWS
   google_maps_flutter: ^2.1.10  # ANDROID | IOS |       |       |     |
+  image_picker: ^0.8.5+3        # ANDROID | IOS |       |       | WEB |
+  mime_type: ^1.0.0             # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
+  flutter_svg: ^1.1.4           # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +80,7 @@ flutter:
     - assets/markers_small/
     - assets/icon/
     - assets/map_styles/
+    - assets/app_icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
