@@ -36,6 +36,9 @@ class ThemeModeApp {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Colors.lightBlue,
     ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Colors.blue,
+    ),
   );
 
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
@@ -66,6 +69,9 @@ class ThemeModeApp {
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Colors.lightBlueAccent,
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Colors.lightBlueAccent,
     ),
   );
 

@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:denv_mobile/providers/providers.dart';
+import 'package:denv_mobile/services/services.dart';
 import 'package:denv_mobile/themes/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/pages.dart';
@@ -19,7 +21,7 @@ void main() {
   if (defaultTargetPlatform == TargetPlatform.android) {
     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
   }
-  runApp(const MyApp());
+  initializeDateFormatting('es_ES', null).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -63,6 +65,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => LocationProvider()),
+            ChangeNotifierProvider(create: (_) => CaseReportProvider()),
+            ChangeNotifierProvider(create: (_) => CaseReportService()),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,

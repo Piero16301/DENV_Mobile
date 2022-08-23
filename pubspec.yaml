@@ -42,6 +42,10 @@ dependencies:
   image_picker: ^0.8.5+3        # ANDROID | IOS |       |       | WEB |
   mime_type: ^1.0.0             # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
   flutter_svg: ^1.1.4           # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
+  intl: ^0.17.0                 # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
+  text_scroll: ^0.1.0           # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
+  dio: ^4.0.6                   # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
+  http: ^0.13.5                 # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
 
 dev_dependencies:
   flutter_test:

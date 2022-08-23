@@ -136,10 +136,18 @@ class NewCaseReportButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final caseReportProvider = Provider.of<CaseReportProvider>(context);
+    final locationProvider = Provider.of<LocationProvider>(context);
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: ElevatedButton(
-        onPressed: () => Navigator.pushNamed(context, '/create_case_report'),
+        onPressed: () {
+          caseReportProvider.setDatetime(DateTime.now());
+          caseReportProvider.setPosition(locationProvider.currentPosition);
+          caseReportProvider.setAddress(locationProvider.currentAddress);
+          Navigator.pushNamed(context, '/create_case_report');
+        },
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
         ),
