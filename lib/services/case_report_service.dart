@@ -21,16 +21,16 @@ class CaseReportService extends ChangeNotifier {
   Future<CaseReportModel?> createNewCaseReport(
       CaseReportModel caseReport) async {
     try {
+      final jsonCaseReport = caseReport.toJson();
       final response = await _dio.post(
         '/case-report',
-        data: caseReport.toJson(),
+        data: jsonCaseReport,
         onSendProgress: (int sent, int total) {
           debugPrint('$sent $total');
         },
       );
       if (response.statusCode == 201) {
-        Map<String, dynamic> data = response.data['data'];
-        return CaseReportModel.fromJson(data['data']);
+        return CaseReportModel.fromJson(response.data['data']);
       } else {
         return null;
       }

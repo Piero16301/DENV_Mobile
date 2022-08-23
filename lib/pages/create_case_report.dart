@@ -116,7 +116,7 @@ class CreateCaseReport extends StatelessWidget {
           ),
         ),
         icon: const Icon(Icons.save),
-        elevation: 5,
+        elevation: 1,
       ),
     );
   }
@@ -172,9 +172,12 @@ class PhotoDisplayAndSelect extends StatelessWidget {
                               : Colors.black,
                         ),
                       )
-                    : Image.file(
-                        caseReportProvider.image!,
-                        fit: BoxFit.contain,
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.file(
+                          caseReportProvider.image!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
               ),
               if (caseReportProvider.image != null)
@@ -237,6 +240,7 @@ class PhotoFromCameraButton extends StatelessWidget {
         }
       },
       style: ButtonStyle(
+        elevation: MaterialStateProperty.all<double>(1),
         fixedSize: MaterialStateProperty.all<Size>(
           const Size.fromHeight(40),
         ),
@@ -273,6 +277,7 @@ class PhotoFromGalleryButton extends StatelessWidget {
         }
       },
       style: ButtonStyle(
+        elevation: MaterialStateProperty.all<double>(1),
         fixedSize: MaterialStateProperty.all<Size>(
           const Size.fromHeight(40),
         ),

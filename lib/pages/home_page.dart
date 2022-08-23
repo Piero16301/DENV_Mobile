@@ -149,6 +149,7 @@ class NewCaseReportButton extends StatelessWidget {
           Navigator.pushNamed(context, '/create_case_report');
         },
         style: ButtonStyle(
+          elevation: MaterialStateProperty.all<double>(1),
           fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
         ),
         child: const Text(
@@ -177,6 +178,7 @@ class NewPropagationZoneButton extends StatelessWidget {
           '/create_propagation_zone',
         ),
         style: ButtonStyle(
+          elevation: MaterialStateProperty.all<double>(1),
           fixedSize: MaterialStateProperty.all<Size>(
             const Size(220, 70),
           ),
