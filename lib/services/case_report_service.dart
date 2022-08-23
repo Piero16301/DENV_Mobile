@@ -17,10 +17,14 @@ class CaseReportService extends ChangeNotifier {
       contentType: 'application/json',
     ),
   );
+  bool isSavingNewCaseReport = false;
 
   Future<CaseReportModel?> createNewCaseReport(
       CaseReportModel caseReport) async {
     try {
+      isSavingNewCaseReport = true;
+      notifyListeners();
+
       final jsonCaseReport = caseReport.toJson();
       final response = await _dio.post(
         '/case-report',
@@ -30,11 +34,17 @@ class CaseReportService extends ChangeNotifier {
         },
       );
       if (response.statusCode == 201) {
+        isSavingNewCaseReport = false;
+        notifyListeners();
         return CaseReportModel.fromJson(response.data['data']);
       } else {
+        isSavingNewCaseReport = false;
+        notifyListeners();
         return null;
       }
     } catch (e) {
+      isSavingNewCaseReport = false;
+      notifyListeners();
       return null;
     }
   }

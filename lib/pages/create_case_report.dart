@@ -45,77 +45,91 @@ class CreateCaseReport extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          // Subir fotografía a Cloudinary
-          String photoUrl = caseReportProvider.image != null
-              ? await caseReportService.uploadImage(
-                    caseReportProvider.image!,
-                  ) ??
-                  'Sin fotografía'
-              : 'Sin fotografía';
+        onPressed: caseReportService.isSavingNewCaseReport
+            ? null
+            : () async {
+                // Subir fotografía a Cloudinary
+                String photoUrl = caseReportProvider.image != null
+                    ? await caseReportService.uploadImage(
+                          caseReportProvider.image!,
+                        ) ??
+                        'Sin fotografía'
+                    : 'Sin fotografía';
 
-          // Crear objeto de tipo CaseReport
-          final caseReport = CaseReportModel(
-            address: AddressModel(
-              formattedAddress: caseReportProvider.address!.formattedAddress!,
-              postalCode: getAddressComponent(
-                caseReportProvider.address!,
-                'postal_code',
-              ),
-              country: getAddressComponent(
-                caseReportProvider.address!,
-                'country',
-              ),
-              department: getAddressComponent(
-                caseReportProvider.address!,
-                'administrative_area_level_1',
-              ),
-              province: getAddressComponent(
-                caseReportProvider.address!,
-                'administrative_area_level_2',
-              ),
-              district: getAddressComponent(
-                caseReportProvider.address!,
-                'administrative_area_level_3',
-              ),
-              urbanization: getAddressComponent(
-                caseReportProvider.address!,
-                'sublocality_level_1',
-              ),
-              street: getAddressComponent(
-                caseReportProvider.address!,
-                'route',
-              ),
-              streetNumber: int.parse(
-                getAddressComponent(
-                  caseReportProvider.address!,
-                  'street_number',
-                ),
-              ),
-            ),
-            comment: caseReportProvider.comment ?? 'Sin comentario',
-            dateTime: caseReportProvider.datetime!,
-            latitude: caseReportProvider.position!.latitude,
-            longitude: caseReportProvider.position!.longitude,
-            photoUrl: photoUrl,
-          );
+                // Crear objeto de tipo CaseReport
+                final caseReport = CaseReportModel(
+                  address: AddressModel(
+                    formattedAddress:
+                        caseReportProvider.address!.formattedAddress!,
+                    postalCode: getAddressComponent(
+                      caseReportProvider.address!,
+                      'postal_code',
+                    ),
+                    country: getAddressComponent(
+                      caseReportProvider.address!,
+                      'country',
+                    ),
+                    department: getAddressComponent(
+                      caseReportProvider.address!,
+                      'administrative_area_level_1',
+                    ),
+                    province: getAddressComponent(
+                      caseReportProvider.address!,
+                      'administrative_area_level_2',
+                    ),
+                    district: getAddressComponent(
+                      caseReportProvider.address!,
+                      'administrative_area_level_3',
+                    ),
+                    urbanization: getAddressComponent(
+                      caseReportProvider.address!,
+                      'sublocality_level_1',
+                    ),
+                    street: getAddressComponent(
+                      caseReportProvider.address!,
+                      'route',
+                    ),
+                    streetNumber: int.parse(
+                      getAddressComponent(
+                        caseReportProvider.address!,
+                        'street_number',
+                      ),
+                    ),
+                  ),
+                  comment: caseReportProvider.comment ?? 'Sin comentario',
+                  dateTime: caseReportProvider.datetime!,
+                  latitude: caseReportProvider.position!.latitude,
+                  longitude: caseReportProvider.position!.longitude,
+                  photoUrl: photoUrl,
+                );
 
-          // Subir reporte de caso a MongoDB
-          final newCaseReport =
-              await caseReportService.createNewCaseReport(caseReport);
-          if (newCaseReport != null) {
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacementNamed(context, '/home');
-          }
-        },
-        label: const Text(
-          'Guardar',
-          style: TextStyle(
+                // Subir reporte de caso a MongoDB
+                final newCaseReport =
+                    await caseReportService.createNewCaseReport(
+                  caseReport,
+                );
+                if (newCaseReport != null) {
+                  await _showResponseDialog(success: true, context: context);
+                } else {
+                  await _showResponseDialog(success: false, context: context);
+                }
+              },
+        label: Text(
+          caseReportService.isSavingNewCaseReport ? 'Guardando...' : 'Guardar',
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        icon: const Icon(Icons.save),
+        icon: caseReportService.isSavingNewCaseReport
+            ? SizedBox.square(
+                dimension: 30,
+                child: CircularProgressIndicator(
+                  backgroundColor:
+                      ThemeModeApp.isDarkMode ? Colors.black : Colors.white,
+                ),
+              )
+            : const Icon(Icons.save),
         elevation: 1,
       ),
     );
@@ -127,6 +141,76 @@ class CreateCaseReport extends StatelessWidget {
       orElse: () => AddressComponent(),
     );
     return addressComponent.longName ?? 'No registrado';
+  }
+
+  Future<void> _showResponseDialog({
+    required bool success,
+    required BuildContext context,
+  }) async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                success ? Icons.check_circle : Icons.error,
+                color: success ? Colors.green : Colors.red,
+                size: 50,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                success ? 'Éxito' : 'Error',
+                style: TextStyle(
+                  color: success ? Colors.green : Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          content: Text(
+            success
+                ? 'Se ha guardado el reporte de caso de dengue correctamente'
+                : 'Ha ocurrido un error al guardar el reporte de caso de dengue',
+            style: const TextStyle(
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.only(bottom: 10),
+          actions: [
+            ElevatedButton(
+              onPressed: () => success
+                  ? Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/home',
+                      (_) => false,
+                    )
+                  : Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                elevation: 1,
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Aceptar',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
