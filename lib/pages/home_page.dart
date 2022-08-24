@@ -141,24 +141,27 @@ class NewCaseReportButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: ElevatedButton(
-        onPressed: () {
-          caseReportProvider.setDatetime(DateTime.now());
-          caseReportProvider.setPosition(locationProvider.currentPosition);
-          caseReportProvider.setAddress(locationProvider.currentAddress);
-          Navigator.pushNamed(context, '/create_case_report');
-        },
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all<double>(1),
-          fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
-        ),
-        child: const Text(
-          'Reportar nuevo caso de dengue',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+      child: Hero(
+        tag: 'newCaseReportButton',
+        child: ElevatedButton(
+          onPressed: () {
+            caseReportProvider.setDatetime(DateTime.now());
+            caseReportProvider.setPosition(locationProvider.currentPosition);
+            caseReportProvider.setAddress(locationProvider.currentAddress);
+            Navigator.pushNamed(context, '/create_case_report');
+          },
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all<double>(1),
+            fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           ),
-          textAlign: TextAlign.center,
+          child: const Text(
+            'Reportar nuevo caso de dengue',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
@@ -170,26 +173,34 @@ class NewPropagationZoneButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final propagationZoneProvider =
+        Provider.of<PropagationZoneProvider>(context);
+    final locationProvider = Provider.of<LocationProvider>(context);
+
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: ElevatedButton(
-        onPressed: () => Navigator.pushNamed(
-          context,
-          '/create_propagation_zone',
-        ),
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all<double>(1),
-          fixedSize: MaterialStateProperty.all<Size>(
-            const Size(220, 70),
+      child: Hero(
+        tag: 'newPropagationZoneButton',
+        child: ElevatedButton(
+          onPressed: () {
+            propagationZoneProvider.setDatetime(DateTime.now());
+            propagationZoneProvider
+                .setPosition(locationProvider.currentPosition);
+            propagationZoneProvider.setAddress(locationProvider.currentAddress);
+            Navigator.pushNamed(context, '/create_propagation_zone');
+          },
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all<double>(1),
+            fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           ),
-        ),
-        child: const Text(
-          'Reportar nueva zona de propagación',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+          child: const Text(
+            'Reportar nueva zona de propagación',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         ),
       ),
     );

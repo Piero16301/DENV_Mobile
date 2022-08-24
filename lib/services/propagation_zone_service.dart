@@ -9,42 +9,42 @@ import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime_type/mime_type.dart';
 
-class CaseReportService extends ChangeNotifier {
+class PropagationZoneService extends ChangeNotifier {
   final String _cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dq5dl67s2';
-  final String _uploadPreset = 'sgtxqlcv';
+  final String _uploadPreset = 'sr2qafxo';
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: 'http://20.206.152.104',
       contentType: 'application/json',
     ),
   );
-  bool isSavingNewCaseReport = false;
+  bool isSavingNewPropagationZone = false;
 
-  Future<CaseReportModel?> createNewCaseReport(
-      CaseReportModel caseReport) async {
+  Future<PropagationZoneModel?> createNewPropagationZone(
+      PropagationZoneModel propagationZone) async {
     try {
-      isSavingNewCaseReport = true;
+      isSavingNewPropagationZone = true;
       notifyListeners();
 
-      final jsonCaseReport = caseReport.toJson();
+      final jsonPropagationZone = propagationZone.toJson();
       final response = await _dio.post(
-        '/case-report',
-        data: jsonCaseReport,
+        '/propagation-zone',
+        data: jsonPropagationZone,
         onSendProgress: (int sent, int total) {
           debugPrint('$sent $total');
         },
       );
       if (response.statusCode == 201) {
-        isSavingNewCaseReport = false;
+        isSavingNewPropagationZone = false;
         notifyListeners();
-        return CaseReportModel.fromJson(response.data['data']);
+        return PropagationZoneModel.fromJson(response.data['data']);
       } else {
-        isSavingNewCaseReport = false;
+        isSavingNewPropagationZone = false;
         notifyListeners();
         return null;
       }
     } catch (e) {
-      isSavingNewCaseReport = false;
+      isSavingNewPropagationZone = false;
       notifyListeners();
       return null;
     }

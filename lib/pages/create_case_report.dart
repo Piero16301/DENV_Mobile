@@ -31,30 +31,35 @@ class CreateCaseReport extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            PhotoDisplayAndSelect(size: size),
+            PhotoDisplayAndSelectCaseReport(size: size),
             const SizedBox(height: 30),
-            InsertComment(size: size),
+            InsertCommentCaseReport(size: size),
             const SizedBox(height: 20),
-            ShowCurrentDateTime(size: size),
+            ShowCurrentDateTimeCaseReport(size: size),
             const SizedBox(height: 30),
-            ShowLatitudeAndLongitude(size: size),
+            ShowLatitudeAndLongitudeCaseReport(size: size),
             const SizedBox(height: 30),
-            ShowAddress(size: size),
+            ShowAddressCaseReport(size: size),
             const SizedBox(height: 30),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'newCaseReportButton',
         onPressed: caseReportService.isSavingNewCaseReport
             ? null
             : () async {
                 // Subir fotografía a Cloudinary
-                String photoUrl = caseReportProvider.image != null
+                String? photoUrl = caseReportProvider.image != null
                     ? await caseReportService.uploadImage(
-                          caseReportProvider.image!,
-                        ) ??
-                        'Sin fotografía'
+                        caseReportProvider.image!,
+                      )
                     : 'Sin fotografía';
+
+                if (photoUrl == null) {
+                  await _showResponseDialog(success: false, context: context);
+                  return;
+                }
 
                 // Crear objeto de tipo CaseReport
                 final caseReport = CaseReportModel(
@@ -214,8 +219,8 @@ class CreateCaseReport extends StatelessWidget {
   }
 }
 
-class PhotoDisplayAndSelect extends StatelessWidget {
-  const PhotoDisplayAndSelect({
+class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
+  const PhotoDisplayAndSelectCaseReport({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -289,11 +294,11 @@ class PhotoDisplayAndSelect extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
                 Expanded(
-                  child: PhotoFromCameraButton(),
+                  child: PhotoFromCameraButtonCaseReport(),
                 ),
                 SizedBox(width: 20),
                 Expanded(
-                  child: PhotoFromGalleryButton(),
+                  child: PhotoFromGalleryButtonCaseReport(),
                 ),
               ],
             ),
@@ -304,8 +309,8 @@ class PhotoDisplayAndSelect extends StatelessWidget {
   }
 }
 
-class PhotoFromCameraButton extends StatelessWidget {
-  const PhotoFromCameraButton({
+class PhotoFromCameraButtonCaseReport extends StatelessWidget {
+  const PhotoFromCameraButtonCaseReport({
     Key? key,
   }) : super(key: key);
 
@@ -341,8 +346,8 @@ class PhotoFromCameraButton extends StatelessWidget {
   }
 }
 
-class PhotoFromGalleryButton extends StatelessWidget {
-  const PhotoFromGalleryButton({
+class PhotoFromGalleryButtonCaseReport extends StatelessWidget {
+  const PhotoFromGalleryButtonCaseReport({
     Key? key,
   }) : super(key: key);
 
@@ -378,8 +383,8 @@ class PhotoFromGalleryButton extends StatelessWidget {
   }
 }
 
-class InsertComment extends StatelessWidget {
-  const InsertComment({
+class InsertCommentCaseReport extends StatelessWidget {
+  const InsertCommentCaseReport({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -388,6 +393,11 @@ class InsertComment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final caseReportProvider = Provider.of<CaseReportProvider>(
+      context,
+      listen: false,
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
@@ -435,8 +445,7 @@ class InsertComment extends StatelessWidget {
             maxLines: 3,
             maxLength: 200,
             onChanged: (value) {
-              Provider.of<CaseReportProvider>(context, listen: false)
-                  .setComment(value);
+              caseReportProvider.setComment(value);
             },
           ),
         ],
@@ -445,8 +454,8 @@ class InsertComment extends StatelessWidget {
   }
 }
 
-class ShowCurrentDateTime extends StatelessWidget {
-  const ShowCurrentDateTime({
+class ShowCurrentDateTimeCaseReport extends StatelessWidget {
+  const ShowCurrentDateTimeCaseReport({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -470,61 +479,48 @@ class ShowCurrentDateTime extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-            // decoration: BoxDecoration(
-            //   borderRadius: const BorderRadius.all(
-            //     Radius.circular(15),
-            //   ),
-            //   border: Border.all(
-            //     width: 2,
-            //     color: ThemeModeApp.isDarkMode
-            //         ? const Color.fromARGB(255, 189, 189, 189)
-            //         : const Color.fromARGB(255, 77, 77, 77),
-            //   ),
-            // ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.calendar_today_rounded,
-                        size: 30,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today_rounded,
+                      size: 30,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      DateFormat.yMMMd('es_ES').format(
+                        caseReportProvider.datetime!,
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        DateFormat.yMMMd('es_ES').format(
-                          caseReportProvider.datetime!,
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.access_time_rounded,
-                        size: 30,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.access_time_rounded,
+                      size: 30,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      DateFormat('hh:mm:ss a').format(
+                        caseReportProvider.datetime!,
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        DateFormat('hh:mm:ss a').format(
-                          caseReportProvider.datetime!,
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
@@ -533,8 +529,8 @@ class ShowCurrentDateTime extends StatelessWidget {
   }
 }
 
-class ShowLatitudeAndLongitude extends StatelessWidget {
-  const ShowLatitudeAndLongitude({
+class ShowLatitudeAndLongitudeCaseReport extends StatelessWidget {
+  const ShowLatitudeAndLongitudeCaseReport({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -558,67 +554,52 @@ class ShowLatitudeAndLongitude extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-            // decoration: BoxDecoration(
-            //   borderRadius: const BorderRadius.all(
-            //     Radius.circular(15),
-            //   ),
-            //   border: Border.all(
-            //     width: 2,
-            //     color: ThemeModeApp.isDarkMode
-            //         ? const Color.fromARGB(255, 189, 189, 189)
-            //         : const Color.fromARGB(255, 77, 77, 77),
-            //   ),
-            // ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/app_icons/latitude_icon.svg',
-                        height: 30,
-                        width: 30,
-                        color: (ThemeModeApp.isDarkMode)
-                            ? Colors.white
-                            : Colors.black,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/app_icons/latitude_icon.svg',
+                      height: 30,
+                      width: 30,
+                      color: (ThemeModeApp.isDarkMode)
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      caseReportProvider.position!.latitude.toStringAsFixed(5),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        caseReportProvider.position!.latitude
-                            .toStringAsFixed(5),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/app_icons/longitude_icon.svg',
+                      height: 30,
+                      width: 30,
+                      color: (ThemeModeApp.isDarkMode)
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      caseReportProvider.position!.longitude.toStringAsFixed(5),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/app_icons/longitude_icon.svg',
-                        height: 30,
-                        width: 30,
-                        color: (ThemeModeApp.isDarkMode)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        caseReportProvider.position!.longitude
-                            .toStringAsFixed(5),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
@@ -627,8 +608,8 @@ class ShowLatitudeAndLongitude extends StatelessWidget {
   }
 }
 
-class ShowAddress extends StatelessWidget {
-  const ShowAddress({
+class ShowAddressCaseReport extends StatelessWidget {
+  const ShowAddressCaseReport({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -652,46 +633,33 @@ class ShowAddress extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-            // decoration: BoxDecoration(
-            //   borderRadius: const BorderRadius.all(
-            //     Radius.circular(15),
-            //   ),
-            //   border: Border.all(
-            //     width: 2,
-            //     color: ThemeModeApp.isDarkMode
-            //         ? const Color.fromARGB(255, 189, 189, 189)
-            //         : const Color.fromARGB(255, 77, 77, 77),
-            //   ),
-            // ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: SizedBox(
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_rounded,
-                      size: 30,
-                    ),
-                    const SizedBox(width: 10),
-                    Flexible(
-                      flex: 1,
-                      child: TextScroll(
-                        caseReportProvider.address!.formattedAddress!,
-                        mode: TextScrollMode.bouncing,
-                        velocity: const Velocity(
-                          pixelsPerSecond: Offset(25, 0),
-                        ),
-                        delayBefore: const Duration(milliseconds: 500),
-                        pauseBetween: const Duration(milliseconds: 50),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: SizedBox(
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.location_on_rounded,
+                    size: 30,
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    flex: 1,
+                    child: TextScroll(
+                      caseReportProvider.address!.formattedAddress!,
+                      mode: TextScrollMode.bouncing,
+                      velocity: const Velocity(
+                        pixelsPerSecond: Offset(25, 0),
+                      ),
+                      delayBefore: const Duration(milliseconds: 500),
+                      pauseBetween: const Duration(milliseconds: 50),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
