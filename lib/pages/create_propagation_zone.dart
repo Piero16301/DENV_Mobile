@@ -107,7 +107,7 @@ class CreatePropagationZone extends StatelessWidget {
                   dateTime: propagationZoneProvider.datetime!,
                   latitude: propagationZoneProvider.position!.latitude,
                   longitude: propagationZoneProvider.position!.longitude,
-                  photoUrl: photoUrl!,
+                  photoUrl: photoUrl,
                 );
 
                 // Subir zona de propagación a MongoDB
