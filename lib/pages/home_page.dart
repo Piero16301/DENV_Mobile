@@ -1,5 +1,6 @@
 import 'package:denv_mobile/pages/pages.dart';
 import 'package:denv_mobile/providers/providers.dart';
+import 'package:denv_mobile/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -66,20 +67,26 @@ class MapButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mapService = Provider.of<MapService>(context);
+    final mapProvider = Provider.of<MapProvider>(context);
+
     return InkWell(
-      // onTap: _loading
-      //     ? null
-      //     : () {
-      //         setState(() {
-      //           _loading = true;
-      //         });
-      //         Future.delayed(const Duration(seconds: 3), () {
-      //           setState(() {
-      //             _loading = false;
-      //           });
-      //         });
-      //       },
-      onTap: () => Navigator.pushNamed(context, '/map'),
+      onTap: mapService.isGettingCaseReports ||
+              mapService.isGettingPropagationZones
+          ? null
+          : () async {
+              final caseReportsSummarized =
+                  await mapService.getCaseReportsSummarized();
+              final propagationZonesSummarized =
+                  await mapService.getPropagationZonesSummarized();
+
+              mapProvider.setCaseReportsSummarized(caseReportsSummarized);
+              mapProvider
+                  .setPropagationZonesSummarized(propagationZonesSummarized);
+
+              // ignore: use_build_context_synchronously
+              Navigator.pushNamed(context, '/map');
+            },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 50),
         child: Column(
@@ -98,11 +105,13 @@ class MapButton extends StatelessWidget {
                   ),
                   iconSize: 150,
                 ),
-                const AnimatedOpacity(
-                  // opacity: _loading ? 1.0 : 0.0,
-                  opacity: 0.0,
-                  duration: Duration(milliseconds: 500),
-                  child: SizedBox(
+                AnimatedOpacity(
+                  opacity: mapService.isGettingCaseReports ||
+                          mapService.isGettingPropagationZones
+                      ? 1.0
+                      : 0.0,
+                  duration: const Duration(milliseconds: 500),
+                  child: const SizedBox(
                     height: 200,
                     width: 200,
                     child: CircularProgressIndicator(
@@ -112,11 +121,13 @@ class MapButton extends StatelessWidget {
                 ),
               ],
             ),
-            const AnimatedOpacity(
-              // opacity: _loading ? 0.0 : 1.0,
-              opacity: 1.0,
+            AnimatedOpacity(
+              opacity: mapService.isGettingCaseReports ||
+                      mapService.isGettingPropagationZones
+                  ? 0.0
+                  : 1.0,
               duration: Duration(milliseconds: 500),
-              child: Text(
+              child: const Text(
                 'Mostar mapa',
                 style: TextStyle(
                   fontSize: 20,

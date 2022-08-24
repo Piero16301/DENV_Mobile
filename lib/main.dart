@@ -69,6 +69,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ChangeNotifierProvider(create: (_) => CaseReportService()),
             ChangeNotifierProvider(create: (_) => PropagationZoneProvider()),
             ChangeNotifierProvider(create: (_) => PropagationZoneService()),
+            ChangeNotifierProvider(create: (_) => MapProvider()),
+            ChangeNotifierProvider(create: (_) => MapService()),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,

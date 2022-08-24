@@ -18,6 +18,7 @@ class CaseReportService extends ChangeNotifier {
       contentType: 'application/json',
     ),
   );
+
   bool isSavingNewCaseReport = false;
 
   Future<CaseReportModel?> createNewCaseReport(
