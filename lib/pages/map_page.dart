@@ -113,31 +113,45 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       size: const Size.square(200),
     );
 
+    // Select the appropriate image based on the screen size
+    double screenWidth = MediaQuery.of(context).size.width;
+    String folderName = '';
+    if (screenWidth < 750) {
+      folderName = 'markers_720p';
+      debugPrint('screenWidth < 750 $screenWidth');
+    } else if (screenWidth < 1100) {
+      folderName = 'markers_1080p';
+      debugPrint('screenWidth < 1100 $screenWidth');
+    } else {
+      folderName = 'markers_1440p';
+      debugPrint('screenWidth >= 1100 $screenWidth');
+    }
+
     if (_markerIconCaseReportLight == null) {
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
-        'assets/markers_small/marker_case_report_light.png',
+        'assets/$folderName/marker_case_report_light.png',
       ).then(_updateBitmapCaseReportLight);
     }
 
     if (_markerIconPropagationZoneLight == null) {
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
-        'assets/markers_small/marker_propagation_zone_light.png',
+        'assets/$folderName/marker_propagation_zone_light.png',
       ).then(_updateBitmapPropagationZoneLight);
     }
 
     if (_markerIconCaseReportDark == null) {
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
-        'assets/markers_small/marker_case_report_dark.png',
+        'assets/$folderName/marker_case_report_dark.png',
       ).then(_updateBitmapCaseReportDark);
     }
 
     if (_markerIconPropagationZoneDark == null) {
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
-        'assets/markers_small/marker_propagation_zone_dark.png',
+        'assets/$folderName/marker_propagation_zone_dark.png',
       ).then(_updateBitmapPropagationZoneDark);
     }
   }

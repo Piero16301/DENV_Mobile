@@ -126,7 +126,7 @@ class MapButton extends StatelessWidget {
                       mapService.isGettingPropagationZones
                   ? 0.0
                   : 1.0,
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
               child: const Text(
                 'Mostar mapa',
                 style: TextStyle(
