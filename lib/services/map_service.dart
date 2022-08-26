@@ -8,6 +8,9 @@ class MapService extends ChangeNotifier {
     BaseOptions(
       baseUrl: 'http://20.206.152.104',
       contentType: 'application/json',
+      receiveDataWhenStatusError: true,
+      connectTimeout: 3 * 1000,
+      receiveTimeout: 3 * 1000,
     ),
   );
 
@@ -30,6 +33,10 @@ class MapService extends ChangeNotifier {
         notifyListeners();
         return [];
       }
+    } on DioError catch (_) {
+      isGettingCaseReports = false;
+      notifyListeners();
+      return [];
     } catch (e) {
       isGettingCaseReports = false;
       notifyListeners();
@@ -54,6 +61,10 @@ class MapService extends ChangeNotifier {
         notifyListeners();
         return [];
       }
+    } on DioError catch (_) {
+      isGettingCaseReports = false;
+      notifyListeners();
+      return [];
     } catch (e) {
       isGettingPropagationZones = false;
       notifyListeners();

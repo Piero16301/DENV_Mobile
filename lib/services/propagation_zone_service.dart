@@ -16,6 +16,9 @@ class PropagationZoneService extends ChangeNotifier {
     BaseOptions(
       baseUrl: 'http://20.206.152.104',
       contentType: 'application/json',
+      receiveDataWhenStatusError: true,
+      connectTimeout: 3 * 1000,
+      receiveTimeout: 3 * 1000,
     ),
   );
   bool isSavingNewPropagationZone = false;

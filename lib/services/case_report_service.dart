@@ -16,6 +16,9 @@ class CaseReportService extends ChangeNotifier {
     BaseOptions(
       baseUrl: 'http://20.206.152.104',
       contentType: 'application/json',
+      receiveDataWhenStatusError: true,
+      connectTimeout: 3 * 1000,
+      receiveTimeout: 3 * 1000,
     ),
   );
 
@@ -44,6 +47,10 @@ class CaseReportService extends ChangeNotifier {
         notifyListeners();
         return null;
       }
+    } on DioError catch (_) {
+      isSavingNewCaseReport = false;
+      notifyListeners();
+      return null;
     } catch (e) {
       isSavingNewCaseReport = false;
       notifyListeners();

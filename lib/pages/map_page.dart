@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:denv_mobile/providers/providers.dart';
+import 'package:denv_mobile/services/services.dart';
 import 'package:denv_mobile/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -23,23 +26,58 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   BitmapDescriptor? _markerIconCaseReportDark;
   BitmapDescriptor? _markerIconPropagationZoneDark;
 
-  // final MapType _currentMapType = MapType.normal;
+  Timer? _timer;
 
   final Set<Marker> _markers = <Marker>{};
   final Set<Marker> _markersLight = <Marker>{};
   final Set<Marker> _markersDark = <Marker>{};
 
+  bool _isFirtsLoad = true;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    Future.delayed(Duration.zero, () {
+      _createCustomMarker(MediaQuery.of(context));
+    });
     _loadMapStyles();
+    _timer = Timer.periodic(const Duration(seconds: 10), (_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        debugPrint('Agregando marcadores');
+        if (_isFirtsLoad) {
+          _isFirtsLoad = false;
+          _addMarkers(Provider.of<MapProvider>(context, listen: false));
+        } else {
+          final mapService = Provider.of<MapService>(context, listen: false);
+          final mapProvider = Provider.of<MapProvider>(context, listen: false);
+          final caseReportsSummarized =
+              await mapService.getCaseReportsSummarized();
+          final propagationZonesSummarized =
+              await mapService.getPropagationZonesSummarized();
+
+          mapProvider.setCaseReportsSummarized(caseReportsSummarized);
+          mapProvider.setPropagationZonesSummarized(propagationZonesSummarized);
+
+          // ignore: use_build_context_synchronously
+          _addMarkers(Provider.of<MapProvider>(context, listen: false));
+        }
+      });
+    });
   }
 
   Future _loadMapStyles() async {
     _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
     _lightMapStyle =
         await rootBundle.loadString('assets/map_styles/light.json');
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+    setState(() {
+      _setMapStyle();
+    });
   }
 
   Future _setMapStyle() async {
@@ -56,25 +94,14 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangePlatformBrightness() {
-    super.didChangePlatformBrightness();
-    setState(() {
-      _setMapStyle();
-    });
-  }
-
-  @override
   void dispose() {
-    super.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _createCustomMarker(MediaQuery.of(context));
-
-    _addMarkers();
-
     return Scaffold(
       body: SafeArea(
         child: GoogleMap(
@@ -123,7 +150,8 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       debugPrint('screenWidth < 750 $screenWidth $screenHeight');
     } else if (screenWidth >= 750 && screenWidth < 1100) {
       folderName = 'markers_1080p';
-      debugPrint('screenWidth < 1100 $screenWidth $screenHeight');
+      debugPrint(
+          'screenWidth >= 750 && screenWidth < 1100 $screenWidth $screenHeight');
     } else {
       folderName = 'markers_1440p';
       debugPrint('screenWidth >= 1100 $screenWidth $screenHeight');
@@ -182,44 +210,55 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
     });
   }
 
-  void _addMarkers() {
+  void _addMarkers(MapProvider mapProvider) {
     if (_markerIconCaseReportLight != null &&
         _markerIconPropagationZoneLight != null &&
         _markerIconCaseReportDark != null &&
         _markerIconPropagationZoneDark != null) {
-      _markersLight.add(
-        Marker(
-          markerId: const MarkerId('1'),
-          position: const LatLng(-12.135211981936047, -77.03213588952726),
-          anchor: const Offset(0.5, 0.5),
-          icon: _markerIconCaseReportLight!,
-        ),
-      );
-      _markersLight.add(
-        Marker(
-          markerId: const MarkerId('2'),
-          position: const LatLng(-12.135211981936047, -77.02213588952726),
-          anchor: const Offset(0.5, 0.5),
-          icon: _markerIconPropagationZoneLight!,
-        ),
-      );
-
-      _markersDark.add(
-        Marker(
-          markerId: const MarkerId('1'),
-          position: const LatLng(-12.135211981936047, -77.03213588952726),
-          anchor: const Offset(0.5, 0.5),
-          icon: _markerIconCaseReportDark!,
-        ),
-      );
-      _markersDark.add(
-        Marker(
-          markerId: const MarkerId('2'),
-          position: const LatLng(-12.135211981936047, -77.02213588952726),
-          anchor: const Offset(0.5, 0.5),
-          icon: _markerIconPropagationZoneDark!,
-        ),
-      );
+      final caseReportsSummarized = mapProvider.caseReportsSummarized;
+      final propagationZonesSummarized = mapProvider.propagationZonesSummarized;
+      _markersLight.clear();
+      _markersDark.clear();
+      if (caseReportsSummarized.isNotEmpty) {
+        for (var caseReport in caseReportsSummarized) {
+          _markersLight.add(
+            Marker(
+              markerId: MarkerId(caseReport.id),
+              position: LatLng(
+                caseReport.latitude,
+                caseReport.longitude,
+              ),
+              icon: _markerIconCaseReportLight!,
+              onTap: () {
+                // Navigator.pushNamed(context, '/case_report', arguments: {
+                //   'caseReport': caseReport,
+                // });
+                debugPrint('caseReport ${caseReport.id}');
+              },
+            ),
+          );
+        }
+      }
+      if (propagationZonesSummarized.isNotEmpty) {
+        for (var propagationZone in propagationZonesSummarized) {
+          _markersLight.add(
+            Marker(
+              markerId: MarkerId(propagationZone.id),
+              position: LatLng(
+                propagationZone.latitude,
+                propagationZone.longitude,
+              ),
+              icon: _markerIconPropagationZoneLight!,
+              onTap: () {
+                // Navigator.pushNamed(context, '/propagation_zone', arguments: {
+                //   'propagationZone': propagationZone,
+                // });
+                debugPrint('propagationZone ${propagationZone.id}');
+              },
+            ),
+          );
+        }
+      }
     }
   }
 }
