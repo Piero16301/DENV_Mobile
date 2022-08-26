@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:denv_mobile/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -43,8 +44,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
   Future _setMapStyle() async {
     final controller = await _controller.future;
-    final theme = WidgetsBinding.instance.window.platformBrightness;
-    if (theme == Brightness.dark) {
+    if (ThemeModeApp.isDarkMode) {
       controller.setMapStyle(_darkMapStyle);
       _markers.clear();
       _markers.addAll(_markersDark);
@@ -71,7 +71,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    _createCustomMarker(context);
+    _createCustomMarker(MediaQuery.of(context));
 
     _addMarkers();
 
@@ -94,8 +94,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
             _setMapStyle();
-            if (WidgetsBinding.instance.window.platformBrightness ==
-                Brightness.dark) {
+            if (ThemeModeApp.isDarkMode) {
               _markers.addAll(_markersDark);
             } else {
               _markers.addAll(_markersLight);
@@ -107,24 +106,27 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
     );
   }
 
-  Future<void> _createCustomMarker(BuildContext context) async {
+  Future<void> _createCustomMarker(MediaQueryData mediaQueryData) async {
     final ImageConfiguration imageConfiguration = createLocalImageConfiguration(
       context,
       size: const Size.square(200),
     );
 
     // Select the appropriate image based on the screen size
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth =
+        mediaQueryData.size.width * mediaQueryData.devicePixelRatio;
+    double screenHeight =
+        mediaQueryData.size.height * mediaQueryData.devicePixelRatio;
     String folderName = '';
     if (screenWidth < 750) {
       folderName = 'markers_720p';
-      debugPrint('screenWidth < 750 $screenWidth');
-    } else if (screenWidth < 1100) {
+      debugPrint('screenWidth < 750 $screenWidth $screenHeight');
+    } else if (screenWidth >= 750 && screenWidth < 1100) {
       folderName = 'markers_1080p';
-      debugPrint('screenWidth < 1100 $screenWidth');
+      debugPrint('screenWidth < 1100 $screenWidth $screenHeight');
     } else {
       folderName = 'markers_1440p';
-      debugPrint('screenWidth >= 1100 $screenWidth');
+      debugPrint('screenWidth >= 1100 $screenWidth $screenHeight');
     }
 
     if (_markerIconCaseReportLight == null) {
