@@ -26,7 +26,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   BitmapDescriptor? _markerIconCaseReportDark;
   BitmapDescriptor? _markerIconPropagationZoneDark;
 
-  Timer? _timer;
+  late Stream<void> _subscription;
 
   final Set<Marker> _markers = <Marker>{};
   final Set<Marker> _markersLight = <Marker>{};
@@ -42,27 +42,24 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       _createCustomMarker(MediaQuery.of(context));
     });
     _loadMapStyles();
-    _timer = Timer.periodic(const Duration(seconds: 10), (_) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        debugPrint('Agregando marcadores');
-        if (_isFirtsLoad) {
-          _isFirtsLoad = false;
-          _addMarkers(Provider.of<MapProvider>(context, listen: false));
-        } else {
-          final mapService = Provider.of<MapService>(context, listen: false);
-          final mapProvider = Provider.of<MapProvider>(context, listen: false);
-          final caseReportsSummarized =
-              await mapService.getCaseReportsSummarized();
-          final propagationZonesSummarized =
-              await mapService.getPropagationZonesSummarized();
 
-          mapProvider.setCaseReportsSummarized(caseReportsSummarized);
-          mapProvider.setPropagationZonesSummarized(propagationZonesSummarized);
-
-          // ignore: use_build_context_synchronously
-          _addMarkers(Provider.of<MapProvider>(context, listen: false));
-        }
-      });
+    _subscription =
+        Stream<void>.periodic(const Duration(seconds: 10), (_) async {
+      debugPrint('Agregando marcadores');
+      if (_isFirtsLoad) {
+        _isFirtsLoad = false;
+        _addMarkers(Provider.of<MapProvider>(context, listen: false));
+      } else {
+        final mapService = Provider.of<MapService>(context, listen: false);
+        final mapProvider = Provider.of<MapProvider>(context, listen: false);
+        final caseReportsSummarized =
+            await mapService.getCaseReportsSummarized();
+        final propagationZonesSummarized =
+            await mapService.getPropagationZonesSummarized();
+        mapProvider.setCaseReportsSummarized(caseReportsSummarized);
+        mapProvider.setPropagationZonesSummarized(propagationZonesSummarized);
+        _addMarkers(mapProvider);
+      }
     });
   }
 
@@ -96,7 +93,6 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _timer?.cancel();
     super.dispose();
   }
 
