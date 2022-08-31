@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:denv_mobile/models/models.dart';
 import 'package:denv_mobile/providers/providers.dart';
-import 'package:denv_mobile/services/services.dart';
 import 'package:denv_mobile/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -26,41 +27,18 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   BitmapDescriptor? _markerIconCaseReportDark;
   BitmapDescriptor? _markerIconPropagationZoneDark;
 
-  late Stream<void> _subscription;
-
   final Set<Marker> _markers = <Marker>{};
   final Set<Marker> _markersLight = <Marker>{};
   final Set<Marker> _markersDark = <Marker>{};
 
-  bool _isFirtsLoad = true;
+  LatLng _center = const LatLng(0, 0);
+  bool _centerSet = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    Future.delayed(Duration.zero, () {
-      _createCustomMarker(MediaQuery.of(context));
-    });
     _loadMapStyles();
-
-    _subscription =
-        Stream<void>.periodic(const Duration(seconds: 10), (_) async {
-      debugPrint('Agregando marcadores');
-      if (_isFirtsLoad) {
-        _isFirtsLoad = false;
-        _addMarkers(Provider.of<MapProvider>(context, listen: false));
-      } else {
-        final mapService = Provider.of<MapService>(context, listen: false);
-        final mapProvider = Provider.of<MapProvider>(context, listen: false);
-        final caseReportsSummarized =
-            await mapService.getCaseReportsSummarized();
-        final propagationZonesSummarized =
-            await mapService.getPropagationZonesSummarized();
-        mapProvider.setCaseReportsSummarized(caseReportsSummarized);
-        mapProvider.setPropagationZonesSummarized(propagationZonesSummarized);
-        _addMarkers(mapProvider);
-      }
-    });
   }
 
   Future _loadMapStyles() async {
@@ -72,6 +50,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   @override
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
+    ThemeModeApp.changeTheme(!ThemeModeApp.isDarkMode);
     setState(() {
       _setMapStyle();
     });
@@ -80,13 +59,17 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   Future _setMapStyle() async {
     final controller = await _controller.future;
     if (ThemeModeApp.isDarkMode) {
-      controller.setMapStyle(_darkMapStyle);
-      _markers.clear();
-      _markers.addAll(_markersDark);
+      setState(() {
+        controller.setMapStyle(_darkMapStyle);
+        _markers.clear();
+        _markers.addAll(_markersDark);
+      });
     } else {
-      controller.setMapStyle(_lightMapStyle);
-      _markers.clear();
-      _markers.addAll(_markersLight);
+      setState(() {
+        controller.setMapStyle(_lightMapStyle);
+        _markers.clear();
+        _markers.addAll(_markersLight);
+      });
     }
   }
 
@@ -98,20 +81,46 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    _createCustomMarker(MediaQuery.of(context));
+
+    final caseReportsSummarized = Provider.of<MapProvider>(
+      context,
+      listen: false,
+    ).caseReportsSummarized;
+    final propagationZonesSummarized = Provider.of<MapProvider>(
+      context,
+      listen: false,
+    ).propagationZonesSummarized;
+    final locationProvider = Provider.of<LocationProvider>(context);
+
+    if (!_centerSet) {
+      _calculateCenter(
+        caseReportsSummarized,
+        propagationZonesSummarized,
+        locationProvider.currentPosition!,
+      );
+      _centerSet = true;
+    }
+
+    _addAllMarkers(
+      caseReportsSummarized,
+      propagationZonesSummarized,
+    );
+
     return Scaffold(
       body: SafeArea(
         child: GoogleMap(
           mapType: MapType.normal,
-          initialCameraPosition: const CameraPosition(
-            target: LatLng(-12.135211981936047, -77.02213588952726),
-            zoom: 15,
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom: 13,
           ),
           buildingsEnabled: false,
           compassEnabled: true,
           mapToolbarEnabled: false,
           indoorViewEnabled: true,
-          myLocationEnabled: false,
-          myLocationButtonEnabled: false,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
           tiltGesturesEnabled: false,
           zoomControlsEnabled: false,
           onMapCreated: (GoogleMapController controller) {
@@ -145,7 +154,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       folderName = 'markers_720p';
       debugPrint('screenWidth < 750 $screenWidth $screenHeight');
     } else if (screenWidth >= 750 && screenWidth < 1100) {
-      folderName = 'markers_1080p';
+      folderName = 'markers_720p';
       debugPrint(
           'screenWidth >= 750 && screenWidth < 1100 $screenWidth $screenHeight');
     } else {
@@ -206,15 +215,69 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
     });
   }
 
-  void _addMarkers(MapProvider mapProvider) {
+  void _calculateCenter(
+    List<CaseReportSummarizedModel> caseReportsSummarized,
+    List<PropagationZoneSummarizedModel> propagationZonesSummarized,
+    Position currentPosition,
+  ) {
+    debugPrint('Calculating center');
+    double avgLatCases = caseReportsSummarized.isEmpty
+        ? 0.0
+        : caseReportsSummarized
+                .map((e) => e.latitude)
+                .reduce((value, element) => value + element) /
+            caseReportsSummarized.length;
+    double avgLonCases = caseReportsSummarized.isEmpty
+        ? 0.0
+        : caseReportsSummarized
+                .map((e) => e.longitude)
+                .reduce((value, element) => value + element) /
+            caseReportsSummarized.length;
+
+    double avgLatZones = propagationZonesSummarized.isEmpty
+        ? 0.0
+        : propagationZonesSummarized
+                .map((e) => e.latitude)
+                .reduce((value, element) => value + element) /
+            propagationZonesSummarized.length;
+    double avgLonZones = propagationZonesSummarized.isEmpty
+        ? 0.0
+        : propagationZonesSummarized
+                .map((e) => e.longitude)
+                .reduce((value, element) => value + element) /
+            propagationZonesSummarized.length;
+
+    int totalRegisters =
+        caseReportsSummarized.length + propagationZonesSummarized.length;
+    double avgLat = totalRegisters == 0
+        ? currentPosition.latitude
+        : (avgLatCases * (caseReportsSummarized.length / totalRegisters)) +
+            (avgLatZones *
+                (propagationZonesSummarized.length / totalRegisters));
+    double avgLon = totalRegisters == 0
+        ? currentPosition.longitude
+        : (avgLonCases * (caseReportsSummarized.length / totalRegisters)) +
+            (avgLonZones *
+                (propagationZonesSummarized.length / totalRegisters));
+
+    setState(() {
+      _center = LatLng(avgLat, avgLon);
+    });
+  }
+
+  void _addAllMarkers(
+    List<CaseReportSummarizedModel> caseReportsSummarized,
+    List<PropagationZoneSummarizedModel> propagationZonesSummarized,
+  ) {
     if (_markerIconCaseReportLight != null &&
         _markerIconPropagationZoneLight != null &&
         _markerIconCaseReportDark != null &&
         _markerIconPropagationZoneDark != null) {
-      final caseReportsSummarized = mapProvider.caseReportsSummarized;
-      final propagationZonesSummarized = mapProvider.propagationZonesSummarized;
+      // Clear current lists
       _markersLight.clear();
       _markersDark.clear();
+
+      // Add markers for case reports to light and dark list
       if (caseReportsSummarized.isNotEmpty) {
         for (var caseReport in caseReportsSummarized) {
           _markersLight.add(
@@ -225,16 +288,44 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                 caseReport.longitude,
               ),
               icon: _markerIconCaseReportLight!,
-              onTap: () {
-                // Navigator.pushNamed(context, '/case_report', arguments: {
-                //   'caseReport': caseReport,
-                // });
-                debugPrint('caseReport ${caseReport.id}');
-              },
+              anchor: const Offset(0.5, 0.5),
+              infoWindow: InfoWindow(
+                title: caseReport.id,
+                onTap: () {
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/case-report',
+                  //   arguments: caseReport,
+                  // );
+                },
+              ),
+            ),
+          );
+          _markersDark.add(
+            Marker(
+              markerId: MarkerId(caseReport.id),
+              position: LatLng(
+                caseReport.latitude,
+                caseReport.longitude,
+              ),
+              icon: _markerIconCaseReportDark!,
+              anchor: const Offset(0.5, 0.5),
+              infoWindow: InfoWindow(
+                title: caseReport.id,
+                onTap: () {
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/case-report',
+                  //   arguments: caseReport,
+                  // );
+                },
+              ),
             ),
           );
         }
       }
+
+      // Add markers for propagation zones to light and dark list
       if (propagationZonesSummarized.isNotEmpty) {
         for (var propagationZone in propagationZonesSummarized) {
           _markersLight.add(
@@ -245,12 +336,40 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                 propagationZone.longitude,
               ),
               icon: _markerIconPropagationZoneLight!,
-              onTap: () {
-                // Navigator.pushNamed(context, '/propagation_zone', arguments: {
-                //   'propagationZone': propagationZone,
-                // });
-                debugPrint('propagationZone ${propagationZone.id}');
-              },
+              anchor: const Offset(0.5, 0.5),
+              infoWindow: InfoWindow(
+                title: propagationZone.id,
+                onTap: () {
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/case-report',
+                  //   arguments: caseReport,
+                  // );
+                },
+              ),
+            ),
+          );
+        }
+        for (var propagationZone in propagationZonesSummarized) {
+          _markersDark.add(
+            Marker(
+              markerId: MarkerId(propagationZone.id),
+              position: LatLng(
+                propagationZone.latitude,
+                propagationZone.longitude,
+              ),
+              icon: _markerIconPropagationZoneDark!,
+              anchor: const Offset(0.5, 0.5),
+              infoWindow: InfoWindow(
+                title: propagationZone.id,
+                onTap: () {
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/case-report',
+                  //   arguments: caseReport,
+                  // );
+                },
+              ),
             ),
           );
         }
