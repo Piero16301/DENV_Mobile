@@ -17,7 +17,10 @@ class MapService extends ChangeNotifier {
   bool isGettingCaseReports = false;
   bool isGettingPropagationZones = false;
 
-  Future<List<CaseReportSummarizedModel>> getCaseReportsSummarized() async {
+  bool isGettingCaseReport = false;
+  bool isGettingPropagationZone = false;
+
+  Future<List<CaseReportSummarizedModel>?> getCaseReportsSummarized() async {
     try {
       isGettingCaseReports = true;
       notifyListeners();
@@ -31,20 +34,22 @@ class MapService extends ChangeNotifier {
       } else {
         isGettingCaseReports = false;
         notifyListeners();
-        return [];
+        return null;
       }
     } on DioError catch (_) {
       isGettingCaseReports = false;
       notifyListeners();
-      return [];
+      debugPrint('Error: ${_.message}');
+      return null;
     } catch (e) {
       isGettingCaseReports = false;
       notifyListeners();
-      return [];
+      debugPrint('Error: $e');
+      return null;
     }
   }
 
-  Future<List<PropagationZoneSummarizedModel>>
+  Future<List<PropagationZoneSummarizedModel>?>
       getPropagationZonesSummarized() async {
     try {
       isGettingPropagationZones = true;
@@ -59,16 +64,69 @@ class MapService extends ChangeNotifier {
       } else {
         isGettingPropagationZones = false;
         notifyListeners();
-        return [];
+        return null;
       }
     } on DioError catch (_) {
-      isGettingCaseReports = false;
+      isGettingPropagationZones = false;
       notifyListeners();
-      return [];
+      debugPrint('Error: ${_.message}');
+      return null;
     } catch (e) {
       isGettingPropagationZones = false;
       notifyListeners();
-      return [];
+      debugPrint('Error: $e');
+      return null;
+    }
+  }
+
+  Future<CaseReportModel?> getCaseReport(String idCaseReport) async {
+    try {
+      isGettingCaseReport = true;
+      notifyListeners();
+      final response = await _dio.get('/case-report/$idCaseReport');
+      if (response.statusCode == 200) {
+        isGettingCaseReport = false;
+        notifyListeners();
+        return CaseReportModel.fromJson(response.data['data']);
+      } else {
+        isGettingCaseReport = false;
+        notifyListeners();
+        return null;
+      }
+    } on DioError catch (_) {
+      isGettingCaseReport = false;
+      notifyListeners();
+      return null;
+    } catch (e) {
+      isGettingCaseReport = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
+  Future<PropagationZoneModel?> getPropagationZone(
+      String idPropagationZone) async {
+    try {
+      isGettingPropagationZone = true;
+      notifyListeners();
+      final response = await _dio.get('/propagation-zone/$idPropagationZone');
+      if (response.statusCode == 200) {
+        isGettingPropagationZone = false;
+        notifyListeners();
+        return PropagationZoneModel.fromJson(response.data['data']);
+      } else {
+        isGettingPropagationZone = false;
+        notifyListeners();
+        return null;
+      }
+    } on DioError catch (_) {
+      isGettingPropagationZone = false;
+      notifyListeners();
+      return null;
+    } catch (e) {
+      isGettingPropagationZone = false;
+      notifyListeners();
+      return null;
     }
   }
 }

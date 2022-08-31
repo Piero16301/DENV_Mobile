@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:denv_mobile/models/models.dart';
 import 'package:denv_mobile/providers/providers.dart';
+import 'package:denv_mobile/services/map_service.dart';
 import 'package:denv_mobile/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -92,7 +93,9 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       context,
       listen: false,
     ).propagationZonesSummarized;
+
     final locationProvider = Provider.of<LocationProvider>(context);
+    final mapService = Provider.of<MapService>(context);
 
     if (!_centerSet) {
       _calculateCenter(
@@ -106,6 +109,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
     _addAllMarkers(
       caseReportsSummarized,
       propagationZonesSummarized,
+      mapService,
     );
 
     return Scaffold(
@@ -269,6 +273,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   void _addAllMarkers(
     List<CaseReportSummarizedModel> caseReportsSummarized,
     List<PropagationZoneSummarizedModel> propagationZonesSummarized,
+    MapService mapService,
   ) {
     if (_markerIconCaseReportLight != null &&
         _markerIconPropagationZoneLight != null &&
@@ -299,16 +304,20 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
               ),
               icon: _markerIconCaseReportLight!,
               anchor: const Offset(0.5, 0.5),
-              infoWindow: InfoWindow(
-                title: caseReport.id,
-                onTap: () {
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   '/case-report',
-                  //   arguments: caseReport,
-                  // );
-                },
-              ),
+              onTap: () async {
+                // Get case report details
+                CaseReportModel? caseReportModel =
+                    await mapService.getCaseReport(caseReport.id);
+                // Show case report details
+                if (caseReportModel != null) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamed(
+                    context,
+                    '/case-report',
+                    arguments: caseReportModel,
+                  );
+                }
+              },
             ),
           );
           _markersDark.add(
@@ -320,16 +329,20 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
               ),
               icon: _markerIconCaseReportDark!,
               anchor: const Offset(0.5, 0.5),
-              infoWindow: InfoWindow(
-                title: caseReport.id,
-                onTap: () {
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   '/case-report',
-                  //   arguments: caseReport,
-                  // );
-                },
-              ),
+              onTap: () async {
+                // Get case report details
+                CaseReportModel? caseReportModel =
+                    await mapService.getCaseReport(caseReport.id);
+                // Show case report details
+                if (caseReportModel != null) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamed(
+                    context,
+                    '/case-report',
+                    arguments: caseReportModel,
+                  );
+                }
+              },
             ),
           );
         }
@@ -347,16 +360,19 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
               ),
               icon: _markerIconPropagationZoneLight!,
               anchor: const Offset(0.5, 0.5),
-              infoWindow: InfoWindow(
-                title: propagationZone.id,
-                onTap: () {
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   '/case-report',
-                  //   arguments: caseReport,
-                  // );
-                },
-              ),
+              onTap: () async {
+                // Get propagation zone details
+                PropagationZoneModel? propagationZoneModel =
+                    await mapService.getPropagationZone(propagationZone.id);
+                if (propagationZoneModel != null) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamed(
+                    context,
+                    '/propagation-zone',
+                    arguments: propagationZoneModel,
+                  );
+                }
+              },
             ),
           );
         }
@@ -370,16 +386,19 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
               ),
               icon: _markerIconPropagationZoneDark!,
               anchor: const Offset(0.5, 0.5),
-              infoWindow: InfoWindow(
-                title: propagationZone.id,
-                onTap: () {
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   '/case-report',
-                  //   arguments: caseReport,
-                  // );
-                },
-              ),
+              onTap: () async {
+                // Get propagation zone details
+                PropagationZoneModel? propagationZoneModel =
+                    await mapService.getPropagationZone(propagationZone.id);
+                if (propagationZoneModel != null) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamed(
+                    context,
+                    '/propagation-zone',
+                    arguments: propagationZoneModel,
+                  );
+                }
+              },
             ),
           );
         }

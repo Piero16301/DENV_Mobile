@@ -1,6 +1,8 @@
+import 'package:denv_mobile/models/models.dart';
 import 'package:denv_mobile/pages/pages.dart';
 import 'package:denv_mobile/providers/providers.dart';
 import 'package:denv_mobile/services/services.dart';
+import 'package:denv_mobile/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -75,17 +77,27 @@ class MapButton extends StatelessWidget {
               mapService.isGettingPropagationZones
           ? null
           : () async {
+              List responses = await Future.wait([
+                mapService.getCaseReportsSummarized(),
+                mapService.getPropagationZonesSummarized(),
+              ]);
+
               final caseReportsSummarized =
-                  await mapService.getCaseReportsSummarized();
+                  responses[0] as List<CaseReportSummarizedModel>?;
               final propagationZonesSummarized =
-                  await mapService.getPropagationZonesSummarized();
+                  responses[1] as List<PropagationZoneSummarizedModel>?;
 
-              mapProvider.setCaseReportsSummarized(caseReportsSummarized);
-              mapProvider
-                  .setPropagationZonesSummarized(propagationZonesSummarized);
+              if (caseReportsSummarized != null &&
+                  propagationZonesSummarized != null) {
+                mapProvider.setCaseReportsSummarized(caseReportsSummarized);
+                mapProvider
+                    .setPropagationZonesSummarized(propagationZonesSummarized);
 
-              // ignore: use_build_context_synchronously
-              Navigator.pushNamed(context, '/map');
+                // ignore: use_build_context_synchronously
+                Navigator.pushNamed(context, '/map');
+              } else {
+                await _showErrorDialog(context: context);
+              }
             },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 50),
@@ -140,6 +152,67 @@ class MapButton extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _showErrorDialog({
+    required BuildContext context,
+  }) async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Icon(
+                Icons.error,
+                color: Colors.red,
+                size: 50,
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Error',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          content: const Text(
+            'Ha ocurrido un error al obtener los casos de dengue y zonas de propagación, por favor intente de nuevo.',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.only(bottom: 10),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                elevation: 1,
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Aceptar',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class NewCaseReportButton extends StatelessWidget {
@@ -159,7 +232,7 @@ class NewCaseReportButton extends StatelessWidget {
             caseReportProvider.setDatetime(DateTime.now());
             caseReportProvider.setPosition(locationProvider.currentPosition);
             caseReportProvider.setAddress(locationProvider.currentAddress);
-            Navigator.pushNamed(context, '/create_case_report');
+            Navigator.pushNamed(context, '/create-case-report');
           },
           style: ButtonStyle(
             elevation: MaterialStateProperty.all<double>(1),
@@ -198,7 +271,7 @@ class NewPropagationZoneButton extends StatelessWidget {
             propagationZoneProvider
                 .setPosition(locationProvider.currentPosition);
             propagationZoneProvider.setAddress(locationProvider.currentAddress);
-            Navigator.pushNamed(context, '/create_propagation_zone');
+            Navigator.pushNamed(context, '/create-propagation-zone');
           },
           style: ButtonStyle(
             elevation: MaterialStateProperty.all<double>(1),

@@ -12,8 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-class CreateCaseReport extends StatelessWidget {
-  const CreateCaseReport({Key? key}) : super(key: key);
+class CreateCaseReportPage extends StatelessWidget {
+  const CreateCaseReportPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

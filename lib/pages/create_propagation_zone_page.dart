@@ -12,8 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-class CreatePropagationZone extends StatelessWidget {
-  const CreatePropagationZone({Key? key}) : super(key: key);
+class CreatePropagationZonePage extends StatelessWidget {
+  const CreatePropagationZonePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
