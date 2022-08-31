@@ -30,6 +30,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   final Set<Marker> _markers = <Marker>{};
   final Set<Marker> _markersLight = <Marker>{};
   final Set<Marker> _markersDark = <Marker>{};
+  bool _markersLoaded = false;
 
   LatLng _center = const LatLng(0, 0);
   bool _centerSet = false;
@@ -273,6 +274,15 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
         _markerIconPropagationZoneLight != null &&
         _markerIconCaseReportDark != null &&
         _markerIconPropagationZoneDark != null) {
+      if (_markersLoaded) {
+        return;
+      }
+      setState(() {
+        _markersLoaded = true;
+      });
+
+      debugPrint('Adding all markers');
+
       // Clear current lists
       _markersLight.clear();
       _markersDark.clear();
