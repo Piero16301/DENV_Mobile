@@ -5,6 +5,14 @@ class PropagationZonePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Detalles de la zona de propagación'),
+        centerTitle: true,
+      ),
+      body: const Center(
+        child: Text('Zona de propagación'),
+      ),
+    );
   }
 }
