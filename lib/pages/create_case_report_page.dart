@@ -256,7 +256,7 @@ class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 75),
                         child: SvgPicture.asset(
                           'assets/app_icons/no-image.svg',
-                          color: (ThemeModeApp.isDarkMode)
+                          color: ThemeModeApp.isDarkMode
                               ? Colors.white
                               : Colors.black,
                         ),
