@@ -54,7 +54,7 @@ class CreateCaseReportPage extends StatelessWidget {
                     ? await caseReportService.uploadImage(
                         caseReportProvider.image!,
                       )
-                    : 'Sin fotografía';
+                    : 'Sin enlace';
 
                 if (photoUrl == null) {
                   await _showResponseDialog(success: false, context: context);

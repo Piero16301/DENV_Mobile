@@ -55,7 +55,7 @@ class CreatePropagationZonePage extends StatelessWidget {
                     ? await propagationZoneService.uploadImage(
                         propagationZoneProvider.image!,
                       )
-                    : 'Sin fotografía';
+                    : 'Sin enlace';
 
                 if (photoUrl == null) {
                   await _showResponseDialog(success: false, context: context);

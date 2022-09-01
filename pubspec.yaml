@@ -46,6 +46,7 @@ dependencies:
   text_scroll: ^0.1.0           # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
   dio: ^4.0.6                   # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
   http: ^0.13.5                 # ANDROID | IOS | LINUX | MACOS | WEB | WINDOWS
+  cached_network_image: ^3.2.2  # ANDROID | IOS |       | MACOS |     | 
 
 dev_dependencies:
   flutter_test:

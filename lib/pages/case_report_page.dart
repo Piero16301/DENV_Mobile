@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:denv_mobile/models/models.dart';
 import 'package:denv_mobile/themes/themes.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,7 @@ class PhotoDisplayCaseReport extends StatelessWidget {
               ? const Color.fromARGB(255, 66, 66, 66)
               : const Color.fromARGB(255, 185, 185, 185),
         ),
-        child: photoUrl == 'Sin fotografía'
+        child: photoUrl == 'Sin enlace'
             ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 75),
                 child: SvgPicture.asset(
@@ -95,9 +96,19 @@ class PhotoDisplayCaseReport extends StatelessWidget {
               )
             : ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  photoUrl,
+                child: CachedNetworkImage(
+                  imageUrl: photoUrl,
                   fit: BoxFit.contain,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => Center(
+                    child: SvgPicture.asset(
+                      'assets/app_icons/no-image.svg',
+                      color:
+                          ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
                 ),
               ),
       ),
