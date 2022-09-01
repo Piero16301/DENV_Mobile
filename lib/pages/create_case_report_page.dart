@@ -565,9 +565,8 @@ class ShowLatitudeAndLongitudeCaseReport extends StatelessWidget {
                       'assets/app_icons/latitude_icon.svg',
                       height: 30,
                       width: 30,
-                      color: (ThemeModeApp.isDarkMode)
-                          ? Colors.white
-                          : Colors.black,
+                      color:
+                          ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -585,9 +584,8 @@ class ShowLatitudeAndLongitudeCaseReport extends StatelessWidget {
                       'assets/app_icons/longitude_icon.svg',
                       height: 30,
                       width: 30,
-                      color: (ThemeModeApp.isDarkMode)
-                          ? Colors.white
-                          : Colors.black,
+                      color:
+                          ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
                     ),
                     const SizedBox(width: 10),
                     Text(
