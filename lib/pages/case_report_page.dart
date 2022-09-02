@@ -17,7 +17,7 @@ class CaseReportPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalles del caso de dengue'),
+        title: const Text('Detalles del la inspección de vivienda'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

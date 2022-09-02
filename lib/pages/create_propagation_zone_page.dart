@@ -24,7 +24,7 @@ class CreatePropagationZonePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reportar nueva zona de propagación'),
+        title: const Text('Registro del vector'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

@@ -23,7 +23,7 @@ class CreateCaseReportPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reportar nuevo caso de dengue'),
+        title: const Text('Inspección de viviendas'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -666,3 +666,13 @@ class ShowAddressCaseReport extends StatelessWidget {
     );
   }
 }
+
+// 1. DNI
+// 2. Fecha y hora
+// 3. Latitud y longitud
+// 4. Dirección
+// 5. Calle
+// 6. Mz. Lote (input)
+// 7. Nro. de habitantes (input)
+// 8. Condición de viviendas
+// 8.1. Casa

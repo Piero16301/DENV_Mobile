@@ -238,7 +238,7 @@ class NewCaseReportButton extends StatelessWidget {
             fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           ),
           child: const Text(
-            'Reportar nuevo caso de dengue',
+            'Inspección de viviendas',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -277,7 +277,7 @@ class NewPropagationZoneButton extends StatelessWidget {
             fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           ),
           child: const Text(
-            'Reportar nueva zona de propagación',
+            'Registro del vector',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
