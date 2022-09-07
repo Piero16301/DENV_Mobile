@@ -14,7 +14,7 @@ class PropagationZoneService extends ChangeNotifier {
   final String _uploadPreset = 'sr2qafxo';
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://20.206.152.104',
+      baseUrl: 'http://18.207.168.16',
       contentType: 'application/json',
       receiveDataWhenStatusError: true,
       connectTimeout: 3 * 1000,

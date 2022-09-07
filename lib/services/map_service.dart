@@ -6,7 +6,7 @@ import '../models/models.dart';
 class MapService extends ChangeNotifier {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://20.206.152.104',
+      baseUrl: 'http://18.207.168.16',
       contentType: 'application/json',
       receiveDataWhenStatusError: true,
       connectTimeout: 3 * 1000,
@@ -28,9 +28,13 @@ class MapService extends ChangeNotifier {
       if (response.statusCode == 200) {
         isGettingCaseReports = false;
         notifyListeners();
-        return (response.data['data'] as List<dynamic>)
-            .map((e) => CaseReportSummarizedModel.fromJson(e))
-            .toList();
+        if (response.data['data'] == null) {
+          return List<CaseReportSummarizedModel>.empty();
+        } else {
+          return (response.data['data'] as List<dynamic>)
+              .map((e) => CaseReportSummarizedModel.fromJson(e))
+              .toList();
+        }
       } else {
         isGettingCaseReports = false;
         notifyListeners();
@@ -58,9 +62,13 @@ class MapService extends ChangeNotifier {
       if (response.statusCode == 200) {
         isGettingPropagationZones = false;
         notifyListeners();
-        return (response.data['data'] as List<dynamic>)
-            .map((e) => PropagationZoneSummarizedModel.fromJson(e))
-            .toList();
+        if (response.data['data'] == null) {
+          return List<PropagationZoneSummarizedModel>.empty();
+        } else {
+          return (response.data['data'] as List<dynamic>)
+              .map((e) => PropagationZoneSummarizedModel.fromJson(e))
+              .toList();
+        }
       } else {
         isGettingPropagationZones = false;
         notifyListeners();
