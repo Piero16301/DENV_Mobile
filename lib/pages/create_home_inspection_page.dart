@@ -25,7 +25,7 @@ class CreateHomeInspectionPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inspección de viviendas'),
+        title: const Text('Nueva inspección de vivienda'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

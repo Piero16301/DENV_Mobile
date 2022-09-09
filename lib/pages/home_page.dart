@@ -239,7 +239,7 @@ class NewHomeInspectionButton extends StatelessWidget {
             fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           ),
           child: const Text(
-            'Inspección de viviendas',
+            'Nueva inspección de vivienda',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -276,7 +276,7 @@ class NewVectorRecordButton extends StatelessWidget {
             fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
           ),
           child: const Text(
-            'Registro del vector',
+            'Nuevo registro del vector',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

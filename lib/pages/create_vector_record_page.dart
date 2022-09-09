@@ -23,7 +23,7 @@ class CreateVectorRecordPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registro del vector'),
+        title: const Text('Nuevo registro del vector'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
