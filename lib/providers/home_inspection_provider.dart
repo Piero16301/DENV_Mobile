@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding/google_geocoding.dart';
 
-class PropagationZoneProvider extends ChangeNotifier {
+class HomeInspectionProvider extends ChangeNotifier {
   String? _comment;
   File? _image;
   DateTime? _datetime;

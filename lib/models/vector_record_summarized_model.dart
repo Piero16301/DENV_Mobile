@@ -1,23 +1,23 @@
 import 'dart:convert';
 
-CaseReportSummarizedModel caseReportSummarizedModelFromJson(String str) =>
-    CaseReportSummarizedModel.fromJson(json.decode(str));
-String caseReportSummarizedModelToJson(CaseReportSummarizedModel data) =>
+VectorRecordSummarizedModel vectorRecordSummarizedModelFromJson(String str) =>
+    VectorRecordSummarizedModel.fromJson(json.decode(str));
+String vectorRecordSummarizedModelToJson(VectorRecordSummarizedModel data) =>
     json.encode(data.toJson());
 
-class CaseReportSummarizedModel {
+class VectorRecordSummarizedModel {
   String id;
   double latitude;
   double longitude;
 
-  CaseReportSummarizedModel({
+  VectorRecordSummarizedModel({
     required this.id,
     required this.latitude,
     required this.longitude,
   });
 
-  factory CaseReportSummarizedModel.fromJson(Map<String, dynamic> json) =>
-      CaseReportSummarizedModel(
+  factory VectorRecordSummarizedModel.fromJson(Map<String, dynamic> json) =>
+      VectorRecordSummarizedModel(
         id: json["id"],
         latitude: json["latitude"].toDouble(),
         longitude: json["longitude"].toDouble(),

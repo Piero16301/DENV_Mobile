@@ -1,7 +1,6 @@
+import 'package:denv_mobile/models/models.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
-import '../models/models.dart';
 
 class MapService extends ChangeNotifier {
   final Dio _dio = Dio(
@@ -14,125 +13,126 @@ class MapService extends ChangeNotifier {
     ),
   );
 
-  bool isGettingCaseReports = false;
-  bool isGettingPropagationZones = false;
+  bool isGettingHomeInspections = false;
+  bool isGettingVectorRecords = false;
 
-  bool isGettingCaseReport = false;
-  bool isGettingPropagationZone = false;
+  bool isGettingHomeInspection = false;
+  bool isGettingVectorRecord = false;
 
-  Future<List<CaseReportSummarizedModel>?> getCaseReportsSummarized() async {
+  Future<List<HomeInspectionSummarizedModel>?>
+      getHomeInspectionsSummarized() async {
     try {
-      isGettingCaseReports = true;
+      isGettingHomeInspections = true;
       notifyListeners();
-      final response = await _dio.get('/case-reports-summarized');
+      final response = await _dio.get('/home-inspections-summarized');
       if (response.statusCode == 200) {
-        isGettingCaseReports = false;
+        isGettingHomeInspections = false;
         notifyListeners();
         if (response.data['data'] == null) {
-          return List<CaseReportSummarizedModel>.empty();
+          return List<HomeInspectionSummarizedModel>.empty();
         } else {
           return (response.data['data'] as List<dynamic>)
-              .map((e) => CaseReportSummarizedModel.fromJson(e))
+              .map((e) => HomeInspectionSummarizedModel.fromJson(e))
               .toList();
         }
       } else {
-        isGettingCaseReports = false;
+        isGettingHomeInspections = false;
         notifyListeners();
         return null;
       }
     } on DioError catch (_) {
-      isGettingCaseReports = false;
+      isGettingHomeInspections = false;
       notifyListeners();
       debugPrint('Error: ${_.message}');
       return null;
     } catch (e) {
-      isGettingCaseReports = false;
+      isGettingHomeInspections = false;
       notifyListeners();
       debugPrint('Error: $e');
       return null;
     }
   }
 
-  Future<List<PropagationZoneSummarizedModel>?>
-      getPropagationZonesSummarized() async {
+  Future<List<VectorRecordSummarizedModel>?>
+      getVectorRecordsSummarized() async {
     try {
-      isGettingPropagationZones = true;
+      isGettingVectorRecords = true;
       notifyListeners();
-      final response = await _dio.get('/propagation-zones-summarized');
+      final response = await _dio.get('/vector-records-summarized');
       if (response.statusCode == 200) {
-        isGettingPropagationZones = false;
+        isGettingVectorRecords = false;
         notifyListeners();
         if (response.data['data'] == null) {
-          return List<PropagationZoneSummarizedModel>.empty();
+          return List<VectorRecordSummarizedModel>.empty();
         } else {
           return (response.data['data'] as List<dynamic>)
-              .map((e) => PropagationZoneSummarizedModel.fromJson(e))
+              .map((e) => VectorRecordSummarizedModel.fromJson(e))
               .toList();
         }
       } else {
-        isGettingPropagationZones = false;
+        isGettingVectorRecords = false;
         notifyListeners();
         return null;
       }
     } on DioError catch (_) {
-      isGettingPropagationZones = false;
+      isGettingVectorRecords = false;
       notifyListeners();
       debugPrint('Error: ${_.message}');
       return null;
     } catch (e) {
-      isGettingPropagationZones = false;
+      isGettingVectorRecords = false;
       notifyListeners();
       debugPrint('Error: $e');
       return null;
     }
   }
 
-  Future<CaseReportModel?> getCaseReport(String idCaseReport) async {
+  Future<HomeInspectionModel?> getHomeInspection(
+      String idHomeInspection) async {
     try {
-      isGettingCaseReport = true;
+      isGettingHomeInspection = true;
       notifyListeners();
-      final response = await _dio.get('/case-report/$idCaseReport');
+      final response = await _dio.get('/home-inspection/$idHomeInspection');
       if (response.statusCode == 200) {
-        isGettingCaseReport = false;
+        isGettingHomeInspection = false;
         notifyListeners();
-        return CaseReportModel.fromJson(response.data['data']);
+        return HomeInspectionModel.fromJson(response.data['data']);
       } else {
-        isGettingCaseReport = false;
+        isGettingHomeInspection = false;
         notifyListeners();
         return null;
       }
     } on DioError catch (_) {
-      isGettingCaseReport = false;
+      isGettingHomeInspection = false;
       notifyListeners();
       return null;
     } catch (e) {
-      isGettingCaseReport = false;
+      isGettingHomeInspection = false;
       notifyListeners();
       return null;
     }
   }
 
-  Future<PropagationZoneModel?> getPropagationZone(
-      String idPropagationZone) async {
+  Future<VectorRecordModel?> getVectorRecord(String idVectorRecord) async {
     try {
-      isGettingPropagationZone = true;
+      isGettingVectorRecord = true;
       notifyListeners();
-      final response = await _dio.get('/propagation-zone/$idPropagationZone');
+      final response = await _dio.get('/vector-record/$idVectorRecord');
       if (response.statusCode == 200) {
-        isGettingPropagationZone = false;
+        isGettingVectorRecord = false;
         notifyListeners();
-        return PropagationZoneModel.fromJson(response.data['data']);
+        return VectorRecordModel.fromJson(response.data['data']);
       } else {
-        isGettingPropagationZone = false;
+        isGettingVectorRecord = false;
         notifyListeners();
         return null;
       }
     } on DioError catch (_) {
-      isGettingPropagationZone = false;
+      isGettingVectorRecord = false;
       notifyListeners();
       return null;
     } catch (e) {
-      isGettingPropagationZone = false;
+      isGettingVectorRecord = false;
       notifyListeners();
       return null;
     }

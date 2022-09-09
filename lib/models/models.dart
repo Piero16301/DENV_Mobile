@@ -1,5 +1,5 @@
-export 'case_report_model.dart';
+export 'home_inspection_model.dart';
 export 'address_model.dart';
-export 'propagation_zone_model.dart';
-export 'case_report_summarized_model.dart';
-export 'propagation_zone_summarized_model.dart';
+export 'vector_record_model.dart';
+export 'home_inspection_summarized_model.dart';
+export 'vector_record_summarized_model.dart';

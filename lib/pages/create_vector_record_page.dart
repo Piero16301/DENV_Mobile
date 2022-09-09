@@ -12,15 +12,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-class CreatePropagationZonePage extends StatelessWidget {
-  const CreatePropagationZonePage({Key? key}) : super(key: key);
+class CreateVectorRecordPage extends StatelessWidget {
+  const CreateVectorRecordPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final propagationZoneProvider =
-        Provider.of<PropagationZoneProvider>(context);
-    final propagationZoneService = Provider.of<PropagationZoneService>(context);
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(context);
+    final vectorRecordService = Provider.of<VectorRecordService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -32,28 +31,28 @@ class CreatePropagationZonePage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            PhotoDisplayAndSelectPropagationZone(size: size),
+            PhotoDisplayAndSelectVectorRecord(size: size),
             const SizedBox(height: 30),
-            InsertCommentPropagationZone(size: size),
+            InsertCommentVectorRecord(size: size),
             const SizedBox(height: 20),
-            ShowCurrentDateTimePropagationZone(size: size),
+            ShowCurrentDateTimeVectorRecord(size: size),
             const SizedBox(height: 30),
-            ShowLatitudeAndLongitudePropagationZone(size: size),
+            ShowLatitudeAndLongitudeVectorRecord(size: size),
             const SizedBox(height: 30),
-            ShowAddressPropagationZone(size: size),
+            ShowAddressVectorRecord(size: size),
             const SizedBox(height: 30),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        heroTag: 'newPropagationZoneButton',
-        onPressed: propagationZoneService.isSavingNewPropagationZone
+        heroTag: 'newVectorRecordButton',
+        onPressed: vectorRecordService.isSavingNewVectorRecord
             ? null
             : () async {
                 // Subir fotografía a Cloudinary
-                String? photoUrl = propagationZoneProvider.image != null
-                    ? await propagationZoneService.uploadImage(
-                        propagationZoneProvider.image!,
+                String? photoUrl = vectorRecordProvider.image != null
+                    ? await vectorRecordService.uploadImage(
+                        vectorRecordProvider.image!,
                       )
                     : 'Sin enlace';
 
@@ -62,66 +61,68 @@ class CreatePropagationZonePage extends StatelessWidget {
                   return;
                 }
 
-                // Crear objeto de tipo PropagationZone
-                final propagationZone = PropagationZoneModel(
+                // Crear objeto de tipo VectorRecord
+                final vectorRecord = VectorRecordModel(
                   address: AddressModel(
-                    formattedAddress:
-                        propagationZoneProvider.address!.formattedAddress!,
-                    postalCode: getAddressComponent(
-                      propagationZoneProvider.address!,
+                    formattedaddress:
+                        vectorRecordProvider.address!.formattedAddress!,
+                    postalcode: getAddressComponent(
+                      vectorRecordProvider.address!,
                       'postal_code',
                     ),
                     country: getAddressComponent(
-                      propagationZoneProvider.address!,
+                      vectorRecordProvider.address!,
                       'country',
                     ),
                     department: getAddressComponent(
-                      propagationZoneProvider.address!,
+                      vectorRecordProvider.address!,
                       'administrative_area_level_1',
                     ),
                     province: getAddressComponent(
-                      propagationZoneProvider.address!,
+                      vectorRecordProvider.address!,
                       'administrative_area_level_2',
                     ),
                     district: getAddressComponent(
-                      propagationZoneProvider.address!,
+                      vectorRecordProvider.address!,
                       'administrative_area_level_3',
                     ),
                     urbanization: getAddressComponent(
-                      propagationZoneProvider.address!,
+                      vectorRecordProvider.address!,
                       'sublocality_level_1',
                     ),
                     street: getAddressComponent(
-                      propagationZoneProvider.address!,
+                      vectorRecordProvider.address!,
                       'route',
                     ),
-                    streetNumber: int.parse(
+                    block: 'C-2',
+                    lot: 40,
+                    streetnumber: int.parse(
                       getAddressComponent(
-                        propagationZoneProvider.address!,
+                        vectorRecordProvider.address!,
                         'street_number',
                       ),
                     ),
                   ),
-                  comment: propagationZoneProvider.comment ?? 'Sin comentario',
-                  dateTime: propagationZoneProvider.datetime!,
-                  latitude: propagationZoneProvider.position!.latitude,
-                  longitude: propagationZoneProvider.position!.longitude,
-                  photoUrl: photoUrl,
+                  comment: vectorRecordProvider.comment ?? 'Sin comentario',
+                  datetime: vectorRecordProvider.datetime!,
+                  latitude: vectorRecordProvider.position!.latitude,
+                  longitude: vectorRecordProvider.position!.longitude,
+                  photourl: photoUrl,
                 );
 
                 // Subir zona de propagación a MongoDB
-                final newPropagationZone =
-                    await propagationZoneService.createNewPropagationZone(
-                  propagationZone,
+                final newVectorRecord =
+                    await vectorRecordService.createNewVectorRecord(
+                  vectorRecord,
                 );
-                if (newPropagationZone != null) {
+                if (newVectorRecord != null) {
                   await _showResponseDialog(success: true, context: context);
                 } else {
                   await _showResponseDialog(success: false, context: context);
                 }
               },
         label: Text(
-          propagationZoneService.isSavingNewPropagationZone
+          vectorRecordService.isSavingNewVectorRecord
               ? 'Guardando...'
               : 'Guardar',
           style: const TextStyle(
@@ -129,7 +130,7 @@ class CreatePropagationZonePage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        icon: propagationZoneService.isSavingNewPropagationZone
+        icon: vectorRecordService.isSavingNewVectorRecord
             ? SizedBox.square(
                 dimension: 30,
                 child: CircularProgressIndicator(
@@ -222,8 +223,8 @@ class CreatePropagationZonePage extends StatelessWidget {
   }
 }
 
-class PhotoDisplayAndSelectPropagationZone extends StatelessWidget {
-  const PhotoDisplayAndSelectPropagationZone({
+class PhotoDisplayAndSelectVectorRecord extends StatelessWidget {
+  const PhotoDisplayAndSelectVectorRecord({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -232,8 +233,7 @@ class PhotoDisplayAndSelectPropagationZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final propagationZoneProvider =
-        Provider.of<PropagationZoneProvider>(context);
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(context);
 
     return Center(
       child: Column(
@@ -255,7 +255,7 @@ class PhotoDisplayAndSelectPropagationZone extends StatelessWidget {
                       ? const Color.fromARGB(255, 66, 66, 66)
                       : const Color.fromARGB(255, 185, 185, 185),
                 ),
-                child: propagationZoneProvider.image == null
+                child: vectorRecordProvider.image == null
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 75),
                         child: SvgPicture.asset(
@@ -268,12 +268,12 @@ class PhotoDisplayAndSelectPropagationZone extends StatelessWidget {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image.file(
-                          propagationZoneProvider.image!,
+                          vectorRecordProvider.image!,
                           fit: BoxFit.contain,
                         ),
                       ),
               ),
-              if (propagationZoneProvider.image != null)
+              if (vectorRecordProvider.image != null)
                 Positioned(
                   right: 0,
                   top: 0,
@@ -285,7 +285,7 @@ class PhotoDisplayAndSelectPropagationZone extends StatelessWidget {
                     color:
                         ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
                     onPressed: () {
-                      propagationZoneProvider.setImage(null);
+                      vectorRecordProvider.setImage(null);
                     },
                   ),
                 ),
@@ -298,11 +298,11 @@ class PhotoDisplayAndSelectPropagationZone extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
                 Expanded(
-                  child: PhotoFromCameraButtonPropagationZone(),
+                  child: PhotoFromCameraButtonVectorRecord(),
                 ),
                 SizedBox(width: 20),
                 Expanded(
-                  child: PhotoFromGalleryButtonPropagationZone(),
+                  child: PhotoFromGalleryButtonVectorRecord(),
                 ),
               ],
             ),
@@ -313,13 +313,12 @@ class PhotoDisplayAndSelectPropagationZone extends StatelessWidget {
   }
 }
 
-class PhotoFromCameraButtonPropagationZone extends StatelessWidget {
-  const PhotoFromCameraButtonPropagationZone({Key? key}) : super(key: key);
+class PhotoFromCameraButtonVectorRecord extends StatelessWidget {
+  const PhotoFromCameraButtonVectorRecord({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final propagationZoneProvider =
-        Provider.of<PropagationZoneProvider>(context);
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(context);
 
     return ElevatedButton(
       onPressed: () async {
@@ -328,7 +327,7 @@ class PhotoFromCameraButtonPropagationZone extends StatelessWidget {
           source: ImageSource.camera,
         );
         if (pickedFile != null) {
-          propagationZoneProvider.setImage(File(pickedFile.path));
+          vectorRecordProvider.setImage(File(pickedFile.path));
         }
       },
       style: ButtonStyle(
@@ -349,13 +348,12 @@ class PhotoFromCameraButtonPropagationZone extends StatelessWidget {
   }
 }
 
-class PhotoFromGalleryButtonPropagationZone extends StatelessWidget {
-  const PhotoFromGalleryButtonPropagationZone({Key? key}) : super(key: key);
+class PhotoFromGalleryButtonVectorRecord extends StatelessWidget {
+  const PhotoFromGalleryButtonVectorRecord({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final propagationZoneProvider =
-        Provider.of<PropagationZoneProvider>(context);
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(context);
 
     return ElevatedButton(
       onPressed: () async {
@@ -364,7 +362,7 @@ class PhotoFromGalleryButtonPropagationZone extends StatelessWidget {
           source: ImageSource.gallery,
         );
         if (pickedFile != null) {
-          propagationZoneProvider.setImage(File(pickedFile.path));
+          vectorRecordProvider.setImage(File(pickedFile.path));
         }
       },
       style: ButtonStyle(
@@ -385,8 +383,8 @@ class PhotoFromGalleryButtonPropagationZone extends StatelessWidget {
   }
 }
 
-class InsertCommentPropagationZone extends StatelessWidget {
-  const InsertCommentPropagationZone({
+class InsertCommentVectorRecord extends StatelessWidget {
+  const InsertCommentVectorRecord({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -395,7 +393,7 @@ class InsertCommentPropagationZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final propagationZoneProvider = Provider.of<PropagationZoneProvider>(
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(
       context,
       listen: false,
     );
@@ -447,7 +445,7 @@ class InsertCommentPropagationZone extends StatelessWidget {
             maxLines: 3,
             maxLength: 200,
             onChanged: (value) {
-              propagationZoneProvider.setComment(value);
+              vectorRecordProvider.setComment(value);
             },
           ),
         ],
@@ -456,8 +454,8 @@ class InsertCommentPropagationZone extends StatelessWidget {
   }
 }
 
-class ShowCurrentDateTimePropagationZone extends StatelessWidget {
-  const ShowCurrentDateTimePropagationZone({
+class ShowCurrentDateTimeVectorRecord extends StatelessWidget {
+  const ShowCurrentDateTimeVectorRecord({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -466,7 +464,7 @@ class ShowCurrentDateTimePropagationZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final propagationZoneProvider = Provider.of<PropagationZoneProvider>(
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(
       context,
     );
 
@@ -497,7 +495,7 @@ class ShowCurrentDateTimePropagationZone extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(
                       DateFormat.yMMMd('es_ES').format(
-                        propagationZoneProvider.datetime!,
+                        vectorRecordProvider.datetime!,
                       ),
                       style: const TextStyle(
                         fontSize: 16,
@@ -515,7 +513,7 @@ class ShowCurrentDateTimePropagationZone extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(
                       DateFormat('hh:mm:ss a').format(
-                        propagationZoneProvider.datetime!,
+                        vectorRecordProvider.datetime!,
                       ),
                       style: const TextStyle(
                         fontSize: 16,
@@ -533,8 +531,8 @@ class ShowCurrentDateTimePropagationZone extends StatelessWidget {
   }
 }
 
-class ShowLatitudeAndLongitudePropagationZone extends StatelessWidget {
-  const ShowLatitudeAndLongitudePropagationZone({
+class ShowLatitudeAndLongitudeVectorRecord extends StatelessWidget {
+  const ShowLatitudeAndLongitudeVectorRecord({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -543,7 +541,7 @@ class ShowLatitudeAndLongitudePropagationZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final propagationZoneProvider = Provider.of<PropagationZoneProvider>(
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(
       context,
     );
 
@@ -577,7 +575,7 @@ class ShowLatitudeAndLongitudePropagationZone extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      propagationZoneProvider.position!.latitude
+                      vectorRecordProvider.position!.latitude
                           .toStringAsFixed(5),
                       style: const TextStyle(
                         fontSize: 16,
@@ -598,7 +596,7 @@ class ShowLatitudeAndLongitudePropagationZone extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      propagationZoneProvider.position!.longitude
+                      vectorRecordProvider.position!.longitude
                           .toStringAsFixed(5),
                       style: const TextStyle(
                         fontSize: 16,
@@ -616,8 +614,8 @@ class ShowLatitudeAndLongitudePropagationZone extends StatelessWidget {
   }
 }
 
-class ShowAddressPropagationZone extends StatelessWidget {
-  const ShowAddressPropagationZone({
+class ShowAddressVectorRecord extends StatelessWidget {
+  const ShowAddressVectorRecord({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -626,7 +624,7 @@ class ShowAddressPropagationZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final propagationZoneProvider = Provider.of<PropagationZoneProvider>(
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(
       context,
     );
 
@@ -656,7 +654,7 @@ class ShowAddressPropagationZone extends StatelessWidget {
                   Flexible(
                     flex: 1,
                     child: TextScroll(
-                      propagationZoneProvider.address!.formattedAddress!,
+                      vectorRecordProvider.address!.formattedAddress!,
                       mode: TextScrollMode.bouncing,
                       velocity: const Velocity(
                         pixelsPerSecond: Offset(25, 0),

@@ -24,10 +24,10 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   String _darkMapStyle = '';
   String _lightMapStyle = '';
 
-  BitmapDescriptor? _markerIconCaseReportLight;
-  BitmapDescriptor? _markerIconPropagationZoneLight;
-  BitmapDescriptor? _markerIconCaseReportDark;
-  BitmapDescriptor? _markerIconPropagationZoneDark;
+  BitmapDescriptor? _markerIconHomeInspectionLight;
+  BitmapDescriptor? _markerIconVectorRecordLight;
+  BitmapDescriptor? _markerIconHomeInspectionDark;
+  BitmapDescriptor? _markerIconVectorRecordDark;
 
   final Set<Marker> _markers = <Marker>{};
   final Set<Marker> _markersLight = <Marker>{};
@@ -86,30 +86,30 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     _createCustomMarker(MediaQuery.of(context));
 
-    final caseReportsSummarized = Provider.of<MapProvider>(
+    final homeInspectionsSummarized = Provider.of<MapProvider>(
       context,
       listen: false,
-    ).caseReportsSummarized;
-    final propagationZonesSummarized = Provider.of<MapProvider>(
+    ).homeInspectionsSummarized;
+    final vectorRecordsSummarized = Provider.of<MapProvider>(
       context,
       listen: false,
-    ).propagationZonesSummarized;
+    ).vectorRecordsSummarized;
 
     final locationProvider = Provider.of<LocationProvider>(context);
     final mapService = Provider.of<MapService>(context);
 
     if (!_centerSet) {
       _calculateCenter(
-        caseReportsSummarized,
-        propagationZonesSummarized,
+        homeInspectionsSummarized,
+        vectorRecordsSummarized,
         locationProvider.currentPosition!,
       );
       _centerSet = true;
     }
 
     _addAllMarkers(
-      caseReportsSummarized,
-      propagationZonesSummarized,
+      homeInspectionsSummarized,
+      vectorRecordsSummarized,
       mapService,
     );
 
@@ -169,103 +169,101 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       debugPrint('screenWidth >= 1100 $screenWidth $screenHeight');
     }
 
-    if (_markerIconCaseReportLight == null) {
+    if (_markerIconHomeInspectionLight == null) {
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
         'assets/$folderName/marker_case_report_light.png',
-      ).then(_updateBitmapCaseReportLight);
+      ).then(_updateBitmapHomeInspectionLight);
     }
 
-    if (_markerIconPropagationZoneLight == null) {
+    if (_markerIconVectorRecordLight == null) {
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
         'assets/$folderName/marker_propagation_zone_light.png',
-      ).then(_updateBitmapPropagationZoneLight);
+      ).then(_updateBitmapVectorRecordLight);
     }
 
-    if (_markerIconCaseReportDark == null) {
+    if (_markerIconHomeInspectionDark == null) {
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
         'assets/$folderName/marker_case_report_dark.png',
-      ).then(_updateBitmapCaseReportDark);
+      ).then(_updateBitmapHomeInspectionDark);
     }
 
-    if (_markerIconPropagationZoneDark == null) {
+    if (_markerIconVectorRecordDark == null) {
       BitmapDescriptor.fromAssetImage(
         imageConfiguration,
         'assets/$folderName/marker_propagation_zone_dark.png',
-      ).then(_updateBitmapPropagationZoneDark);
+      ).then(_updateBitmapVectorRecordDark);
     }
   }
 
-  void _updateBitmapCaseReportLight(BitmapDescriptor bitmap) {
+  void _updateBitmapHomeInspectionLight(BitmapDescriptor bitmap) {
     setState(() {
-      _markerIconCaseReportLight = bitmap;
+      _markerIconHomeInspectionLight = bitmap;
     });
   }
 
-  void _updateBitmapPropagationZoneLight(BitmapDescriptor bitmap) {
+  void _updateBitmapVectorRecordLight(BitmapDescriptor bitmap) {
     setState(() {
-      _markerIconPropagationZoneLight = bitmap;
+      _markerIconVectorRecordLight = bitmap;
     });
   }
 
-  void _updateBitmapCaseReportDark(BitmapDescriptor bitmap) {
+  void _updateBitmapHomeInspectionDark(BitmapDescriptor bitmap) {
     setState(() {
-      _markerIconCaseReportDark = bitmap;
+      _markerIconHomeInspectionDark = bitmap;
     });
   }
 
-  void _updateBitmapPropagationZoneDark(BitmapDescriptor bitmap) {
+  void _updateBitmapVectorRecordDark(BitmapDescriptor bitmap) {
     setState(() {
-      _markerIconPropagationZoneDark = bitmap;
+      _markerIconVectorRecordDark = bitmap;
     });
   }
 
   void _calculateCenter(
-    List<CaseReportSummarizedModel> caseReportsSummarized,
-    List<PropagationZoneSummarizedModel> propagationZonesSummarized,
+    List<HomeInspectionSummarizedModel> homeInspectionsSummarized,
+    List<VectorRecordSummarizedModel> vectorRecordsSummarized,
     Position currentPosition,
   ) {
     debugPrint('Calculating center');
-    double avgLatCases = caseReportsSummarized.isEmpty
+    double avgLatCases = homeInspectionsSummarized.isEmpty
         ? 0.0
-        : caseReportsSummarized
+        : homeInspectionsSummarized
                 .map((e) => e.latitude)
                 .reduce((value, element) => value + element) /
-            caseReportsSummarized.length;
-    double avgLonCases = caseReportsSummarized.isEmpty
+            homeInspectionsSummarized.length;
+    double avgLonCases = homeInspectionsSummarized.isEmpty
         ? 0.0
-        : caseReportsSummarized
+        : homeInspectionsSummarized
                 .map((e) => e.longitude)
                 .reduce((value, element) => value + element) /
-            caseReportsSummarized.length;
+            homeInspectionsSummarized.length;
 
-    double avgLatZones = propagationZonesSummarized.isEmpty
+    double avgLatZones = vectorRecordsSummarized.isEmpty
         ? 0.0
-        : propagationZonesSummarized
+        : vectorRecordsSummarized
                 .map((e) => e.latitude)
                 .reduce((value, element) => value + element) /
-            propagationZonesSummarized.length;
-    double avgLonZones = propagationZonesSummarized.isEmpty
+            vectorRecordsSummarized.length;
+    double avgLonZones = vectorRecordsSummarized.isEmpty
         ? 0.0
-        : propagationZonesSummarized
+        : vectorRecordsSummarized
                 .map((e) => e.longitude)
                 .reduce((value, element) => value + element) /
-            propagationZonesSummarized.length;
+            vectorRecordsSummarized.length;
 
     int totalRegisters =
-        caseReportsSummarized.length + propagationZonesSummarized.length;
+        homeInspectionsSummarized.length + vectorRecordsSummarized.length;
     double avgLat = totalRegisters == 0
         ? currentPosition.latitude
-        : (avgLatCases * (caseReportsSummarized.length / totalRegisters)) +
-            (avgLatZones *
-                (propagationZonesSummarized.length / totalRegisters));
+        : (avgLatCases * (homeInspectionsSummarized.length / totalRegisters)) +
+            (avgLatZones * (vectorRecordsSummarized.length / totalRegisters));
     double avgLon = totalRegisters == 0
         ? currentPosition.longitude
-        : (avgLonCases * (caseReportsSummarized.length / totalRegisters)) +
-            (avgLonZones *
-                (propagationZonesSummarized.length / totalRegisters));
+        : (avgLonCases * (homeInspectionsSummarized.length / totalRegisters)) +
+            (avgLonZones * (vectorRecordsSummarized.length / totalRegisters));
 
     setState(() {
       _center = LatLng(avgLat, avgLon);
@@ -273,14 +271,14 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   }
 
   void _addAllMarkers(
-    List<CaseReportSummarizedModel> caseReportsSummarized,
-    List<PropagationZoneSummarizedModel> propagationZonesSummarized,
+    List<HomeInspectionSummarizedModel> homeInspectionsSummarized,
+    List<VectorRecordSummarizedModel> vectorRecordsSummarized,
     MapService mapService,
   ) {
-    if (_markerIconCaseReportLight != null &&
-        _markerIconPropagationZoneLight != null &&
-        _markerIconCaseReportDark != null &&
-        _markerIconPropagationZoneDark != null) {
+    if (_markerIconHomeInspectionLight != null &&
+        _markerIconVectorRecordLight != null &&
+        _markerIconHomeInspectionDark != null &&
+        _markerIconVectorRecordDark != null) {
       if (_markersLoaded) {
         return;
       }
@@ -295,92 +293,94 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       _markersDark.clear();
 
       // Add markers for case reports to light and dark list
-      if (caseReportsSummarized.isNotEmpty) {
-        for (var caseReport in caseReportsSummarized) {
+      if (homeInspectionsSummarized.isNotEmpty) {
+        for (var homeInspection in homeInspectionsSummarized) {
           _markersLight.add(
             Marker(
-              markerId: MarkerId(caseReport.id),
+              markerId: MarkerId(homeInspection.id),
               position: LatLng(
-                caseReport.latitude,
-                caseReport.longitude,
+                homeInspection.latitude,
+                homeInspection.longitude,
               ),
-              icon: _markerIconCaseReportLight!,
+              icon: _markerIconHomeInspectionLight!,
               anchor: const Offset(0.5, 0.5),
               infoWindow: InfoWindow(
                 title: 'Mostrar detalles',
                 snippet: 'Presiona para ver detalles de este caso',
-                onTap: () => _getCaseReportDetails(caseReport, mapService),
+                onTap: () =>
+                    _getHomeInspectionDetails(homeInspection, mapService),
               ),
               // Zoom in on marker when tapped
-              onTap: () => _focusCameraToCaseReport(caseReport),
+              onTap: () => _focusCameraToHomeInspection(homeInspection),
             ),
           );
           _markersDark.add(
             Marker(
-              markerId: MarkerId(caseReport.id),
+              markerId: MarkerId(homeInspection.id),
               position: LatLng(
-                caseReport.latitude,
-                caseReport.longitude,
+                homeInspection.latitude,
+                homeInspection.longitude,
               ),
-              icon: _markerIconCaseReportDark!,
+              icon: _markerIconHomeInspectionDark!,
               anchor: const Offset(0.5, 0.5),
               infoWindow: InfoWindow(
                 title: 'Mostrar detalles',
                 snippet: 'Presiona para ver detalles de este caso',
-                onTap: () => _getCaseReportDetails(caseReport, mapService),
+                onTap: () =>
+                    _getHomeInspectionDetails(homeInspection, mapService),
               ),
               // Zoom in on marker when tapped
-              onTap: () => _focusCameraToCaseReport(caseReport),
+              onTap: () => _focusCameraToHomeInspection(homeInspection),
             ),
           );
         }
       }
 
       // Add markers for propagation zones to light and dark list
-      if (propagationZonesSummarized.isNotEmpty) {
-        for (var propagationZone in propagationZonesSummarized) {
+      if (vectorRecordsSummarized.isNotEmpty) {
+        for (var vectorRecord in vectorRecordsSummarized) {
           _markersLight.add(
             Marker(
-              markerId: MarkerId(propagationZone.id),
+              markerId: MarkerId(vectorRecord.id),
               position: LatLng(
-                propagationZone.latitude,
-                propagationZone.longitude,
+                vectorRecord.latitude,
+                vectorRecord.longitude,
               ),
-              icon: _markerIconPropagationZoneLight!,
+              icon: _markerIconVectorRecordLight!,
               anchor: const Offset(0.5, 0.5),
               infoWindow: InfoWindow(
                 title: 'Mostrar detalles',
                 snippet: 'Presiona para ver detalles de esta zona',
-                onTap: () => _getPropagationZoneDetails(
-                  propagationZone,
+                onTap: () => _getVectorRecordDetails(
+                  vectorRecord,
                   mapService,
                 ),
               ),
               // Zoom in on marker when tapped
-              onTap: () => _focusCameraToPropagationZone(propagationZone),
+              onTap: () => _focusCameraToVectorRecord(vectorRecord),
             ),
           );
         }
-        for (var propagationZone in propagationZonesSummarized) {
+        for (var vectorRecord in vectorRecordsSummarized) {
           _markersDark.add(
             Marker(
-              markerId: MarkerId(propagationZone.id),
+              markerId: MarkerId(vectorRecord.id),
               position: LatLng(
-                propagationZone.latitude,
-                propagationZone.longitude,
+                vectorRecord.latitude,
+                vectorRecord.longitude,
               ),
-              icon: _markerIconPropagationZoneDark!,
+              icon: _markerIconVectorRecordDark!,
               anchor: const Offset(0.5, 0.5),
               infoWindow: InfoWindow(
                 title: 'Mostrar detalles',
                 snippet: 'Presiona para ver detalles de esta zona',
-                onTap: () => _getPropagationZoneDetails(
-                  propagationZone,
+                onTap: () => _getVectorRecordDetails(
+                  vectorRecord,
                   mapService,
                 ),
               ),
               // Zoom in on marker when tapped
-              onTap: () => _focusCameraToPropagationZone(propagationZone),
+              onTap: () => _focusCameraToVectorRecord(vectorRecord),
             ),
           );
         }
@@ -388,63 +388,63 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
     }
   }
 
-  void _getCaseReportDetails(
-    CaseReportSummarizedModel caseReportSummarized,
+  void _getHomeInspectionDetails(
+    HomeInspectionSummarizedModel homeInspectionSummarized,
     MapService mapService,
   ) async {
     // Get case report details
-    CaseReportModel? caseReportModel =
-        await mapService.getCaseReport(caseReportSummarized.id);
+    HomeInspectionModel? homeInspectionModel =
+        await mapService.getHomeInspection(homeInspectionSummarized.id);
     // Show case report details
-    if (caseReportModel != null) {
+    if (homeInspectionModel != null) {
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(
         context,
-        '/case-report',
-        arguments: caseReportModel,
+        '/home-inspection',
+        arguments: homeInspectionModel,
       );
     }
   }
 
-  void _getPropagationZoneDetails(
-    PropagationZoneSummarizedModel propagationZoneSummarized,
+  void _getVectorRecordDetails(
+    VectorRecordSummarizedModel vectorRecordSummarized,
     MapService mapService,
   ) async {
     // Get propagation zone details
-    PropagationZoneModel? propagationZoneModel =
-        await mapService.getPropagationZone(propagationZoneSummarized.id);
-    if (propagationZoneModel != null) {
+    VectorRecordModel? vectorRecordModel =
+        await mapService.getVectorRecord(vectorRecordSummarized.id);
+    if (vectorRecordModel != null) {
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(
         context,
-        '/propagation-zone',
-        arguments: propagationZoneModel,
+        '/vector-record',
+        arguments: vectorRecordModel,
       );
     }
   }
 
-  void _focusCameraToCaseReport(
-    CaseReportSummarizedModel caseReportSummarizedModel,
+  void _focusCameraToHomeInspection(
+    HomeInspectionSummarizedModel homeInspectionSummarizedModel,
   ) {
     _mapController!.animateCamera(
       CameraUpdate.newLatLngZoom(
         LatLng(
-          caseReportSummarizedModel.latitude,
-          caseReportSummarizedModel.longitude,
+          homeInspectionSummarizedModel.latitude,
+          homeInspectionSummarizedModel.longitude,
         ),
         17,
       ),
     );
   }
 
-  void _focusCameraToPropagationZone(
-    PropagationZoneSummarizedModel propagationZoneSummarizedModel,
+  void _focusCameraToVectorRecord(
+    VectorRecordSummarizedModel vectorRecordSummarizedModel,
   ) {
     _mapController!.animateCamera(
       CameraUpdate.newLatLngZoom(
         LatLng(
-          propagationZoneSummarizedModel.latitude,
-          propagationZoneSummarizedModel.longitude,
+          vectorRecordSummarizedModel.latitude,
+          vectorRecordSummarizedModel.longitude,
         ),
         17,
       ),

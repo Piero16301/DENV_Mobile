@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:denv_mobile/models/inspection/containers/containers.dart';
+import 'package:denv_mobile/models/inspection/inspection.dart';
 import 'package:denv_mobile/models/models.dart';
 import 'package:denv_mobile/providers/providers.dart';
 import 'package:denv_mobile/services/services.dart';
@@ -12,14 +14,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-class CreateCaseReportPage extends StatelessWidget {
-  const CreateCaseReportPage({Key? key}) : super(key: key);
+class CreateHomeInspectionPage extends StatelessWidget {
+  const CreateHomeInspectionPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final caseReportProvider = Provider.of<CaseReportProvider>(context);
-    final caseReportService = Provider.of<CaseReportService>(context);
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final homeInspectionService = Provider.of<HomeInspectionService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,28 +33,28 @@ class CreateCaseReportPage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            PhotoDisplayAndSelectCaseReport(size: size),
+            PhotoDisplayAndSelectHomeInspection(size: size),
             const SizedBox(height: 30),
-            InsertCommentCaseReport(size: size),
+            InsertCommentHomeInspection(size: size),
             const SizedBox(height: 20),
-            ShowCurrentDateTimeCaseReport(size: size),
+            ShowCurrentDateTimeHomeInspection(size: size),
             const SizedBox(height: 30),
-            ShowLatitudeAndLongitudeCaseReport(size: size),
+            ShowLatitudeAndLongitudeHomeInspection(size: size),
             const SizedBox(height: 30),
-            ShowAddressCaseReport(size: size),
+            ShowAddressHomeInspection(size: size),
             const SizedBox(height: 30),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        heroTag: 'newCaseReportButton',
-        onPressed: caseReportService.isSavingNewCaseReport
+        heroTag: 'newHomeInspectionButton',
+        onPressed: homeInspectionService.isSavingNewHomeInspection
             ? null
             : () async {
                 // Subir fotografía a Cloudinary
-                String? photoUrl = caseReportProvider.image != null
-                    ? await caseReportService.uploadImage(
-                        caseReportProvider.image!,
+                String? photoUrl = homeInspectionProvider.image != null
+                    ? await homeInspectionService.uploadImage(
+                        homeInspectionProvider.image!,
                       )
                     : 'Sin enlace';
 
@@ -61,72 +63,108 @@ class CreateCaseReportPage extends StatelessWidget {
                   return;
                 }
 
-                // Crear objeto de tipo CaseReport
-                final caseReport = CaseReportModel(
+                // Crear objeto de tipo HomeInspection
+                final homeInspection = HomeInspectionModel(
                   address: AddressModel(
-                    formattedAddress:
-                        caseReportProvider.address!.formattedAddress!,
-                    postalCode: getAddressComponent(
-                      caseReportProvider.address!,
+                    formattedaddress:
+                        homeInspectionProvider.address!.formattedAddress!,
+                    postalcode: getAddressComponent(
+                      homeInspectionProvider.address!,
                       'postal_code',
                     ),
                     country: getAddressComponent(
-                      caseReportProvider.address!,
+                      homeInspectionProvider.address!,
                       'country',
                     ),
                     department: getAddressComponent(
-                      caseReportProvider.address!,
+                      homeInspectionProvider.address!,
                       'administrative_area_level_1',
                     ),
                     province: getAddressComponent(
-                      caseReportProvider.address!,
+                      homeInspectionProvider.address!,
                       'administrative_area_level_2',
                     ),
                     district: getAddressComponent(
-                      caseReportProvider.address!,
+                      homeInspectionProvider.address!,
                       'administrative_area_level_3',
                     ),
                     urbanization: getAddressComponent(
-                      caseReportProvider.address!,
+                      homeInspectionProvider.address!,
                       'sublocality_level_1',
                     ),
                     street: getAddressComponent(
-                      caseReportProvider.address!,
+                      homeInspectionProvider.address!,
                       'route',
                     ),
-                    streetNumber: int.parse(
+                    block: 'C-2',
+                    lot: 40,
+                    streetnumber: int.parse(
                       getAddressComponent(
-                        caseReportProvider.address!,
+                        homeInspectionProvider.address!,
                         'street_number',
                       ),
                     ),
                   ),
-                  comment: caseReportProvider.comment ?? 'Sin comentario',
-                  dateTime: caseReportProvider.datetime!,
-                  latitude: caseReportProvider.position!.latitude,
-                  longitude: caseReportProvider.position!.longitude,
-                  photoUrl: photoUrl,
+                  comment: homeInspectionProvider.comment ?? 'Sin comentario',
+                  datetime: homeInspectionProvider.datetime!,
+                  dni: '74044313',
+                  latitude: homeInspectionProvider.position!.latitude,
+                  longitude: homeInspectionProvider.position!.longitude,
+                  photourl: photoUrl,
+                  numberinhabitants: 10,
+                  homecondition: HomeConditionModel(
+                    inspectedhome: 1,
+                    reluctantdwelling: 2,
+                    closedhome: 3,
+                    uninhabitedhouse: 4,
+                    housingspotlights: 5,
+                    treatedhousing: 6,
+                  ),
+                  typecontainers: TypeContainersModel(
+                    elevatedtank: ElevatedTankModel(i: 1, p: 2, t: 3),
+                    lowtank: LowTankModel(i: 1, p: 2, t: 3),
+                    cylinderbarrel: CylinderBarrelModel(i: 1, p: 2, t: 3),
+                    buckettub: BucketTubModel(i: 1, p: 2, t: 3),
+                    tire: TireModel(i: 1, p: 2, t: 3),
+                    flower: FlowerModel(i: 1, p: 2, t: 3),
+                    useless: UselessModel(i: 1, p: 2, t: 3),
+                    others: OthersModel(i: 1, p: 2, t: 3),
+                  ),
+                  totalcontainer: TotalContainerModel(
+                    inspectedcontainers: 1,
+                    containersspotlights: 2,
+                    treatedcontainers: 3,
+                    destroyedcontainers: 4,
+                  ),
+                  aegyptifocus: AegyptiFocusModel(
+                    larvae: 1,
+                    pupae: 2,
+                    adult: 3,
+                  ),
                 );
 
                 // Subir reporte de caso a MongoDB
-                final newCaseReport =
-                    await caseReportService.createNewCaseReport(
-                  caseReport,
+                final newHomeInspection =
+                    await homeInspectionService.createNewHomeInspection(
+                  homeInspection,
                 );
-                if (newCaseReport != null) {
+
+                if (newHomeInspection != null) {
                   await _showResponseDialog(success: true, context: context);
                 } else {
                   await _showResponseDialog(success: false, context: context);
                 }
               },
         label: Text(
-          caseReportService.isSavingNewCaseReport ? 'Guardando...' : 'Guardar',
+          homeInspectionService.isSavingNewHomeInspection
+              ? 'Guardando...'
+              : 'Guardar',
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        icon: caseReportService.isSavingNewCaseReport
+        icon: homeInspectionService.isSavingNewHomeInspection
             ? SizedBox.square(
                 dimension: 30,
                 child: CircularProgressIndicator(
@@ -219,8 +257,8 @@ class CreateCaseReportPage extends StatelessWidget {
   }
 }
 
-class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
-  const PhotoDisplayAndSelectCaseReport({
+class PhotoDisplayAndSelectHomeInspection extends StatelessWidget {
+  const PhotoDisplayAndSelectHomeInspection({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -229,7 +267,7 @@ class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final caseReportProvider = Provider.of<CaseReportProvider>(context);
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
     return Center(
       child: Column(
@@ -251,7 +289,7 @@ class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
                       ? const Color.fromARGB(255, 66, 66, 66)
                       : const Color.fromARGB(255, 185, 185, 185),
                 ),
-                child: caseReportProvider.image == null
+                child: homeInspectionProvider.image == null
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 75),
                         child: SvgPicture.asset(
@@ -264,12 +302,12 @@ class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image.file(
-                          caseReportProvider.image!,
+                          homeInspectionProvider.image!,
                           fit: BoxFit.contain,
                         ),
                       ),
               ),
-              if (caseReportProvider.image != null)
+              if (homeInspectionProvider.image != null)
                 Positioned(
                   right: 0,
                   top: 0,
@@ -281,7 +319,7 @@ class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
                     color:
                         ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
                     onPressed: () {
-                      caseReportProvider.setImage(null);
+                      homeInspectionProvider.setImage(null);
                     },
                   ),
                 ),
@@ -294,11 +332,11 @@ class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
                 Expanded(
-                  child: PhotoFromCameraButtonCaseReport(),
+                  child: PhotoFromCameraButtonHomeInspection(),
                 ),
                 SizedBox(width: 20),
                 Expanded(
-                  child: PhotoFromGalleryButtonCaseReport(),
+                  child: PhotoFromGalleryButtonHomeInspection(),
                 ),
               ],
             ),
@@ -309,14 +347,14 @@ class PhotoDisplayAndSelectCaseReport extends StatelessWidget {
   }
 }
 
-class PhotoFromCameraButtonCaseReport extends StatelessWidget {
-  const PhotoFromCameraButtonCaseReport({
+class PhotoFromCameraButtonHomeInspection extends StatelessWidget {
+  const PhotoFromCameraButtonHomeInspection({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final caseReportProvider = Provider.of<CaseReportProvider>(context);
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
     return ElevatedButton(
       onPressed: () async {
@@ -325,7 +363,7 @@ class PhotoFromCameraButtonCaseReport extends StatelessWidget {
           source: ImageSource.camera,
         );
         if (pickedFile != null) {
-          caseReportProvider.setImage(File(pickedFile.path));
+          homeInspectionProvider.setImage(File(pickedFile.path));
         }
       },
       style: ButtonStyle(
@@ -346,14 +384,14 @@ class PhotoFromCameraButtonCaseReport extends StatelessWidget {
   }
 }
 
-class PhotoFromGalleryButtonCaseReport extends StatelessWidget {
-  const PhotoFromGalleryButtonCaseReport({
+class PhotoFromGalleryButtonHomeInspection extends StatelessWidget {
+  const PhotoFromGalleryButtonHomeInspection({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final caseReportProvider = Provider.of<CaseReportProvider>(context);
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
     return ElevatedButton(
       onPressed: () async {
@@ -362,7 +400,7 @@ class PhotoFromGalleryButtonCaseReport extends StatelessWidget {
           source: ImageSource.gallery,
         );
         if (pickedFile != null) {
-          caseReportProvider.setImage(File(pickedFile.path));
+          homeInspectionProvider.setImage(File(pickedFile.path));
         }
       },
       style: ButtonStyle(
@@ -383,8 +421,8 @@ class PhotoFromGalleryButtonCaseReport extends StatelessWidget {
   }
 }
 
-class InsertCommentCaseReport extends StatelessWidget {
-  const InsertCommentCaseReport({
+class InsertCommentHomeInspection extends StatelessWidget {
+  const InsertCommentHomeInspection({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -393,7 +431,7 @@ class InsertCommentCaseReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final caseReportProvider = Provider.of<CaseReportProvider>(
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(
       context,
       listen: false,
     );
@@ -445,7 +483,7 @@ class InsertCommentCaseReport extends StatelessWidget {
             maxLines: 3,
             maxLength: 200,
             onChanged: (value) {
-              caseReportProvider.setComment(value);
+              homeInspectionProvider.setComment(value);
             },
           ),
         ],
@@ -454,8 +492,8 @@ class InsertCommentCaseReport extends StatelessWidget {
   }
 }
 
-class ShowCurrentDateTimeCaseReport extends StatelessWidget {
-  const ShowCurrentDateTimeCaseReport({
+class ShowCurrentDateTimeHomeInspection extends StatelessWidget {
+  const ShowCurrentDateTimeHomeInspection({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -464,7 +502,7 @@ class ShowCurrentDateTimeCaseReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final caseReportProvider = Provider.of<CaseReportProvider>(context);
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -493,7 +531,7 @@ class ShowCurrentDateTimeCaseReport extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(
                       DateFormat.yMMMd('es_ES').format(
-                        caseReportProvider.datetime!,
+                        homeInspectionProvider.datetime!,
                       ),
                       style: const TextStyle(
                         fontSize: 16,
@@ -511,7 +549,7 @@ class ShowCurrentDateTimeCaseReport extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(
                       DateFormat('hh:mm:ss a').format(
-                        caseReportProvider.datetime!,
+                        homeInspectionProvider.datetime!,
                       ),
                       style: const TextStyle(
                         fontSize: 16,
@@ -529,8 +567,8 @@ class ShowCurrentDateTimeCaseReport extends StatelessWidget {
   }
 }
 
-class ShowLatitudeAndLongitudeCaseReport extends StatelessWidget {
-  const ShowLatitudeAndLongitudeCaseReport({
+class ShowLatitudeAndLongitudeHomeInspection extends StatelessWidget {
+  const ShowLatitudeAndLongitudeHomeInspection({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -539,7 +577,7 @@ class ShowLatitudeAndLongitudeCaseReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final caseReportProvider = Provider.of<CaseReportProvider>(context);
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -570,7 +608,8 @@ class ShowLatitudeAndLongitudeCaseReport extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      caseReportProvider.position!.latitude.toStringAsFixed(5),
+                      homeInspectionProvider.position!.latitude
+                          .toStringAsFixed(5),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -589,7 +628,8 @@ class ShowLatitudeAndLongitudeCaseReport extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      caseReportProvider.position!.longitude.toStringAsFixed(5),
+                      homeInspectionProvider.position!.longitude
+                          .toStringAsFixed(5),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -606,8 +646,8 @@ class ShowLatitudeAndLongitudeCaseReport extends StatelessWidget {
   }
 }
 
-class ShowAddressCaseReport extends StatelessWidget {
-  const ShowAddressCaseReport({
+class ShowAddressHomeInspection extends StatelessWidget {
+  const ShowAddressHomeInspection({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -616,7 +656,7 @@ class ShowAddressCaseReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final caseReportProvider = Provider.of<CaseReportProvider>(context);
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -644,7 +684,7 @@ class ShowAddressCaseReport extends StatelessWidget {
                   Flexible(
                     flex: 1,
                     child: TextScroll(
-                      caseReportProvider.address!.formattedAddress!,
+                      homeInspectionProvider.address!.formattedAddress!,
                       mode: TextScrollMode.bouncing,
                       velocity: const Velocity(
                         pixelsPerSecond: Offset(25, 0),

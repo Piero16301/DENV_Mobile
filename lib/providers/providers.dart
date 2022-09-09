@@ -1,4 +1,4 @@
 export 'location_provider.dart';
-export 'case_report_provider.dart';
-export 'propagation_zone_provider.dart';
+export 'home_inspection_provider.dart';
+export 'vector_record_provider.dart';
 export 'map_provider.dart';

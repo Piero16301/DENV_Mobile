@@ -9,7 +9,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime_type/mime_type.dart';
 
-class CaseReportService extends ChangeNotifier {
+class HomeInspectionService extends ChangeNotifier {
   final String _cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dq5dl67s2';
   final String _uploadPreset = 'sgtxqlcv';
   final Dio _dio = Dio(
@@ -22,37 +22,37 @@ class CaseReportService extends ChangeNotifier {
     ),
   );
 
-  bool isSavingNewCaseReport = false;
+  bool isSavingNewHomeInspection = false;
 
-  Future<CaseReportModel?> createNewCaseReport(
-      CaseReportModel caseReport) async {
+  Future<HomeInspectionModel?> createNewHomeInspection(
+      HomeInspectionModel homeInspection) async {
     try {
-      isSavingNewCaseReport = true;
+      isSavingNewHomeInspection = true;
       notifyListeners();
 
-      final jsonCaseReport = caseReport.toJson();
+      final jsonHomeInspection = homeInspection.toJson();
       final response = await _dio.post(
-        '/case-report',
-        data: jsonCaseReport,
+        '/home-inspection',
+        data: jsonHomeInspection,
         onSendProgress: (int sent, int total) {
           debugPrint('$sent $total');
         },
       );
       if (response.statusCode == 201) {
-        isSavingNewCaseReport = false;
+        isSavingNewHomeInspection = false;
         notifyListeners();
-        return CaseReportModel.fromJson(response.data['data']);
+        return HomeInspectionModel.fromJson(response.data['data']);
       } else {
-        isSavingNewCaseReport = false;
+        isSavingNewHomeInspection = false;
         notifyListeners();
         return null;
       }
     } on DioError catch (_) {
-      isSavingNewCaseReport = false;
+      isSavingNewHomeInspection = false;
       notifyListeners();
       return null;
     } catch (e) {
-      isSavingNewCaseReport = false;
+      isSavingNewHomeInspection = false;
       notifyListeners();
       return null;
     }

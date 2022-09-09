@@ -65,10 +65,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => LocationProvider()),
-            ChangeNotifierProvider(create: (_) => CaseReportProvider()),
-            ChangeNotifierProvider(create: (_) => CaseReportService()),
-            ChangeNotifierProvider(create: (_) => PropagationZoneProvider()),
-            ChangeNotifierProvider(create: (_) => PropagationZoneService()),
+            ChangeNotifierProvider(create: (_) => HomeInspectionProvider()),
+            ChangeNotifierProvider(create: (_) => HomeInspectionService()),
+            ChangeNotifierProvider(create: (_) => VectorRecordProvider()),
+            ChangeNotifierProvider(create: (_) => VectorRecordService()),
             ChangeNotifierProvider(create: (_) => MapProvider()),
             ChangeNotifierProvider(create: (_) => MapService()),
           ],
@@ -79,11 +79,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             routes: {
               '/home': (context) => const HomePage(),
               '/map': (context) => const MapPage(),
-              '/create-case-report': (context) => const CreateCaseReportPage(),
-              '/create-propagation-zone': (context) =>
-                  const CreatePropagationZonePage(),
-              '/case-report': (context) => const CaseReportPage(),
-              '/propagation-zone': (context) => const PropagationZonePage(),
+              '/create-home-inspection': (context) =>
+                  const CreateHomeInspectionPage(),
+              '/create-vector-record': (context) =>
+                  const CreateVectorRecordPage(),
+              '/home-inspection': (context) => const HomeInspectionPage(),
+              '/vector-record': (context) => const VectorRecordPage(),
             },
             theme: ThemeModeApp.getTheme(),
           ),

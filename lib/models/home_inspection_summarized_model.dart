@@ -1,25 +1,25 @@
 import 'dart:convert';
 
-PropagationZoneSummarizedModel propagationZoneSummarizedModelFromJson(
+HomeInspectionSummarizedModel homeInspectionSummarizedModelFromJson(
         String str) =>
-    PropagationZoneSummarizedModel.fromJson(json.decode(str));
-String propagationZoneSummarizedModelToJson(
-        PropagationZoneSummarizedModel data) =>
+    HomeInspectionSummarizedModel.fromJson(json.decode(str));
+String homeInspectionSummarizedModelToJson(
+        HomeInspectionSummarizedModel data) =>
     json.encode(data.toJson());
 
-class PropagationZoneSummarizedModel {
+class HomeInspectionSummarizedModel {
   String id;
   double latitude;
   double longitude;
 
-  PropagationZoneSummarizedModel({
+  HomeInspectionSummarizedModel({
     required this.id,
     required this.latitude,
     required this.longitude,
   });
 
-  factory PropagationZoneSummarizedModel.fromJson(Map<String, dynamic> json) =>
-      PropagationZoneSummarizedModel(
+  factory HomeInspectionSummarizedModel.fromJson(Map<String, dynamic> json) =>
+      HomeInspectionSummarizedModel(
         id: json["id"],
         latitude: json["latitude"].toDouble(),
         longitude: json["longitude"].toDouble(),

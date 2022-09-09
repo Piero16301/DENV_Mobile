@@ -6,14 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-class PropagationZonePage extends StatelessWidget {
-  const PropagationZonePage({Key? key}) : super(key: key);
+class VectorRecordPage extends StatelessWidget {
+  const VectorRecordPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final propagationZoneModel =
-        ModalRoute.of(context)!.settings.arguments as PropagationZoneModel;
+    final vectorRecordModel =
+        ModalRoute.of(context)!.settings.arguments as VectorRecordModel;
 
     return Scaffold(
       appBar: AppBar(
@@ -25,30 +25,30 @@ class PropagationZonePage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            PhotoDisplayPropagationZone(
+            PhotoDisplayVectorRecord(
               size: size,
-              photoUrl: propagationZoneModel.photoUrl,
+              photoUrl: vectorRecordModel.photourl,
             ),
             const SizedBox(height: 30),
-            CommentDisplayPropagationZone(
+            CommentDisplayVectorRecord(
               size: size,
-              comment: propagationZoneModel.comment,
+              comment: vectorRecordModel.comment,
             ),
             const SizedBox(height: 20),
-            DatetimeDisplayPropagationZone(
+            DatetimeDisplayVectorRecord(
               size: size,
-              dateTime: propagationZoneModel.dateTime,
+              dateTime: vectorRecordModel.datetime,
             ),
             const SizedBox(height: 30),
-            CoordinatesDisplayPropagationZone(
+            CoordinatesDisplayVectorRecord(
               size: size,
-              latitude: propagationZoneModel.latitude,
-              longitude: propagationZoneModel.longitude,
+              latitude: vectorRecordModel.latitude,
+              longitude: vectorRecordModel.longitude,
             ),
             const SizedBox(height: 30),
-            AddressDisplayPropagationZone(
+            AddressDisplayVectorRecord(
               size: size,
-              address: propagationZoneModel.address.formattedAddress,
+              address: vectorRecordModel.address.formattedaddress,
             ),
             const SizedBox(height: 30),
           ],
@@ -58,8 +58,8 @@ class PropagationZonePage extends StatelessWidget {
   }
 }
 
-class PhotoDisplayPropagationZone extends StatelessWidget {
-  const PhotoDisplayPropagationZone({
+class PhotoDisplayVectorRecord extends StatelessWidget {
+  const PhotoDisplayVectorRecord({
     Key? key,
     required this.size,
     required this.photoUrl,
@@ -116,8 +116,8 @@ class PhotoDisplayPropagationZone extends StatelessWidget {
   }
 }
 
-class CommentDisplayPropagationZone extends StatelessWidget {
-  const CommentDisplayPropagationZone({
+class CommentDisplayVectorRecord extends StatelessWidget {
+  const CommentDisplayVectorRecord({
     Key? key,
     required this.size,
     required this.comment,
@@ -184,8 +184,8 @@ class CommentDisplayPropagationZone extends StatelessWidget {
   }
 }
 
-class DatetimeDisplayPropagationZone extends StatelessWidget {
-  const DatetimeDisplayPropagationZone({
+class DatetimeDisplayVectorRecord extends StatelessWidget {
+  const DatetimeDisplayVectorRecord({
     Key? key,
     required this.size,
     required this.dateTime,
@@ -255,8 +255,8 @@ class DatetimeDisplayPropagationZone extends StatelessWidget {
   }
 }
 
-class CoordinatesDisplayPropagationZone extends StatelessWidget {
-  const CoordinatesDisplayPropagationZone({
+class CoordinatesDisplayVectorRecord extends StatelessWidget {
+  const CoordinatesDisplayVectorRecord({
     Key? key,
     required this.size,
     required this.latitude,
@@ -334,8 +334,8 @@ class CoordinatesDisplayPropagationZone extends StatelessWidget {
   }
 }
 
-class AddressDisplayPropagationZone extends StatelessWidget {
-  const AddressDisplayPropagationZone({
+class AddressDisplayVectorRecord extends StatelessWidget {
+  const AddressDisplayVectorRecord({
     Key? key,
     required this.size,
     required this.address,

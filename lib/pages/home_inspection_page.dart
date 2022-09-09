@@ -6,14 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-class CaseReportPage extends StatelessWidget {
-  const CaseReportPage({Key? key}) : super(key: key);
+class HomeInspectionPage extends StatelessWidget {
+  const HomeInspectionPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final caseReportModel =
-        ModalRoute.of(context)!.settings.arguments as CaseReportModel;
+    final homeInspectionModel =
+        ModalRoute.of(context)!.settings.arguments as HomeInspectionModel;
 
     return Scaffold(
       appBar: AppBar(
@@ -27,28 +27,28 @@ class CaseReportPage extends StatelessWidget {
             const SizedBox(height: 20),
             PhotoDisplayCaseReport(
               size: size,
-              photoUrl: caseReportModel.photoUrl,
+              photoUrl: homeInspectionModel.photourl,
             ),
             const SizedBox(height: 30),
             CommentDisplayCaseReport(
               size: size,
-              comment: caseReportModel.comment,
+              comment: homeInspectionModel.comment,
             ),
             const SizedBox(height: 20),
             DatetimeDisplayCaseReport(
               size: size,
-              dateTime: caseReportModel.dateTime,
+              dateTime: homeInspectionModel.datetime,
             ),
             const SizedBox(height: 30),
             CoordinatesDisplayCaseReport(
               size: size,
-              latitude: caseReportModel.latitude,
-              longitude: caseReportModel.longitude,
+              latitude: homeInspectionModel.latitude,
+              longitude: homeInspectionModel.longitude,
             ),
             const SizedBox(height: 30),
             AddressDisplayCaseReport(
               size: size,
-              address: caseReportModel.address.formattedAddress,
+              address: homeInspectionModel.address.formattedaddress,
             ),
             const SizedBox(height: 30),
           ],

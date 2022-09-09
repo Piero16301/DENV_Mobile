@@ -1,33 +1,33 @@
 import 'package:denv_mobile/models/models.dart';
 
-class PropagationZoneModel {
+class VectorRecordModel {
   String? id;
   AddressModel address;
   String comment;
-  DateTime dateTime;
+  DateTime datetime;
   double latitude;
   double longitude;
-  String photoUrl;
+  String photourl;
 
-  PropagationZoneModel({
+  VectorRecordModel({
     this.id,
     required this.address,
     required this.comment,
-    required this.dateTime,
+    required this.datetime,
     required this.latitude,
     required this.longitude,
-    required this.photoUrl,
+    required this.photourl,
   });
 
-  factory PropagationZoneModel.fromJson(Map<String, dynamic> json) =>
-      PropagationZoneModel(
+  factory VectorRecordModel.fromJson(Map<String, dynamic> json) =>
+      VectorRecordModel(
         id: json["id"],
         address: AddressModel.fromJson(json["address"]),
         comment: json["comment"],
-        dateTime: DateTime.parse(json["datetime"]),
+        datetime: DateTime.parse(json["datetime"]),
         latitude: json["latitude"].toDouble(),
         longitude: json["longitude"].toDouble(),
-        photoUrl: json["photo_url"],
+        photourl: json["photourl"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -37,10 +37,10 @@ class PropagationZoneModel {
         "datetime": parseDateTime(),
         "latitude": latitude,
         "longitude": longitude,
-        "photo_url": photoUrl,
+        "photourl": photourl,
       };
 
   String parseDateTime() {
-    return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}T${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}.000+00:00';
+    return '${datetime.year}-${datetime.month.toString().padLeft(2, '0')}-${datetime.day.toString().padLeft(2, '0')}T${datetime.hour.toString().padLeft(2, '0')}:${datetime.minute.toString().padLeft(2, '0')}:${datetime.second.toString().padLeft(2, '0')}.000+00:00';
   }
 }

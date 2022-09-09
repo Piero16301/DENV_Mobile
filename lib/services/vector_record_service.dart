@@ -9,7 +9,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime_type/mime_type.dart';
 
-class PropagationZoneService extends ChangeNotifier {
+class VectorRecordService extends ChangeNotifier {
   final String _cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dq5dl67s2';
   final String _uploadPreset = 'sr2qafxo';
   final Dio _dio = Dio(
@@ -21,33 +21,34 @@ class PropagationZoneService extends ChangeNotifier {
       receiveTimeout: 3 * 1000,
     ),
   );
-  bool isSavingNewPropagationZone = false;
 
-  Future<PropagationZoneModel?> createNewPropagationZone(
-      PropagationZoneModel propagationZone) async {
+  bool isSavingNewVectorRecord = false;
+
+  Future<VectorRecordModel?> createNewVectorRecord(
+      VectorRecordModel vectorRecord) async {
     try {
-      isSavingNewPropagationZone = true;
+      isSavingNewVectorRecord = true;
       notifyListeners();
 
-      final jsonPropagationZone = propagationZone.toJson();
+      final jsonVectorRecord = vectorRecord.toJson();
       final response = await _dio.post(
-        '/propagation-zone',
-        data: jsonPropagationZone,
+        '/vector-record',
+        data: jsonVectorRecord,
         onSendProgress: (int sent, int total) {
           debugPrint('$sent $total');
         },
       );
       if (response.statusCode == 201) {
-        isSavingNewPropagationZone = false;
+        isSavingNewVectorRecord = false;
         notifyListeners();
-        return PropagationZoneModel.fromJson(response.data['data']);
+        return VectorRecordModel.fromJson(response.data['data']);
       } else {
-        isSavingNewPropagationZone = false;
+        isSavingNewVectorRecord = false;
         notifyListeners();
         return null;
       }
     } catch (e) {
-      isSavingNewPropagationZone = false;
+      isSavingNewVectorRecord = false;
       notifyListeners();
       return null;
     }

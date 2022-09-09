@@ -2,23 +2,23 @@ import 'package:denv_mobile/models/models.dart';
 import 'package:flutter/material.dart';
 
 class MapProvider extends ChangeNotifier {
-  List<CaseReportSummarizedModel> _caseReportsSummarized = [];
-  List<PropagationZoneSummarizedModel> _propagationZonesSummarized = [];
+  List<HomeInspectionSummarizedModel> _homeInspectionsSummarized = [];
+  List<VectorRecordSummarizedModel> _vectorRecordsSummarized = [];
 
-  List<CaseReportSummarizedModel> get caseReportsSummarized =>
-      _caseReportsSummarized;
-  List<PropagationZoneSummarizedModel> get propagationZonesSummarized =>
-      _propagationZonesSummarized;
+  List<HomeInspectionSummarizedModel> get homeInspectionsSummarized =>
+      _homeInspectionsSummarized;
+  List<VectorRecordSummarizedModel> get vectorRecordsSummarized =>
+      _vectorRecordsSummarized;
 
-  void setCaseReportsSummarized(
-      List<CaseReportSummarizedModel> caseReportsSummarized) {
-    _caseReportsSummarized = caseReportsSummarized;
+  void setHomeInspectionsSummarized(
+      List<HomeInspectionSummarizedModel> homeInspectionsSummarized) {
+    _homeInspectionsSummarized = homeInspectionsSummarized;
     notifyListeners();
   }
 
-  void setPropagationZonesSummarized(
-      List<PropagationZoneSummarizedModel> propagationZonesSummarized) {
-    _propagationZonesSummarized = propagationZonesSummarized;
+  void setVectorRecordsSummarized(
+      List<VectorRecordSummarizedModel> vectorRecordsSummarized) {
+    _vectorRecordsSummarized = vectorRecordsSummarized;
     notifyListeners();
   }
 }

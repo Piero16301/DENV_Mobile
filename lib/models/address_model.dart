@@ -5,49 +5,57 @@ AddressModel addressModelFromJson(String str) =>
 String addressModelToJson(AddressModel data) => json.encode(data.toJson());
 
 class AddressModel {
-  String formattedAddress;
-  String postalCode;
+  String formattedaddress;
+  String postalcode;
   String country;
   String department;
   String province;
   String district;
   String urbanization;
   String street;
-  int streetNumber;
+  String block;
+  int lot;
+  int streetnumber;
 
   AddressModel({
-    required this.formattedAddress,
-    required this.postalCode,
+    required this.formattedaddress,
+    required this.postalcode,
     required this.country,
     required this.department,
     required this.province,
     required this.district,
     required this.urbanization,
     required this.street,
-    required this.streetNumber,
+    required this.block,
+    required this.lot,
+    required this.streetnumber,
   });
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
-        formattedAddress: json["formatted_address"],
-        postalCode: json["postalCode"],
+        formattedaddress: json["formattedaddress"],
+        postalcode: json["postalcode"],
         country: json["country"],
         department: json["department"],
         province: json["province"],
         district: json["district"],
         urbanization: json["urbanization"],
         street: json["street"],
-        streetNumber: json["streetNumber"],
+        block: json["block"],
+        lot: json["lot"],
+        streetnumber: json["streetnumber"],
       );
 
   Map<String, dynamic> toJson() => {
-        "formatted_address": formattedAddress,
-        "postalCode": postalCode,
+        "formattedaddress": formattedaddress,
+        "postalcode": postalcode,
         "country": country,
         "department": department,
         "province": province,
         "district": district,
         "urbanization": urbanization,
         "street": street,
-        "streetNumber": streetNumber,
+        "block": block,
+        "lot": lot,
+        "streetnumber": streetnumber,
       };
 }

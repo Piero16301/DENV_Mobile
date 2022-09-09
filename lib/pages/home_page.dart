@@ -34,8 +34,8 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: const [
                       MapButton(),
-                      NewCaseReportButton(),
-                      NewPropagationZoneButton(),
+                      NewHomeInspectionButton(),
+                      NewVectorRecordButton(),
                     ],
                   ),
                 ),
@@ -72,25 +72,25 @@ class MapButton extends StatelessWidget {
     final mapProvider = Provider.of<MapProvider>(context);
 
     return InkWell(
-      onTap: mapService.isGettingCaseReports ||
-              mapService.isGettingPropagationZones
+      onTap: mapService.isGettingHomeInspections ||
+              mapService.isGettingVectorRecords
           ? null
           : () async {
               List responses = await Future.wait([
-                mapService.getCaseReportsSummarized(),
-                mapService.getPropagationZonesSummarized(),
+                mapService.getHomeInspectionsSummarized(),
+                mapService.getVectorRecordsSummarized(),
               ]);
 
-              final caseReportsSummarized =
-                  responses[0] as List<CaseReportSummarizedModel>?;
-              final propagationZonesSummarized =
-                  responses[1] as List<PropagationZoneSummarizedModel>?;
+              final homeInspectionsSummarized =
+                  responses[0] as List<HomeInspectionSummarizedModel>?;
+              final vectorRecordsSummarized =
+                  responses[1] as List<VectorRecordSummarizedModel>?;
 
-              if (caseReportsSummarized != null &&
-                  propagationZonesSummarized != null) {
-                mapProvider.setCaseReportsSummarized(caseReportsSummarized);
+              if (homeInspectionsSummarized != null &&
+                  vectorRecordsSummarized != null) {
                 mapProvider
-                    .setPropagationZonesSummarized(propagationZonesSummarized);
+                    .setHomeInspectionsSummarized(homeInspectionsSummarized);
+                mapProvider.setVectorRecordsSummarized(vectorRecordsSummarized);
 
                 // ignore: use_build_context_synchronously
                 Navigator.pushNamed(context, '/map');
@@ -117,8 +117,8 @@ class MapButton extends StatelessWidget {
                   iconSize: 150,
                 ),
                 AnimatedOpacity(
-                  opacity: mapService.isGettingCaseReports ||
-                          mapService.isGettingPropagationZones
+                  opacity: mapService.isGettingHomeInspections ||
+                          mapService.isGettingVectorRecords
                       ? 1.0
                       : 0.0,
                   duration: const Duration(milliseconds: 500),
@@ -133,8 +133,8 @@ class MapButton extends StatelessWidget {
               ],
             ),
             AnimatedOpacity(
-              opacity: mapService.isGettingCaseReports ||
-                      mapService.isGettingPropagationZones
+              opacity: mapService.isGettingHomeInspections ||
+                      mapService.isGettingVectorRecords
                   ? 0.0
                   : 1.0,
               duration: const Duration(milliseconds: 500),
@@ -214,24 +214,25 @@ class MapButton extends StatelessWidget {
   }
 }
 
-class NewCaseReportButton extends StatelessWidget {
-  const NewCaseReportButton({Key? key}) : super(key: key);
+class NewHomeInspectionButton extends StatelessWidget {
+  const NewHomeInspectionButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final caseReportProvider = Provider.of<CaseReportProvider>(context);
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
     final locationProvider = Provider.of<LocationProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Hero(
-        tag: 'newCaseReportButton',
+        tag: 'newHomeInspectionButton',
         child: ElevatedButton(
           onPressed: () {
-            caseReportProvider.setDatetime(DateTime.now());
-            caseReportProvider.setPosition(locationProvider.currentPosition);
-            caseReportProvider.setAddress(locationProvider.currentAddress);
-            Navigator.pushNamed(context, '/create-case-report');
+            homeInspectionProvider.setDatetime(DateTime.now());
+            homeInspectionProvider
+                .setPosition(locationProvider.currentPosition);
+            homeInspectionProvider.setAddress(locationProvider.currentAddress);
+            Navigator.pushNamed(context, '/create-home-inspection');
           },
           style: ButtonStyle(
             elevation: MaterialStateProperty.all<double>(1),
@@ -251,26 +252,24 @@ class NewCaseReportButton extends StatelessWidget {
   }
 }
 
-class NewPropagationZoneButton extends StatelessWidget {
-  const NewPropagationZoneButton({Key? key}) : super(key: key);
+class NewVectorRecordButton extends StatelessWidget {
+  const NewVectorRecordButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final propagationZoneProvider =
-        Provider.of<PropagationZoneProvider>(context);
+    final vectorRecordProvider = Provider.of<VectorRecordProvider>(context);
     final locationProvider = Provider.of<LocationProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Hero(
-        tag: 'newPropagationZoneButton',
+        tag: 'newVectorRecordButton',
         child: ElevatedButton(
           onPressed: () {
-            propagationZoneProvider.setDatetime(DateTime.now());
-            propagationZoneProvider
-                .setPosition(locationProvider.currentPosition);
-            propagationZoneProvider.setAddress(locationProvider.currentAddress);
-            Navigator.pushNamed(context, '/create-propagation-zone');
+            vectorRecordProvider.setDatetime(DateTime.now());
+            vectorRecordProvider.setPosition(locationProvider.currentPosition);
+            vectorRecordProvider.setAddress(locationProvider.currentAddress);
+            Navigator.pushNamed(context, '/create-vector-record');
           },
           style: ButtonStyle(
             elevation: MaterialStateProperty.all<double>(1),
