@@ -32,17 +32,17 @@ class CreateHomeInspectionPage extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: size.width * 0.05),
             PhotoDisplayAndSelectHomeInspection(size: size),
-            const SizedBox(height: 30),
-            InsertCommentHomeInspection(size: size),
-            const SizedBox(height: 20),
-            ShowCurrentDateTimeHomeInspection(size: size),
-            const SizedBox(height: 30),
-            ShowLatitudeAndLongitudeHomeInspection(size: size),
-            const SizedBox(height: 30),
+            SizedBox(height: size.width * 0.05),
             ShowAddressHomeInspection(size: size),
-            const SizedBox(height: 30),
+            SizedBox(height: size.width * 0.05),
+            ShowCurrentDateTimeHomeInspection(size: size),
+            SizedBox(height: size.width * 0.05),
+            ShowLatitudeAndLongitudeHomeInspection(size: size),
+            SizedBox(height: size.width * 0.05),
+            InsertCommentHomeInspection(size: size),
+            SizedBox(height: size.width * 0.05),
           ],
         ),
       ),
@@ -86,7 +86,7 @@ class CreateHomeInspectionPage extends StatelessWidget {
                     ),
                     district: getAddressComponent(
                       homeInspectionProvider.address!,
-                      'administrative_area_level_3',
+                      'locality',
                     ),
                     urbanization: getAddressComponent(
                       homeInspectionProvider.address!,
@@ -275,8 +275,8 @@ class PhotoDisplayAndSelectHomeInspection extends StatelessWidget {
           Stack(
             children: [
               Container(
-                width: size.width - 100,
-                height: (size.width - 100) * 0.75,
+                width: size.width * 0.8,
+                height: (size.width * 0.8) * 0.75,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
@@ -436,8 +436,8 @@ class InsertCommentHomeInspection extends StatelessWidget {
       listen: false,
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
+    return SizedBox(
+      width: size.width * 0.8,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -504,8 +504,8 @@ class ShowCurrentDateTimeHomeInspection extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
+    return SizedBox(
+      width: size.width * 0.8,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -579,8 +579,8 @@ class ShowLatitudeAndLongitudeHomeInspection extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
+    return SizedBox(
+      width: size.width * 0.8,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -658,46 +658,224 @@ class ShowAddressHomeInspection extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return SizedBox(
+      width: size.width * 0.8,
+      child: ExpansionTile(
+        title: const Text(
+          'Dirección',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textColor: ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 0),
         children: [
-          const Text(
-            'Dirección',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          AddressRowTile(
+            tileTitle: 'Cód. postal',
+            tileContent: getAddressComponent(
+              homeInspectionProvider.address!,
+              'postal_code',
             ),
           ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+          AddressRowTile(
+            tileTitle: 'País:',
+            tileContent: getAddressComponent(
+              homeInspectionProvider.address!,
+              'country',
+            ),
+          ),
+          AddressRowTile(
+            tileTitle: 'Departamento:',
+            tileContent: getAddressComponent(
+              homeInspectionProvider.address!,
+              'administrative_area_level_1',
+            ),
+          ),
+          AddressRowTile(
+            tileTitle: 'Provincia:',
+            tileContent: getAddressComponent(
+              homeInspectionProvider.address!,
+              'administrative_area_level_2',
+            ),
+          ),
+          AddressRowTile(
+            tileTitle: 'Distrito:',
+            tileContent: getAddressComponent(
+              homeInspectionProvider.address!,
+              'locality',
+            ),
+          ),
+          AddressRowTile(
+            tileTitle: 'Urbanización:',
+            tileContent: getAddressComponent(
+              homeInspectionProvider.address!,
+              'sublocality_level_1',
+            ),
+          ),
+          AddressRowTile(
+            tileTitle: 'Calle:',
+            tileContent: getAddressComponent(
+              homeInspectionProvider.address!,
+              'route',
+            ),
+          ),
+          AddressRowTile(
+            tileTitle: 'Número:',
+            tileContent: getAddressComponent(
+              homeInspectionProvider.address!,
+              'street_number',
+            ),
+          ),
+          AddressRowTile(
+            tileTitle: 'Dirección:',
+            tileContent: homeInspectionProvider.address!.formattedAddress!,
+          ),
+          const BlockInputHomeInspection(),
+          const LotInputHomeInspection(),
+        ],
+      ),
+    );
+  }
+
+  String getAddressComponent(GeocodingResult result, String type) {
+    final addressComponent = result.addressComponents!.firstWhere(
+      (element) => element.types!.contains(type),
+      orElse: () => AddressComponent(),
+    );
+    return addressComponent.longName ?? 'No registrado';
+  }
+}
+
+class BlockInputHomeInspection extends StatelessWidget {
+  const BlockInputHomeInspection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(
+      context,
+      listen: false,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 125,
+            child: Text(
+              'Manzana:',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 1,
             child: SizedBox(
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.location_on_rounded,
-                    size: 30,
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    flex: 1,
-                    child: TextScroll(
-                      homeInspectionProvider.address!.formattedAddress!,
-                      mode: TextScrollMode.bouncing,
-                      velocity: const Velocity(
-                        pixelsPerSecond: Offset(25, 0),
-                      ),
-                      delayBefore: const Duration(milliseconds: 500),
-                      pauseBetween: const Duration(milliseconds: 50),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
+              width: 100,
+              child: TextField(
+                onChanged: (value) {
+                  homeInspectionProvider.setBlock(value);
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Mz.',
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LotInputHomeInspection extends StatelessWidget {
+  const LotInputHomeInspection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(
+      context,
+      listen: false,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 125,
+            child: Text(
+              'Lote:',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: SizedBox(
+              width: 100,
+              child: TextField(
+                onChanged: (value) {
+                  if (int.tryParse(value) != null) {
+                    homeInspectionProvider.setLot(int.parse(value));
+                  }
+                },
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  hintText: 'Lt.',
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AddressRowTile extends StatelessWidget {
+  const AddressRowTile({
+    Key? key,
+    required this.tileTitle,
+    required this.tileContent,
+  }) : super(key: key);
+
+  final String tileTitle;
+  final String tileContent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 125,
+            child: Text(
+              tileTitle,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: TextScroll(
+              tileContent,
+              mode: TextScrollMode.bouncing,
+              velocity: const Velocity(
+                pixelsPerSecond: Offset(25, 0),
+              ),
+              delayBefore: const Duration(milliseconds: 500),
+              pauseBetween: const Duration(milliseconds: 50),
+              style: const TextStyle(
+                fontSize: 16,
               ),
             ),
           ),

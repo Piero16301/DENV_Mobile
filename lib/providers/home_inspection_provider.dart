@@ -5,17 +5,31 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding/google_geocoding.dart';
 
 class HomeInspectionProvider extends ChangeNotifier {
+  String? _block;
+  int? _lot;
   String? _comment;
   File? _image;
   DateTime? _datetime;
   Position? _position;
   GeocodingResult? _address;
 
+  String? get block => _block;
+  int? get lot => _lot;
   String? get comment => _comment;
   File? get image => _image;
   DateTime? get datetime => _datetime;
   Position? get position => _position;
   GeocodingResult? get address => _address;
+
+  void setBlock(String? value) {
+    _block = value;
+    notifyListeners();
+  }
+
+  void setLot(int? value) {
+    _lot = value;
+    notifyListeners();
+  }
 
   void setComment(String? comment) {
     _comment = comment;
