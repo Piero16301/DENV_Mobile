@@ -775,13 +775,41 @@ class BlockInputHomeInspection extends StatelessWidget {
             flex: 1,
             child: SizedBox(
               width: 100,
-              child: TextField(
+              child: TextFormField(
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: ThemeModeApp.isDarkMode
+                          ? const Color.fromARGB(255, 189, 189, 189)
+                          : const Color.fromARGB(255, 77, 77, 77),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: ThemeModeApp.isDarkMode
+                          ? const Color.fromARGB(255, 189, 189, 189)
+                          : const Color.fromARGB(255, 77, 77, 77),
+                    ),
+                  ),
+                  hintText: 'Mz.',
+                  hintStyle: TextStyle(
+                    color: ThemeModeApp.isDarkMode
+                        ? const Color.fromARGB(255, 189, 189, 189)
+                        : const Color.fromARGB(255, 77, 77, 77),
+                  ),
+                ),
+                initialValue: homeInspectionProvider.block,
                 onChanged: (value) {
                   homeInspectionProvider.setBlock(value);
                 },
-                decoration: const InputDecoration(
-                  hintText: 'Mz.',
-                ),
               ),
             ),
           ),
@@ -819,16 +847,56 @@ class LotInputHomeInspection extends StatelessWidget {
             flex: 1,
             child: SizedBox(
               width: 100,
-              child: TextField(
+              child: TextFormField(
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: ThemeModeApp.isDarkMode
+                          ? const Color.fromARGB(255, 189, 189, 189)
+                          : const Color.fromARGB(255, 77, 77, 77),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: ThemeModeApp.isDarkMode
+                          ? const Color.fromARGB(255, 189, 189, 189)
+                          : const Color.fromARGB(255, 77, 77, 77),
+                    ),
+                  ),
+                  hintText: 'Lt.',
+                  hintStyle: TextStyle(
+                    color: ThemeModeApp.isDarkMode
+                        ? const Color.fromARGB(255, 189, 189, 189)
+                        : const Color.fromARGB(255, 77, 77, 77),
+                  ),
+                ),
+                initialValue: homeInspectionProvider.lot == null
+                    ? ''
+                    : homeInspectionProvider.lot.toString(),
                 onChanged: (value) {
                   if (int.tryParse(value) != null) {
                     homeInspectionProvider.setLot(int.parse(value));
                   }
                 },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return null;
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'Ingrese un entero';
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  hintText: 'Lt.',
-                ),
               ),
             ),
           ),
