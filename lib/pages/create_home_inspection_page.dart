@@ -30,20 +30,31 @@ class CreateHomeInspectionPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            SizedBox(height: size.width * 0.05),
-            PhotoDisplayAndSelectHomeInspection(size: size),
-            SizedBox(height: size.width * 0.05),
-            ShowAddressHomeInspection(size: size),
-            SizedBox(height: size.width * 0.05),
-            ShowCurrentDateTimeHomeInspection(size: size),
-            SizedBox(height: size.width * 0.05),
-            ShowLatitudeAndLongitudeHomeInspection(size: size),
-            SizedBox(height: size.width * 0.05),
-            InsertCommentHomeInspection(size: size),
-            SizedBox(height: size.width * 0.05),
-          ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+          child: Column(
+            children: [
+              SizedBox(height: size.width * 0.05),
+              ShowAddressHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+              NumberInhabitantsInputHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+              HomeConditionHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+              TypeContainersHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+              TotalContainerHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+              ShowCurrentDateTimeHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+              ShowLatitudeAndLongitudeHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+              InsertCommentHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+              PhotoDisplayAndSelectHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -269,80 +280,77 @@ class PhotoDisplayAndSelectHomeInspection extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
 
-    return Center(
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: size.width * 0.8,
-                height: (size.width * 0.8) * 0.75,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    width: 3,
-                    color: ThemeModeApp.isDarkMode
-                        ? const Color.fromARGB(255, 189, 189, 189)
-                        : const Color.fromARGB(255, 77, 77, 77),
-                  ),
+    return Column(
+      children: [
+        Stack(
+          children: [
+            Container(
+              width: size.width * 0.8,
+              height: (size.width * 0.8) * 0.75,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  width: 3,
                   color: ThemeModeApp.isDarkMode
-                      ? const Color.fromARGB(255, 66, 66, 66)
-                      : const Color.fromARGB(255, 185, 185, 185),
+                      ? const Color.fromARGB(255, 189, 189, 189)
+                      : const Color.fromARGB(255, 77, 77, 77),
                 ),
-                child: homeInspectionProvider.image == null
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 75),
-                        child: SvgPicture.asset(
-                          'assets/app_icons/no-image.svg',
-                          color: ThemeModeApp.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                      )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image.file(
-                          homeInspectionProvider.image!,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 66, 66, 66)
+                    : const Color.fromARGB(255, 185, 185, 185),
               ),
-              if (homeInspectionProvider.image != null)
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.close_rounded,
-                      size: 30,
+              child: homeInspectionProvider.image == null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 75),
+                      child: SvgPicture.asset(
+                        'assets/app_icons/no-image.svg',
+                        color: ThemeModeApp.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Image.file(
+                        homeInspectionProvider.image!,
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                    color:
-                        ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
-                    onPressed: () {
-                      homeInspectionProvider.setImage(null);
-                    },
+            ),
+            if (homeInspectionProvider.image != null)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    size: 30,
                   ),
+                  color: ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
+                  onPressed: () {
+                    homeInspectionProvider.setImage(null);
+                  },
                 ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        SizedBox(
+          width: size.width * 0.8,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Expanded(
+                child: PhotoFromCameraButtonHomeInspection(),
+              ),
+              SizedBox(width: 20),
+              Expanded(
+                child: PhotoFromGalleryButtonHomeInspection(),
+              ),
             ],
           ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: size.width * 0.8,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Expanded(
-                  child: PhotoFromCameraButtonHomeInspection(),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: PhotoFromGalleryButtonHomeInspection(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -747,6 +755,53 @@ class ShowAddressHomeInspection extends StatelessWidget {
   }
 }
 
+class AddressRowTile extends StatelessWidget {
+  const AddressRowTile({
+    Key? key,
+    required this.tileTitle,
+    required this.tileContent,
+  }) : super(key: key);
+
+  final String tileTitle;
+  final String tileContent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 125,
+            child: Text(
+              tileTitle,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: TextScroll(
+              tileContent,
+              mode: TextScrollMode.bouncing,
+              velocity: const Velocity(
+                pixelsPerSecond: Offset(25, 0),
+              ),
+              delayBefore: const Duration(milliseconds: 500),
+              pauseBetween: const Duration(milliseconds: 50),
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class BlockInputHomeInspection extends StatelessWidget {
   const BlockInputHomeInspection({super.key});
 
@@ -906,49 +961,2419 @@ class LotInputHomeInspection extends StatelessWidget {
   }
 }
 
-class AddressRowTile extends StatelessWidget {
-  const AddressRowTile({
+class NumberInhabitantsInputHomeInspection extends StatelessWidget {
+  const NumberInhabitantsInputHomeInspection({
     Key? key,
-    required this.tileTitle,
-    required this.tileContent,
+    required this.size,
   }) : super(key: key);
 
-  final String tileTitle;
-  final String tileContent;
+  final Size size;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
+    final enabledBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'N° de habitantes:',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: 'N°',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.numberInhabitants == null
+                ? ''
+                : homeInspectionProvider.numberInhabitants.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setNumberInhabitants(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class HomeConditionHomeInspection extends StatelessWidget {
+  const HomeConditionHomeInspection({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabledBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+
+    return SizedBox(
+      width: size.width * 0.8,
+      child: ExpansionTile(
+        title: const Text(
+          'Condición de vivienda',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textColor: ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 0),
         children: [
-          SizedBox(
-            width: 125,
-            child: Text(
-              tileTitle,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          InspectedHomeInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
           ),
-          Flexible(
-            flex: 1,
-            child: TextScroll(
-              tileContent,
-              mode: TextScrollMode.bouncing,
-              velocity: const Velocity(
-                pixelsPerSecond: Offset(25, 0),
-              ),
-              delayBefore: const Duration(milliseconds: 500),
-              pauseBetween: const Duration(milliseconds: 50),
-              style: const TextStyle(
-                fontSize: 16,
-              ),
-            ),
+          const SizedBox(height: 20),
+          ReluctantDwellingInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
           ),
+          const SizedBox(height: 20),
+          ClosedHouseInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          UninhabitedHouseInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          HousingSpotlightsInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          TreatedHousingInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
         ],
       ),
+    );
+  }
+}
+
+class InspectedHomeInputHomeInspection extends StatelessWidget {
+  const InspectedHomeInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Vivienda inspeccionada:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.inspectedHome == null
+                ? ''
+                : homeInspectionProvider.inspectedHome.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setInspectedHome(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ReluctantDwellingInputHomeInspection extends StatelessWidget {
+  const ReluctantDwellingInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Vivienda renuente:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.reluctantDwelling == null
+                ? ''
+                : homeInspectionProvider.reluctantDwelling.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setReluctantDwelling(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ClosedHouseInputHomeInspection extends StatelessWidget {
+  const ClosedHouseInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Vivienda cerrada:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.closedHouse == null
+                ? ''
+                : homeInspectionProvider.closedHouse.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setClosedHouse(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class UninhabitedHouseInputHomeInspection extends StatelessWidget {
+  const UninhabitedHouseInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Vivienda deshabitada:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.uninhabitedHouse == null
+                ? ''
+                : homeInspectionProvider.uninhabitedHouse.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setUninhabitedHouse(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class HousingSpotlightsInputHomeInspection extends StatelessWidget {
+  const HousingSpotlightsInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Vivienda focos:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.housingSpotlights == null
+                ? ''
+                : homeInspectionProvider.housingSpotlights.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setHousingSpotlights(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TreatedHousingInputHomeInspection extends StatelessWidget {
+  const TreatedHousingInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Vivienda tratada con abte:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.treatedHousing == null
+                ? ''
+                : homeInspectionProvider.treatedHousing.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setTreatedHousing(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TypeContainersHomeInspection extends StatelessWidget {
+  const TypeContainersHomeInspection({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabledBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+
+    return SizedBox(
+      width: size.width * 0.8,
+      child: ExpansionTile(
+        title: const Text(
+          'Tipo de recipientes',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textColor: ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 0),
+        children: [
+          ElevatedTankInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          LowTankInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          CylinderBarrelInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          BucketTubInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          TireInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          FlowerInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          UselessInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          OthersInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+class ElevatedTankInputHomeInspection extends StatelessWidget {
+  const ElevatedTankInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        const Text(
+          'Tanque elevado',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'I',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.elevatedTankI == null
+                        ? ''
+                        : homeInspectionProvider.elevatedTankI.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider
+                            .setElevatedTankI(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'P',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.elevatedTankP == null
+                        ? ''
+                        : homeInspectionProvider.elevatedTankP.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider
+                            .setElevatedTankP(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'T',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.elevatedTankT == null
+                        ? ''
+                        : homeInspectionProvider.elevatedTankT.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider
+                            .setElevatedTankT(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class LowTankInputHomeInspection extends StatelessWidget {
+  const LowTankInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        const Text(
+          'Tanque bajo, pozos',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'I',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.lowTankI == null
+                        ? ''
+                        : homeInspectionProvider.lowTankI.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setLowTankI(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'P',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.lowTankP == null
+                        ? ''
+                        : homeInspectionProvider.lowTankP.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setLowTankP(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'T',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.lowTankT == null
+                        ? ''
+                        : homeInspectionProvider.lowTankT.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setLowTankT(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class CylinderBarrelInputHomeInspection extends StatelessWidget {
+  const CylinderBarrelInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        const Text(
+          'Barril, cilindro sanson',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'I',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.cylinderBarrelI == null
+                        ? ''
+                        : homeInspectionProvider.cylinderBarrelI.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider
+                            .setCylinderBarrelI(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'P',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.cylinderBarrelP == null
+                        ? ''
+                        : homeInspectionProvider.cylinderBarrelP.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider
+                            .setCylinderBarrelP(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'T',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.cylinderBarrelT == null
+                        ? ''
+                        : homeInspectionProvider.cylinderBarrelT.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider
+                            .setCylinderBarrelT(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class BucketTubInputHomeInspection extends StatelessWidget {
+  const BucketTubInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        const Text(
+          'Balde, abtea, tina',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'I',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.bucketTubI == null
+                        ? ''
+                        : homeInspectionProvider.bucketTubI.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setBucketTubI(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'P',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.bucketTubP == null
+                        ? ''
+                        : homeInspectionProvider.bucketTubP.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setBucketTubP(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'T',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.bucketTubT == null
+                        ? ''
+                        : homeInspectionProvider.bucketTubT.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setBucketTubT(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class TireInputHomeInspection extends StatelessWidget {
+  const TireInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        const Text(
+          'Llanta',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'I',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.tireI == null
+                        ? ''
+                        : homeInspectionProvider.tireI.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setTireI(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'P',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.tireP == null
+                        ? ''
+                        : homeInspectionProvider.tireP.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setTireP(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'T',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.tireT == null
+                        ? ''
+                        : homeInspectionProvider.tireT.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setTireT(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class FlowerInputHomeInspection extends StatelessWidget {
+  const FlowerInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        const Text(
+          'Florero, maceta',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'I',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.flowerI == null
+                        ? ''
+                        : homeInspectionProvider.flowerI.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setFlowerI(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'P',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.flowerP == null
+                        ? ''
+                        : homeInspectionProvider.flowerP.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setFlowerP(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'T',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.flowerT == null
+                        ? ''
+                        : homeInspectionProvider.flowerT.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setFlowerT(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class UselessInputHomeInspection extends StatelessWidget {
+  const UselessInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        const Text(
+          'Inservibles',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'I',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.uselessI == null
+                        ? ''
+                        : homeInspectionProvider.uselessI.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setUselessI(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'P',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.uselessP == null
+                        ? ''
+                        : homeInspectionProvider.uselessP.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setUselessP(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'T',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.uselessT == null
+                        ? ''
+                        : homeInspectionProvider.uselessT.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setUselessT(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class OthersInputHomeInspection extends StatelessWidget {
+  const OthersInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        const Text(
+          'Otros',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'I',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.othersI == null
+                        ? ''
+                        : homeInspectionProvider.othersI.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setOthersI(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'P',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.othersP == null
+                        ? ''
+                        : homeInspectionProvider.othersP.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setOthersP(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  'T',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: size.width * 0.2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: enabledBorder,
+                      focusedBorder: focusedBorder,
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: ThemeModeApp.isDarkMode
+                            ? const Color.fromARGB(255, 189, 189, 189)
+                            : const Color.fromARGB(255, 77, 77, 77),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    initialValue: homeInspectionProvider.othersT == null
+                        ? ''
+                        : homeInspectionProvider.othersT.toString(),
+                    onChanged: (value) {
+                      if (int.tryParse(value) != null) {
+                        homeInspectionProvider.setOthersT(int.parse(value));
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return null;
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Ingrese un entero';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class TotalContainerHomeInspection extends StatelessWidget {
+  const TotalContainerHomeInspection({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabledBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+
+    return SizedBox(
+      width: size.width * 0.8,
+      child: ExpansionTile(
+        title: const Text(
+          'Total de recipiente',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textColor: ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 0),
+        children: [
+          InspectedContainersInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          ContainersSpotlightsInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          TreatedContainersInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          DestroyedContainersInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+class InspectedContainersInputHomeInspection extends StatelessWidget {
+  const InspectedContainersInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Recipientes inspeccionados:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.inspectedContainers == null
+                ? ''
+                : homeInspectionProvider.inspectedContainers.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setInspectedContainers(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ContainersSpotlightsInputHomeInspection extends StatelessWidget {
+  const ContainersSpotlightsInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Recipientes focos:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.containersSpotlights == null
+                ? ''
+                : homeInspectionProvider.containersSpotlights.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider
+                    .setContainersSpotlights(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TreatedContainersInputHomeInspection extends StatelessWidget {
+  const TreatedContainersInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Recipientes tratados:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.treatedContainers == null
+                ? ''
+                : homeInspectionProvider.treatedContainers.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setTreatedContainers(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DestroyedContainersInputHomeInspection extends StatelessWidget {
+  const DestroyedContainersInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Recipientes destruidos:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.destroyedContainers == null
+                ? ''
+                : homeInspectionProvider.destroyedContainers.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setDestroyedContainers(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
     );
   }
 }
