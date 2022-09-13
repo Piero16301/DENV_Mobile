@@ -47,6 +47,8 @@ class CreateHomeInspectionPage extends StatelessWidget {
               SizedBox(height: size.width * 0.05),
               AegyptiFocusHomeInspection(size: size),
               SizedBox(height: size.width * 0.05),
+              LarvicideInputHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
               ShowCurrentDateTimeHomeInspection(size: size),
               SizedBox(height: size.width * 0.05),
               ShowLatitudeAndLongitudeHomeInspection(size: size),
@@ -109,8 +111,8 @@ class CreateHomeInspectionPage extends StatelessWidget {
                       homeInspectionProvider.address!,
                       'route',
                     ),
-                    block: 'C-2',
-                    lot: 40,
+                    block: homeInspectionProvider.block ?? 'Sin manzana',
+                    lot: homeInspectionProvider.lot ?? -1,
                     streetnumber: int.parse(
                       getAddressComponent(
                         homeInspectionProvider.address!,
@@ -3636,6 +3638,92 @@ class AdultInputHomeInspection extends StatelessWidget {
               }
               if (int.tryParse(value) == null) {
                 return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class LarvicideInputHomeInspection extends StatelessWidget {
+  const LarvicideInputHomeInspection({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabledBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Larvicida (grs):',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0.0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.larvicide == null
+                ? ''
+                : homeInspectionProvider.larvicide.toString(),
+            onChanged: (value) {
+              if (double.tryParse(value) != null) {
+                homeInspectionProvider.setLarvicide(double.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (double.tryParse(value) == null) {
+                return 'Ingrese un decimal';
               }
               return null;
             },

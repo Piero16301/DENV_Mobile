@@ -58,6 +58,8 @@ class HomeInspectionProvider extends ChangeNotifier {
   int? _pupae;
   int? _adult;
 
+  double? _larvicide;
+
   String? _comment;
   File? _image;
   DateTime? _datetime;
@@ -116,6 +118,8 @@ class HomeInspectionProvider extends ChangeNotifier {
   int? get larvae => _larvae;
   int? get pupae => _pupae;
   int? get adult => _adult;
+
+  double? get larvicide => _larvicide;
 
   String? get comment => _comment;
   File? get image => _image;
@@ -320,6 +324,11 @@ class HomeInspectionProvider extends ChangeNotifier {
 
   void setAdult(int? value) {
     _adult = value;
+    notifyListeners();
+  }
+
+  void setLarvicide(double? value) {
+    _larvicide = value;
     notifyListeners();
   }
 
