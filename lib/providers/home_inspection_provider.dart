@@ -54,6 +54,10 @@ class HomeInspectionProvider extends ChangeNotifier {
   int? _treatedContainers;
   int? _destroyedContainers;
 
+  int? _larvae;
+  int? _pupae;
+  int? _adult;
+
   String? _comment;
   File? _image;
   DateTime? _datetime;
@@ -108,6 +112,10 @@ class HomeInspectionProvider extends ChangeNotifier {
   int? get containersSpotlights => _containersSpotlights;
   int? get treatedContainers => _treatedContainers;
   int? get destroyedContainers => _destroyedContainers;
+
+  int? get larvae => _larvae;
+  int? get pupae => _pupae;
+  int? get adult => _adult;
 
   String? get comment => _comment;
   File? get image => _image;
@@ -297,6 +305,21 @@ class HomeInspectionProvider extends ChangeNotifier {
 
   void setDestroyedContainers(int? value) {
     _destroyedContainers = value;
+    notifyListeners();
+  }
+
+  void setLarvae(int? value) {
+    _larvae = value;
+    notifyListeners();
+  }
+
+  void setPupae(int? value) {
+    _pupae = value;
+    notifyListeners();
+  }
+
+  void setAdult(int? value) {
+    _adult = value;
     notifyListeners();
   }
 

@@ -45,6 +45,8 @@ class CreateHomeInspectionPage extends StatelessWidget {
               SizedBox(height: size.width * 0.05),
               TotalContainerHomeInspection(size: size),
               SizedBox(height: size.width * 0.05),
+              AegyptiFocusHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
               ShowCurrentDateTimeHomeInspection(size: size),
               SizedBox(height: size.width * 0.05),
               ShowLatitudeAndLongitudeHomeInspection(size: size),
@@ -3358,6 +3360,274 @@ class DestroyedContainersInputHomeInspection extends StatelessWidget {
             onChanged: (value) {
               if (int.tryParse(value) != null) {
                 homeInspectionProvider.setDestroyedContainers(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AegyptiFocusHomeInspection extends StatelessWidget {
+  const AegyptiFocusHomeInspection({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabledBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+
+    return SizedBox(
+      width: size.width * 0.8,
+      child: ExpansionTile(
+        title: const Text(
+          'Foco de A. aegypti',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textColor: ThemeModeApp.isDarkMode ? Colors.white : Colors.black,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 0),
+        children: [
+          LarvaeInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          PupaeInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+          AdultInputHomeInspection(
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+class LarvaeInputHomeInspection extends StatelessWidget {
+  const LarvaeInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Larvas:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.larvae == null
+                ? ''
+                : homeInspectionProvider.larvae.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setLarvae(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PupaeInputHomeInspection extends StatelessWidget {
+  const PupaeInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Pupas:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.pupae == null
+                ? ''
+                : homeInspectionProvider.pupae.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setPupae(int.parse(value));
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (int.tryParse(value) == null) {
+                return 'Ingrese un entero';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AdultInputHomeInspection extends StatelessWidget {
+  const AdultInputHomeInspection({
+    Key? key,
+    required this.enabledBorder,
+    required this.focusedBorder,
+  }) : super(key: key);
+
+  final OutlineInputBorder enabledBorder;
+  final OutlineInputBorder focusedBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          child: const Text(
+            'Adulto:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: '0',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.adult == null
+                ? ''
+                : homeInspectionProvider.adult.toString(),
+            onChanged: (value) {
+              if (int.tryParse(value) != null) {
+                homeInspectionProvider.setAdult(int.parse(value));
               }
             },
             validator: (value) {
