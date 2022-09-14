@@ -49,7 +49,10 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                '${locationProvider.currentAddress!.formattedAddress}',
+                locationProvider.isUpdatingPosition ||
+                        locationProvider.isGettingAddress
+                    ? 'Actualizando ubicación...'
+                    : '${locationProvider.currentAddress!.formattedAddress}',
                 style: const TextStyle(
                   fontSize: 16,
                 ),
@@ -70,10 +73,13 @@ class MapButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final mapService = Provider.of<MapService>(context);
     final mapProvider = Provider.of<MapProvider>(context);
+    final locationProvider = Provider.of<LocationProvider>(context);
 
     return InkWell(
       onTap: mapService.isGettingHomeInspections ||
-              mapService.isGettingVectorRecords
+              mapService.isGettingVectorRecords ||
+              locationProvider.isUpdatingPosition ||
+              locationProvider.isGettingAddress
           ? null
           : () async {
               List responses = await Future.wait([
@@ -227,13 +233,28 @@ class NewHomeInspectionButton extends StatelessWidget {
       child: Hero(
         tag: 'newHomeInspectionButton',
         child: ElevatedButton(
-          onPressed: () {
-            homeInspectionProvider.setDatetime(DateTime.now());
-            homeInspectionProvider
-                .setPosition(locationProvider.currentPosition);
-            homeInspectionProvider.setAddress(locationProvider.currentAddress);
-            Navigator.pushNamed(context, '/create-home-inspection');
-          },
+          onPressed: locationProvider.isUpdatingPosition ||
+                  locationProvider.isGettingAddress
+              ? null
+              : () async {
+                  List _ = await Future.wait([
+                    locationProvider.getCurrentPosition(),
+                    locationProvider.getCurrentAddress(),
+                  ]);
+
+                  homeInspectionProvider.setDatetime(
+                    DateTime.now(),
+                  );
+                  homeInspectionProvider.setPosition(
+                    locationProvider.currentPosition,
+                  );
+                  homeInspectionProvider.setAddress(
+                    locationProvider.currentAddress,
+                  );
+
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamed(context, '/create-home-inspection');
+                },
           style: ButtonStyle(
             elevation: MaterialStateProperty.all<double>(1),
             fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),
@@ -265,12 +286,28 @@ class NewVectorRecordButton extends StatelessWidget {
       child: Hero(
         tag: 'newVectorRecordButton',
         child: ElevatedButton(
-          onPressed: () {
-            vectorRecordProvider.setDatetime(DateTime.now());
-            vectorRecordProvider.setPosition(locationProvider.currentPosition);
-            vectorRecordProvider.setAddress(locationProvider.currentAddress);
-            Navigator.pushNamed(context, '/create-vector-record');
-          },
+          onPressed: locationProvider.isUpdatingPosition ||
+                  locationProvider.isGettingAddress
+              ? null
+              : () async {
+                  List _ = await Future.wait([
+                    locationProvider.getCurrentPosition(),
+                    locationProvider.getCurrentAddress(),
+                  ]);
+
+                  vectorRecordProvider.setDatetime(
+                    DateTime.now(),
+                  );
+                  vectorRecordProvider.setPosition(
+                    locationProvider.currentPosition,
+                  );
+                  vectorRecordProvider.setAddress(
+                    locationProvider.currentAddress,
+                  );
+
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamed(context, '/create-vector-record');
+                },
           style: ButtonStyle(
             elevation: MaterialStateProperty.all<double>(1),
             fixedSize: MaterialStateProperty.all<Size>(const Size(220, 70)),

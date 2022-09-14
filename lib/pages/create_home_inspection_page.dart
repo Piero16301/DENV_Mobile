@@ -198,7 +198,7 @@ class CreateHomeInspectionPage extends StatelessWidget {
                     pupae: homeInspectionProvider.pupae ?? -1,
                     adult: homeInspectionProvider.adult ?? -1,
                   ),
-                  larvicide: homeInspectionProvider.larvicide ?? 0.0,
+                  larvicide: homeInspectionProvider.larvicide ?? -1.0,
                 );
 
                 // Subir reporte de caso a MongoDB
@@ -208,6 +208,7 @@ class CreateHomeInspectionPage extends StatelessWidget {
                 );
 
                 if (newHomeInspection) {
+                  homeInspectionProvider.cleanData();
                   await _showResponseDialog(success: true, context: context);
                 } else {
                   await _showResponseDialog(success: false, context: context);

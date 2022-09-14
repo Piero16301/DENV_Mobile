@@ -365,4 +365,55 @@ class HomeInspectionProvider extends ChangeNotifier {
     _address = address;
     notifyListeners();
   }
+
+  void cleanData() {
+    _dni = null;
+    _block = null;
+    _lot = null;
+    _numberInhabitants = null;
+    _inspectedHome = null;
+    _reluctantDwelling = null;
+    _closedHouse = null;
+    _uninhabitedHouse = null;
+    _housingSpotlights = null;
+    _treatedHousing = null;
+    _elevatedTankI = null;
+    _elevatedTankP = null;
+    _elevatedTankT = null;
+    _lowTankI = null;
+    _lowTankP = null;
+    _lowTankT = null;
+    _cylinderBarrelI = null;
+    _cylinderBarrelP = null;
+    _cylinderBarrelT = null;
+    _bucketTubI = null;
+    _bucketTubP = null;
+    _bucketTubT = null;
+    _tireI = null;
+    _tireP = null;
+    _tireT = null;
+    _flowerI = null;
+    _flowerP = null;
+    _flowerT = null;
+    _uselessI = null;
+    _uselessP = null;
+    _uselessT = null;
+    _othersI = null;
+    _othersP = null;
+    _othersT = null;
+    _inspectedContainers = null;
+    _containersSpotlights = null;
+    _treatedContainers = null;
+    _destroyedContainers = null;
+    _larvae = null;
+    _pupae = null;
+    _adult = null;
+    _larvicide = null;
+    _comment = null;
+    _image = null;
+    // _datetime = null;
+    // _position = null;
+    // _address = null;
+    notifyListeners();
+  }
 }
