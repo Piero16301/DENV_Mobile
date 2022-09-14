@@ -115,7 +115,7 @@ class CreateVectorRecordPage extends StatelessWidget {
                     await vectorRecordService.createNewVectorRecord(
                   vectorRecord,
                 );
-                if (newVectorRecord != null) {
+                if (newVectorRecord) {
                   await _showResponseDialog(success: true, context: context);
                 } else {
                   await _showResponseDialog(success: false, context: context);

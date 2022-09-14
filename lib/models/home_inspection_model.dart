@@ -23,6 +23,7 @@ class HomeInspectionModel {
   TypeContainersModel typecontainers;
   TotalContainerModel totalcontainer;
   AegyptiFocusModel aegyptifocus;
+  double larvicide;
 
   HomeInspectionModel({
     this.id,
@@ -38,6 +39,7 @@ class HomeInspectionModel {
     required this.typecontainers,
     required this.totalcontainer,
     required this.aegyptifocus,
+    required this.larvicide,
   });
 
   factory HomeInspectionModel.fromJson(Map<String, dynamic> json) =>
@@ -55,6 +57,7 @@ class HomeInspectionModel {
         typecontainers: TypeContainersModel.fromJson(json["typecontainers"]),
         totalcontainer: TotalContainerModel.fromJson(json["totalcontainer"]),
         aegyptifocus: AegyptiFocusModel.fromJson(json["aegyptifocus"]),
+        larvicide: json["larvicide"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -71,6 +74,7 @@ class HomeInspectionModel {
         "typecontainers": typecontainers.toJson(),
         "totalcontainer": totalcontainer.toJson(),
         "aegyptifocus": aegyptifocus.toJson(),
+        "larvicide": larvicide,
       };
 
   String parseDateTime() {

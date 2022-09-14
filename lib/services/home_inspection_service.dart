@@ -24,7 +24,7 @@ class HomeInspectionService extends ChangeNotifier {
 
   bool isSavingNewHomeInspection = false;
 
-  Future<HomeInspectionModel?> createNewHomeInspection(
+  Future<bool> createNewHomeInspection(
       HomeInspectionModel homeInspection) async {
     try {
       isSavingNewHomeInspection = true;
@@ -41,20 +41,20 @@ class HomeInspectionService extends ChangeNotifier {
       if (response.statusCode == 201) {
         isSavingNewHomeInspection = false;
         notifyListeners();
-        return HomeInspectionModel.fromJson(response.data['data']);
+        return true;
       } else {
         isSavingNewHomeInspection = false;
         notifyListeners();
-        return null;
+        return false;
       }
     } on DioError catch (_) {
       isSavingNewHomeInspection = false;
       notifyListeners();
-      return null;
+      return false;
     } catch (e) {
       isSavingNewHomeInspection = false;
       notifyListeners();
-      return null;
+      return false;
     }
   }
 

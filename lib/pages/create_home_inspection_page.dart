@@ -35,6 +35,8 @@ class CreateHomeInspectionPage extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: size.width * 0.05),
+              DNIInputHomeInspection(size: size),
+              SizedBox(height: size.width * 0.05),
               ShowAddressHomeInspection(size: size),
               SizedBox(height: size.width * 0.05),
               NumberInhabitantsInputHomeInspection(size: size),
@@ -122,40 +124,81 @@ class CreateHomeInspectionPage extends StatelessWidget {
                   ),
                   comment: homeInspectionProvider.comment ?? 'Sin comentario',
                   datetime: homeInspectionProvider.datetime!,
-                  dni: '74044313',
+                  dni: homeInspectionProvider.dni ?? 'Sin DNI',
                   latitude: homeInspectionProvider.position!.latitude,
                   longitude: homeInspectionProvider.position!.longitude,
                   photourl: photoUrl,
-                  numberinhabitants: 10,
+                  numberinhabitants:
+                      homeInspectionProvider.numberInhabitants ?? -1,
                   homecondition: HomeConditionModel(
-                    inspectedhome: 1,
-                    reluctantdwelling: 2,
-                    closedhome: 3,
-                    uninhabitedhouse: 4,
-                    housingspotlights: 5,
-                    treatedhousing: 6,
+                    inspectedhome: homeInspectionProvider.inspectedHome ?? -1,
+                    reluctantdwelling:
+                        homeInspectionProvider.reluctantDwelling ?? -1,
+                    closedhome: homeInspectionProvider.closedHouse ?? -1,
+                    uninhabitedhouse:
+                        homeInspectionProvider.uninhabitedHouse ?? -1,
+                    housingspotlights:
+                        homeInspectionProvider.housingSpotlights ?? -1,
+                    treatedhousing: homeInspectionProvider.treatedHousing ?? -1,
                   ),
                   typecontainers: TypeContainersModel(
-                    elevatedtank: ElevatedTankModel(i: 1, p: 2, t: 3),
-                    lowtank: LowTankModel(i: 1, p: 2, t: 3),
-                    cylinderbarrel: CylinderBarrelModel(i: 1, p: 2, t: 3),
-                    buckettub: BucketTubModel(i: 1, p: 2, t: 3),
-                    tire: TireModel(i: 1, p: 2, t: 3),
-                    flower: FlowerModel(i: 1, p: 2, t: 3),
-                    useless: UselessModel(i: 1, p: 2, t: 3),
-                    others: OthersModel(i: 1, p: 2, t: 3),
+                    elevatedtank: ElevatedTankModel(
+                      i: homeInspectionProvider.elevatedTankI ?? -1,
+                      p: homeInspectionProvider.elevatedTankP ?? -1,
+                      t: homeInspectionProvider.elevatedTankT ?? -1,
+                    ),
+                    lowtank: LowTankModel(
+                      i: homeInspectionProvider.lowTankI ?? -1,
+                      p: homeInspectionProvider.lowTankP ?? -1,
+                      t: homeInspectionProvider.lowTankT ?? -1,
+                    ),
+                    cylinderbarrel: CylinderBarrelModel(
+                      i: homeInspectionProvider.cylinderBarrelI ?? -1,
+                      p: homeInspectionProvider.cylinderBarrelP ?? -1,
+                      t: homeInspectionProvider.cylinderBarrelT ?? -1,
+                    ),
+                    buckettub: BucketTubModel(
+                      i: homeInspectionProvider.bucketTubI ?? -1,
+                      p: homeInspectionProvider.bucketTubP ?? -1,
+                      t: homeInspectionProvider.bucketTubT ?? -1,
+                    ),
+                    tire: TireModel(
+                      i: homeInspectionProvider.tireI ?? -1,
+                      p: homeInspectionProvider.tireP ?? -1,
+                      t: homeInspectionProvider.tireT ?? -1,
+                    ),
+                    flower: FlowerModel(
+                      i: homeInspectionProvider.flowerI ?? -1,
+                      p: homeInspectionProvider.flowerP ?? -1,
+                      t: homeInspectionProvider.flowerT ?? -1,
+                    ),
+                    useless: UselessModel(
+                      i: homeInspectionProvider.uselessI ?? -1,
+                      p: homeInspectionProvider.uselessP ?? -1,
+                      t: homeInspectionProvider.uselessT ?? -1,
+                    ),
+                    others: OthersModel(
+                      i: homeInspectionProvider.othersI ?? -1,
+                      p: homeInspectionProvider.othersP ?? -1,
+                      t: homeInspectionProvider.othersT ?? -1,
+                    ),
                   ),
                   totalcontainer: TotalContainerModel(
-                    inspectedcontainers: 1,
-                    containersspotlights: 2,
-                    treatedcontainers: 3,
-                    destroyedcontainers: 4,
+                    inspectedcontainers:
+                        homeInspectionProvider.inspectedContainers ?? -1,
+                    containersspotlights:
+                        homeInspectionProvider.containersSpotlights ?? -1,
+                    treatedcontainers:
+                        homeInspectionProvider.treatedContainers ?? -1,
+                    destroyedcontainers:
+                        homeInspectionProvider.destroyedContainers ?? -1,
                   ),
                   aegyptifocus: AegyptiFocusModel(
-                    larvae: 1,
-                    pupae: 2,
-                    adult: 3,
+                    larvae: homeInspectionProvider.larvae ?? -1,
+                    pupae: homeInspectionProvider.pupae ?? -1,
+                    adult: homeInspectionProvider.adult ?? -1,
                   ),
+                  larvicide: homeInspectionProvider.larvicide ?? 0.0,
                 );
 
                 // Subir reporte de caso a MongoDB
@@ -164,7 +207,7 @@ class CreateHomeInspectionPage extends StatelessWidget {
                   homeInspection,
                 );
 
-                if (newHomeInspection != null) {
+                if (newHomeInspection) {
                   await _showResponseDialog(success: true, context: context);
                 } else {
                   await _showResponseDialog(success: false, context: context);
@@ -268,6 +311,90 @@ class CreateHomeInspectionPage extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class DNIInputHomeInspection extends StatelessWidget {
+  const DNIInputHomeInspection({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabledBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(15),
+      ),
+      borderSide: BorderSide(
+        width: 2,
+        color: ThemeModeApp.isDarkMode
+            ? const Color.fromARGB(255, 189, 189, 189)
+            : const Color.fromARGB(255, 77, 77, 77),
+      ),
+    );
+    final homeInspectionProvider = Provider.of<HomeInspectionProvider>(context);
+
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.3,
+          child: const Text(
+            'DNI:',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: enabledBorder,
+              focusedBorder: focusedBorder,
+              hintText: 'Ingrese el DNI',
+              hintStyle: TextStyle(
+                color: ThemeModeApp.isDarkMode
+                    ? const Color.fromARGB(255, 189, 189, 189)
+                    : const Color.fromARGB(255, 77, 77, 77),
+              ),
+            ),
+            textAlign: TextAlign.center,
+            initialValue: homeInspectionProvider.dni ?? '',
+            onChanged: (value) {
+              if (value.length == 8) {
+                homeInspectionProvider.setDni(value);
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return null;
+              }
+              if (value.length != 8) {
+                return 'DNI inválido';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -24,8 +24,7 @@ class VectorRecordService extends ChangeNotifier {
 
   bool isSavingNewVectorRecord = false;
 
-  Future<VectorRecordModel?> createNewVectorRecord(
-      VectorRecordModel vectorRecord) async {
+  Future<bool> createNewVectorRecord(VectorRecordModel vectorRecord) async {
     try {
       isSavingNewVectorRecord = true;
       notifyListeners();
@@ -41,16 +40,16 @@ class VectorRecordService extends ChangeNotifier {
       if (response.statusCode == 201) {
         isSavingNewVectorRecord = false;
         notifyListeners();
-        return VectorRecordModel.fromJson(response.data['data']);
+        return true;
       } else {
         isSavingNewVectorRecord = false;
         notifyListeners();
-        return null;
+        return false;
       }
     } catch (e) {
       isSavingNewVectorRecord = false;
       notifyListeners();
-      return null;
+      return false;
     }
   }
 

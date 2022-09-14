@@ -5,6 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding/google_geocoding.dart';
 
 class HomeInspectionProvider extends ChangeNotifier {
+  String? _dni;
+
   String? _block;
   int? _lot;
 
@@ -66,6 +68,8 @@ class HomeInspectionProvider extends ChangeNotifier {
   Position? _position;
   GeocodingResult? _address;
 
+  String? get dni => _dni;
+
   String? get block => _block;
   int? get lot => _lot;
 
@@ -126,6 +130,11 @@ class HomeInspectionProvider extends ChangeNotifier {
   DateTime? get datetime => _datetime;
   Position? get position => _position;
   GeocodingResult? get address => _address;
+
+  void setDni(String? dni) {
+    _dni = dni;
+    notifyListeners();
+  }
 
   void setBlock(String? value) {
     _block = value;
