@@ -115,12 +115,13 @@ class CreateHomeInspectionPage extends StatelessWidget {
                     ),
                     block: homeInspectionProvider.block ?? 'Sin manzana',
                     lot: homeInspectionProvider.lot ?? -1,
-                    streetnumber: int.parse(
-                      getAddressComponent(
-                        homeInspectionProvider.address!,
-                        'street_number',
-                      ),
-                    ),
+                    streetnumber: int.tryParse(
+                          getAddressComponent(
+                            homeInspectionProvider.address!,
+                            'street_number',
+                          ),
+                        ) ??
+                        -1,
                   ),
                   comment: homeInspectionProvider.comment ?? 'Sin comentario',
                   datetime: homeInspectionProvider.datetime!,
@@ -1235,7 +1236,7 @@ class HomeConditionHomeInspection extends StatelessWidget {
             focusedBorder: focusedBorder,
           ),
           const SizedBox(height: 20),
-          ClosedHouseInputHomeInspection(
+          ClosedHomeInputHomeInspection(
             enabledBorder: enabledBorder,
             focusedBorder: focusedBorder,
           ),
@@ -1395,8 +1396,8 @@ class ReluctantDwellingInputHomeInspection extends StatelessWidget {
   }
 }
 
-class ClosedHouseInputHomeInspection extends StatelessWidget {
-  const ClosedHouseInputHomeInspection({
+class ClosedHomeInputHomeInspection extends StatelessWidget {
+  const ClosedHomeInputHomeInspection({
     Key? key,
     required this.enabledBorder,
     required this.focusedBorder,

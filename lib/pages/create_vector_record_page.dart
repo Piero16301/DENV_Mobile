@@ -96,12 +96,13 @@ class CreateVectorRecordPage extends StatelessWidget {
                     ),
                     block: 'C-2',
                     lot: 40,
-                    streetnumber: int.parse(
-                      getAddressComponent(
-                        vectorRecordProvider.address!,
-                        'street_number',
-                      ),
-                    ),
+                    streetnumber: int.tryParse(
+                          getAddressComponent(
+                            vectorRecordProvider.address!,
+                            'street_number',
+                          ),
+                        ) ??
+                        -1,
                   ),
                   comment: vectorRecordProvider.comment ?? 'Sin comentario',
                   datetime: vectorRecordProvider.datetime!,
